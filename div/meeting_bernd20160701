@@ -1,0 +1,58 @@
+Farben:
+	Rot falsch+bestätigt
+	gelb: falsch+bestätigt
+	blau: erledigt
+StBs ignorieren
+E-Mail mit Links auf alle Spiele
+Minimannschaften/Jugendmannschaften
+Genehmigungen für weite Verlegungen
+	eventuell auch als Fehlertyp wenn außerhalb 2 Wochen / Ferien
+Live-Ticker beachten!
+Exports unter admin/, Kommentar-Exports export/, Änderungen unter Änderung/
+Export-Daten:
+	turnierid
+	Spezieller Verein BLV-Archiv
+	Ranglisten:
+		typeid (Herren-Hinrunde, Damen-Hinrunde)
+		teamposition vewenden für Ranglistenposition
+		Feld Berechtigungen (vkz1)
+Berechtigungen zum Ignorieren
+
+Fehlertyp
+	Gültige Ergebnisse (bei Aufgabe Spiel beenden)
+	Spielstand = Sieger
+	Unbekannter Spieler
+	Jugendspieler nicht einsatzberechtigt
+		spielt zum 3. Mal in der Halbsaison
+		gar nicht spielberechtigt
+	Spieler nicht mehr im Verein (während der Saison gewechselt, bis dann)
+	Nicht in der Rangliste
+	Gespielt obwohl festgespielt (nach Tabelle)
+	Benachrichtigen wenn sich jemand festgespielt hat
+	Zu tief gespielt (falsche Mannschaft)
+	Zu wenig Spieler
+	Aufstellungsfehler
+		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
+		Falschrum aufgestellt (HD / HE)
+	Spieler hat dreimal gespielt
+	Spieler hat zweimal in der gleichen Disziplin gespielt
+	Spieler nicht in der Rangliste
+	Spieler ohne Ranglistenposition in der Rangliste
+	Mixed Herren vorne vor Damen
+	Spieler hat zweimal am gleichen Tag in verschiedenen Mannschaften gespielt
+	Nur 2. Doppel / nur 2./3. Einzel etc.
+	Schiedsrichter in der Regionalliga
+	Spielergebnis vor Spieldatum (-spielzeit)
+	Spielergebnis rechtzeitig eingetragen (RL/OL vs Rest, nicht gegen ohne)
+	Halle verändert -> Kommentar (mit Namen der Halle?)
+	1 Spieler im HD / DD / MX
+	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
+	Spiel ohne Kampf darf kein Detailergebnis haben
+	Mindestzahl der Spiele (5 in <VL | 8 in >= VL)
+		auch als Ergebnis von nicht spielberechtigt
+	Spiel ohne Uhrzeit
+	Mannschaft zum 3. Mal nicht angetreten
+	Letzter Spieltag darf nicht überschritten werden (unterschiedlich O19 | OL/RL | U19)
+	Spieler zu alt (Jugend)
+	Mannschaften eines Vereins immer am Anfang der Saison
+	Prüfen ob jede Mannschaft 4 Herren + 2 Damen (in der OL/RL wird nachgerückt)

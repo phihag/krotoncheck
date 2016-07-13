@@ -1,0 +1,8 @@
+<form method="post" class="login_form" action="/login">
+{{{csrf_field}}}
+
+<label><span>E-Mail:</span><input size="40" type="email" name="email" required="required" {{^focus_password}}autofocus="autofocus"{{/focus_password}} value="{{email}}" /></label>
+<label><span>Passwort:</span><input size="40" type="password" name="password" required="required" {{#focus_password}}autofocus="autofocus"{{/focus_password}} /></label>
+
+<button role="submit">Login</button>
+</form>

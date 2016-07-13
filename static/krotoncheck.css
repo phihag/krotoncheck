@@ -1,0 +1,25 @@
+body {
+	font-size: 24px;
+}
+
+.logged_in_as {
+	float: right;
+}
+
+input,textarea,button {
+	font-size: inherit;
+}
+
+
+.login_form>* {
+	display: block;
+	margin: 0.2em 0;
+}
+.login_form>label>span {
+	display: inline-block;
+	min-width: 4em;
+}
+.login_failed {
+	font-weight: bold;
+	color: red;
+}

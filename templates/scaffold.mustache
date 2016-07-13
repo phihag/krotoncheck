@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>krotoncheck</title>
+	<link rel="stylesheet" href="static/krotoncheck.css" />
+</head>
+<body>
+{{#current_user}}
+<nav>
+<div class="logged_in_as"><a href="/user/me">{{email}}</a></div>
+</nav>
+{{/current_user}}
+{{{content}}}
+</body>
+</html>

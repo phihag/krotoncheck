@@ -11,6 +11,7 @@ function setup(app) {
 	app.get('/', root.root_handler);
 	app.post('/login', users.login_handler);
 	app.get('/user/me', users.me_handler);
+	app.get('/change-password', users.change_password_handler);
 	app.post('/logout', users.logout_handler);
 }
 

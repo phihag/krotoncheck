@@ -78,6 +78,7 @@ function render(req, res, next, template_id, data) {
 	data.icon_path = '/static/icons/';
 	data.csrf_token = req.csrfToken();
 	data.csrf_field = '<input type="hidden" name="_csrf" value="' + escape_html(data.csrf_token) + '" />';
+	data.root_path = req.app.root_path;
 	_render_mustache(template_id, data, function(err, content) {
 		if (err) {
 			return next(err);

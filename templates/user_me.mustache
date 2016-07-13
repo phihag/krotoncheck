@@ -1,0 +1,12 @@
+<form method="post" class="change_password_form" action="{{root_path}}change-password">
+{{{csrf_field}}}
+<label><span>Altes Passwort:</span><input type="password" name="old_password" required="required" /></label>
+<label><span>Neues Passwort:</span><input type="password" name="new_password" required="required" /></label>
+<label><span>Neues Passwort:</span><input type="password" name="new_password2" required="required" /></label>
+<button role="submit">Passwort ändern</button>
+</form>
+
+<form method="post" action="{{root_path}}logout">
+{{{csrf_field}}}
+<button role="submit">Ausloggen</button>
+</form>

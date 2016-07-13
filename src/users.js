@@ -51,8 +51,8 @@ function login_handler(req, res, next) {
 			until: Date.now() + session_timeout,
 		};
 		req.app.db.sessions.insert(session);
-		res.cookie('krotoncheck_session', session.key, {maxAge: session_timeout, httpOnly: true, secure: true});
-		res.redirect('/');
+		res.cookie('krotoncheck_session', session.key, {maxAge: session_timeout, httpOnly: true, secure: req.secure});
+		res.redirect(res.app.root_path);
 	});
 }
 
@@ -64,7 +64,7 @@ function logout_handler(req, res) {
 	if (req.cookies.krotoncheck_session) {
 		req.app.db.sessions.remove({key: req.cookies.krotoncheck_session});
 	}
-	res.redirect('/');
+	res.redirect(req.app.root_path);
 }
 
 function need_permission(permission, handler) {
@@ -106,7 +106,7 @@ function change_password_handler(req, res, next) {
 			if (err) {
 				return next(err);
 			}
-			res.redirect('/');
+			res.redirect(req.app.root_path);
 		}
 	);
 }

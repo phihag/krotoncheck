@@ -6,21 +6,22 @@ var path = require('path');
 var utils = require('./utils');
 
 
-function load_config() {
+function load(cb) {
 	var fn = path.dirname(__dirname) + '/config.json';
-	var config_json = fs.readFileSync(fn);
-	var read_config = JSON.parse(config_json);
-	utils.update(config_data, read_config);
+	fs.readFile(fn, function(err, config_json) {
+		if (err) {
+			return cb(err);
+		}
+		var config_data = JSON.parse(config_json);
+		cb(null, function(key) {
+			if (! (key in config_data)) {
+				throw new Error('Cannot find configuration key ' + JSON.stringify(key));
+			}
+			return config_data[key];
+		});
+	});
 }
 
-var config_data = {};
-load_config();
-
-function config(key) {
-	if (! (key in config_data)) {
-		throw new Error('Cannot find configuration key ' + JSON.stringify(key));
-	}
-	return config_data[key];
-}
-
-module.exports = config;
+module.exports = {
+	load: load,
+};

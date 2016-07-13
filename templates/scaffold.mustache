@@ -3,12 +3,13 @@
 <head>
 	<meta charset="utf-8" />
 	<title>krotoncheck</title>
-	<link rel="stylesheet" href="static/krotoncheck.css" />
+<link rel="stylesheet" href="{{root_path}}static/krotoncheck.css" />
+<link rel="stylesheet" href="{{root_path}}static/users.css" />
 </head>
 <body>
 {{#current_user}}
 <nav>
-<div class="logged_in_as"><a href="/user/me">{{email}}</a></div>
+<div class="logged_in_as"><a href="{{root_path}}user/me">{{email}}</a></div>
 </nav>
 {{/current_user}}
 {{{content}}}

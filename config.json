@@ -1,4 +1,5 @@
 {
 	"port": 3002,
-	"debug": true
+	"debug": true,
+	"root_path": "/kc/"
 }

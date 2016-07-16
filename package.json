@@ -23,6 +23,7 @@
     "csurf": "*",
     "csv-parse": "*",
     "express": "*",
+    "serve-favicon": "*",
     "mustache": "*",
     "mustache-express": "*",
     "nedb": "*",

@@ -6,6 +6,7 @@ help:
 	@echo 'make targets:'
 	@echo '  help          This message'
 	@echo '  deps          Download and install all dependencies (for compiling / testing / CLI operation)'
+	@echo '  compile       Create output files from source files where necessary'
 	@echo '  test          Run tests'
 	@echo '  run-server    Run the server'
 	@echo '  clean         Remove temporary files'
@@ -14,6 +15,9 @@ help:
 deps: 
 	(node --version && npm --version) >/dev/null 2>/dev/null || sudo apt-get install -y nodejs npm
 	npm install
+
+compile:
+	$(MAKE) -C static all
 
 test:
 	TODO
@@ -35,4 +39,4 @@ eslint-server:
 eslint-client:
 	@eslint -c static/.eslintrc static/*.js
 
-.PHONY: default help deps test clean run-server lint eslint eslint-server eslint-client
+.PHONY: default compile help deps test clean run-server lint eslint eslint-server eslint-client

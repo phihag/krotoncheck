@@ -24,7 +24,7 @@ function login_handler(req, res, next) {
 	var email = req.body.email;
 	req.app.db.users.findOne({email: email}, function(err, u) {
 		if (err) {
-			throw err;
+			return next(err);
 		}
 
 		if (!u) {

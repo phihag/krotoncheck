@@ -3,9 +3,6 @@
 var fs = require('fs');
 var path = require('path');
 
-var utils = require('./utils');
-
-
 function load(cb) {
 	var fn = path.dirname(__dirname) + '/config.json';
 	fs.readFile(fn, function(err, config_json) {

@@ -1,7 +1,3 @@
-forgot pw link
-favicon
-
-add/list seasons
 implement download
 	http://www.turnier.de/sport/admin/exportplayers.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
 	http://www.turnier.de/sport/admin/exportplayermatches.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1&sd=20150522000000&ed=20160528000000
@@ -13,6 +9,10 @@ implement download
 	http://www.turnier.de/sport/admin/exportmatchfields.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
 download status
 reanalyze
-
 add first test
 ignore
+
+favicon
+forgot pw (send reset token)
+automatically query name + season ID upon season creation
+breadcrumbs

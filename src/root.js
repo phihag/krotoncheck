@@ -4,7 +4,14 @@ var render = require('./render');
 
 
 function root_handler(req, res, next) {
-	render(req, res, next, 'root', {});
+	req.app.db.efetch_all(next, [{
+		collection: 'seasons',
+	}], function(seasons) {
+		console.log(seasons);
+		render(req, res, next, 'root', {
+			seasons: seasons,
+		});
+	});
 }
 
 module.exports = {

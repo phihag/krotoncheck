@@ -16,12 +16,13 @@ function init(callback) {
 		fs.mkdirSync(db_dir);
 	}
 
-	['users', 'sessions'].forEach(function(key) {
+	['users', 'sessions', 'seasons', 'downloads'].forEach(function(key) {
 		db[key] = new Datastore({filename: db_dir + '/' + key, autoload: true});
 	});
 
 	db.users.ensureIndex({fieldName: 'email', unique: true});
 	db.sessions.ensureIndex({fieldName: 'key', unique: true});
+	db.seasons.ensureIndex({fieldName: 'key', unique: true});
 
 	var admin_email = 'krotoncheck@aufschlagwechsel.de';
 	db.users.find({email: admin_email}, function(err, docs) {
@@ -34,15 +35,28 @@ function init(callback) {
 			console.log('Initial admin account: ' + admin.email +  ' : ' + pw + ' .');
 		}
 	});
-	db.fetch_all = function() {
-		var args = [db];
-		for (var i = 0;i < arguments.length;i++) {
-			args.push(arguments[i]);
-		}
-		return fetch_all.apply(null, args);
+	db.fetch_all = function(specs, callback) {
+		return fetch_all(db, specs, callback);
+	};
+	db.efetch_all = function(errfunc, specs, callback) {
+		return fetch_all(db, specs, function() {
+			if (arguments[0]) {
+				return errfunc(arguments[0]);
+			}
+
+			var args = [];
+			for (var i = 1;i < arguments.length;i++) {
+				args.push(arguments[i]);
+			}
+			return callback.apply(null, args);
+		});
 	};
 
-	callback(db);
+	async.waterfall([function(cb) {
+		setup_autonum(cb, db, 'downloads');
+	}], function(err) {
+		callback(err, db);
+	});
 }
 
 function fetch_all(db, specs, callback) {

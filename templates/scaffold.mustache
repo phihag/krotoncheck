@@ -5,13 +5,22 @@
 	<title>krotoncheck</title>
 <link rel="stylesheet" href="{{root_path}}static/krotoncheck.css" />
 <link rel="stylesheet" href="{{root_path}}static/users.css" />
+<link rel="stylesheet" href="{{root_path}}static/seasons.css" />
 </head>
 <body>
 {{#current_user}}
 <nav>
+<div class="breadcrumbs"><a href="{{root_path}}">krotoncheck</a></div>
 <div class="logged_in_as"><a href="{{root_path}}user/me">{{email}}</a></div>
 </nav>
 {{/current_user}}
 {{{content}}}
+
+<script src="{{root_path}}static/uiu.js"></script>
+<script src="{{root_path}}static/report_problem.js"></script>
+{{#script_files}}
+<script src="{{root_path}}static/{{.}}"></script>
+{{/script_files}}
+
 </body>
 </html>

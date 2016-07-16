@@ -1,3 +1,10 @@
 {{^current_user}}
 {{>login}}
 {{/current_user}}
+
+{{#current_user}}
+{{>seasons_list}}
+
+<p><a href="{{root_path}}season_add/dialog">Liga hinzufügen ...</a></p>
+
+{{/current_user}}

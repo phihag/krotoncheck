@@ -1,5 +1,6 @@
 'use strict';
 
+var async = require('async');
 var bodyParser = require('body-parser');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
@@ -35,11 +36,16 @@ function run_server(app_cfg, db) {
 	});
 }
 
-config.load(function(err, app_cfg) {
+async.waterfall([
+	config.load,
+	function(app_cfg, cb) {
+		database.init(function(err, db) {
+			return cb(err, app_cfg, db);
+		});
+	}
+], function(err, app_cfg, db) {
 	if (err) {
 		throw err;
 	}
-	database.init(function(db) {
-		run_server(app_cfg, db);
-	});
+	run_server(app_cfg, db);
 });

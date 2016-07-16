@@ -27,7 +27,12 @@ run-server:
 
 lint: eslint ## Verify source code quality
 
-eslint:
+eslint: eslint-server eslint-client
+
+eslint-server:
 	@eslint src/*.js test/*.js
 
-.PHONY: default help deps test clean run-server lint eslint
+eslint-client:
+	@eslint -c static/.eslintrc static/*.js
+
+.PHONY: default help deps test clean run-server lint eslint eslint-server eslint-client

@@ -73,14 +73,6 @@ function match_all(pattern, input) {
     return res;
 }
 
-function ematch(pattern, input) {
-    var m = pattern.exec(input);
-    if (!m) {
-        throw new Error('Could not find ' + pattern.source);
-    }
-    return m[1];
-}
-
 function values(obj) {
     var res = [];
     for (var key in obj) {
@@ -144,23 +136,38 @@ function update(obj, new_info) {
     }
 }
 
+// Callback gets called with (error, response, body as string)
+function download_page(url, cb) {
+    http.get(url, function(res) {
+        res.setEncoding('utf8'); // TODO read actual page encoding
+        var body = '';
+        res.on('data', function(chunk) {
+            body += chunk;
+        });
+        res.on('end', function() {
+            cb(null, res, body);
+        });
+    }).on('error', function(e) {
+        cb(e, null, null);
+    });
+}
 
 module.exports = {
-    ematch: ematch,
-    escapeRegExp: escapeRegExp,
-    filter_by: filter_by,
-    format_iso8601: format_iso8601,
-    gen_token: gen_token,
-    make_key: make_key,
-    match_all: match_all,
-    multilineRegExp: multilineRegExp,
-    natcmp: natcmp,
-    pad: pad,
-    render_json: render_json,
-    sha512: sha512,
-    size: size,
-    sort_by: sort_by,
-    today_iso8601: today_iso8601,
-    update: update,
-    values: values,
+    download_page,
+    escapeRegExp,
+    filter_by,
+    format_iso8601,
+    gen_token,
+    make_key,
+    match_all,
+    multilineRegExp,
+    natcmp,
+    pad,
+    render_json,
+    sha512,
+    size,
+    sort_by,
+    today_iso8601,
+    update,
+    values,
 };

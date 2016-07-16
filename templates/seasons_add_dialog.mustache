@@ -1,0 +1,17 @@
+<form method="post" action="{{root_path}}season_add" class="season_add_dialog">
+{{{csrf_field}}}
+<label>
+<span>URL:</span><input name="url" type="url" size="90" placeholder="http://turnier.de/sport/..." value="http://www.turnier.de/sport/tournament.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979" required="required" /> 
+</label>
+
+<label>
+<span>Name:</span><input name="name" type="text" size="20" value="" required="required" /> 
+</label>
+
+<label>
+<span>ID:</span><input name="season_id" type="text" size="10" pattern="^[a-z0-9]+$" value="" required="required" /> 
+</label>
+
+
+<button role="submit">Liga hinzufügen</button>
+</form>

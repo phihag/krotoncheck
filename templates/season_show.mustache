@@ -1,3 +1,12 @@
 {{#season}}
 <h1>{{name}}</h1>
+
+Datenstatus 
+
+{{#current_downloads}}
+Currently downloading: {{id}}
+{{/current_downloads}}
+
+<button class="download_button" role="button" data-season_key="{{key}}">Download starten</button>
+
 {{/season}}

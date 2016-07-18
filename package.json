@@ -27,6 +27,7 @@
     "mustache": "*",
     "mustache-express": "*",
     "nedb": "*",
+    "request": "*",
     "webworker-threads": "*"
   }
 }

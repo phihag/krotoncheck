@@ -39,15 +39,11 @@ function init(callback) {
 		return fetch_all(db, specs, callback);
 	};
 	db.efetch_all = function(errfunc, specs, callback) {
-		return fetch_all(db, specs, function() {
-			if (arguments[0]) {
-				return errfunc(arguments[0]);
+		return fetch_all(db, specs, function(err, ...args) {
+			if (err) {
+				return errfunc(err);
 			}
 
-			var args = [];
-			for (var i = 1;i < arguments.length;i++) {
-				args.push(arguments[i]);
-			}
 			return callback.apply(null, args);
 		});
 	};
@@ -103,15 +99,17 @@ function setup_autonum(callback, db, collection, start) {
 		return '' + idx;
 	};
 
-
 	db[collection].find({}, function(err, docs) {
 		if (err) {
 			callback(err);
 		}
 
-		docs.forEach(function(doc) {
-			idx = Math.max(idx, doc._id);
-		});
+		for (let doc of docs) {
+			let int_id = parseInt(doc._id, 10);
+			if (! isNaN(int_id)) {
+				idx = Math.max(idx, int_id);
+			}
+		}
 
 		return callback();
 	});

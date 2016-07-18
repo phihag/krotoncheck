@@ -152,8 +152,19 @@ function download_page(url, cb) {
     });
 }
 
+function ensure_dir(dirname, cb) {
+    fs.exists(dirname, function(exists) {
+        if (exists) {
+            return cb();
+        }
+
+        fs.mkdir(dirname, cb);
+    });
+}
+
 module.exports = {
     download_page,
+    ensure_dir,
     escapeRegExp,
     filter_by,
     format_iso8601,

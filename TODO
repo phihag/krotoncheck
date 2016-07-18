@@ -1,17 +1,10 @@
-implement download
-	http://www.turnier.de/sport/admin/exportplayers.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
-	http://www.turnier.de/sport/admin/exportplayermatches.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1&sd=20150522000000&ed=20160528000000
-	http://www.turnier.de/sport/admin/exportteammatches.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1&sd=20150522000000&ed=20160528000000
-	http://www.turnier.de/sport/admin/exportclubs.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
-	http://www.turnier.de/sport/admin/export_playerteam.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
-	http://www.turnier.de/sport/admin/exportlocations.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
-	http://www.turnier.de/sport/clubranking_export.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
-	http://www.turnier.de/sport/admin/exportmatchfields.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&ft=1
-download status
-reanalyze
+show download status
+button to reanalyze
 add first test
-ignore
 
+ignore
+schedule
 forgot pw (send reset token)
 automatically query name + season ID upon season creation
 breadcrumbs
+detailed download progress

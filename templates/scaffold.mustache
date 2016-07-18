@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="{{root_path}}static/users.css" />
 <link rel="stylesheet" href="{{root_path}}static/seasons.css" />
 </head>
-<body>
+<body data-csrf_token="{{csrf_token}}" data-root_path="{{root_path}}">
 {{#current_user}}
 <nav>
 <div class="breadcrumbs"><a href="{{root_path}}">krotoncheck</a></div>
@@ -19,9 +19,9 @@
 
 <script src="{{root_path}}static/uiu.js"></script>
 <script src="{{root_path}}static/report_problem.js"></script>
-{{#script_files}}
-<script src="{{root_path}}static/{{.}}"></script>
-{{/script_files}}
-
+<script src="{{root_path}}static/cutils.js"></script>
+<script src="{{root_path}}static/season_add_client.js"></script>
+<script src="{{root_path}}static/cdownload.js"></script>
+<script src="{{root_path}}static/init.js"></script>
 </body>
 </html>

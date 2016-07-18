@@ -1,8 +1,8 @@
 'use strict';
 
-(function() {
+var cutils = (function() {
 
-function download_json(url, cb) {
+function request(url, post_data, cb) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState != 4) {
@@ -15,14 +15,42 @@ function download_json(url, cb) {
 			});
 		}
 
-		return JSON.parse(xhr.responseText);
+		var data = JSON.parse(xhr.responseText);
+		cb(null, data);
 	};
-	xhr.open('GET', path);
-	xhr.send();
+
+	if (post_data) {
+		xhr.open('POST', url, true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+		var fd = cutils.form_data(post_data);
+		xhr.send(fd);
+	} else {
+		xhr.open('GET', url);
+		xhr.send();
+	}
+}
+
+function root_path() {
+	return uiu.qs('body').getAttribute('data-root_path');
+}
+
+function csrf_token() {
+	return uiu.qs('body').getAttribute('data-csrf_token');
+}
+
+function form_data(obj) {
+	var items = [];
+	for (var k in obj) {
+		items.push(encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]));
+	}
+	return items.join('&');
 }
 
 return {
-	download_json: download_json,
+	request: request,
+	root_path: root_path,
+	csrf_token: csrf_token,
+	form_data: form_data,
 };
 
 })();

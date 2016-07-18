@@ -2,11 +2,9 @@
 
 var async = require('async');
 var bodyParser = require('body-parser');
-var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var csrf = require('csurf');
 var express = require('express');
-var url = require('url');
 
 var config = require('./config');
 var users = require('./users');
@@ -42,7 +40,7 @@ async.waterfall([
 		database.init(function(err, db) {
 			return cb(err, app_cfg, db);
 		});
-	}
+	},
 ], function(err, app_cfg, db) {
 	if (err) {
 		throw err;

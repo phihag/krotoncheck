@@ -1,5 +1,7 @@
 {
 	"port": 3002,
 	"debug": true,
-	"root_path": "/kc/"
+	"root_path": "/kc/",
+	"tournament_user": "v01krotoncheck",
+	"tournament_password": "BC8atEJxpA"
 }

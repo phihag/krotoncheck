@@ -73,6 +73,13 @@ function silent_error(msg) {
 	report(get_info());
 }
 
+function network_error(e) {
+	console.log('network error: ' + e.message); // TODO report in UI
+	last_error = e;
+	last_error.type = network_error;
+	report(get_info());
+}
+
 function init() {
 	window.onerror = on_error;
 }
@@ -85,6 +92,7 @@ return {
 	send_export: send_export,
 	silent_error: silent_error,
 	on_error: on_error,
+	network_error: network_error,
 };
 
 })();

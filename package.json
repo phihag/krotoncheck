@@ -17,11 +17,12 @@
   },
   "homepage": "https://github.com/phihag/krotoncheck#readme",
   "dependencies": {
+    "atomic-write": "*",
+    "babyparse": "*",
     "bcrypt": "*",
     "body-parser": "*",
     "cookie-parser": "*",
     "csurf": "*",
-    "csv-parse": "*",
     "express": "*",
     "serve-favicon": "*",
     "mustache": "*",

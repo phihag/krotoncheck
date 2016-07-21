@@ -1,16 +1,22 @@
 'use strict';
 
 var async = require('async');
+var atomic_write = require('atomic-write');
 var fs = require('fs');
 var path = require('path');
 var request = require('request');
 var url = require('url');
+
+var Baby = require('babyparse');
 
 var utils = require('./utils');
 
 const BASE_URL = 'http://www.turnier.de/';
 const INPROGRESS_ROOT = path.join(path.dirname(__dirname), 'data/download_inprogress/');
 const DATA_ROOT = path.join(path.dirname(__dirname), 'data/download_data/');
+const HTTP_HEADERS = {
+    'User-Agent': 'krotoncheck (phihag@phihag.de)',
+};
 
 const ALL_TASKS = [
     'players',
@@ -21,6 +27,7 @@ const ALL_TASKS = [
     'locations',
     'clubranking',
     'matchfields',
+    'teams',
 ];
 
 
@@ -55,6 +62,7 @@ function run_login(config, jar, cb) {
     request.get({
         url: login_dialog_url,
         jar: jar,
+        headers: HTTP_HEADERS,
     }, function(err, _, html) {
         if (err) {
             return cb(err);
@@ -80,6 +88,7 @@ function run_login(config, jar, cb) {
             url: login_url,
             form: form_data,
             jar: jar,
+            headers: HTTP_HEADERS,
         }, function(err) {
             if (err) {
                 return cb(err);
@@ -127,6 +136,7 @@ function download_season(config, season, started_cb, done_cb) {
                 var req = request({
                     url: calc_url(task_name, tournament_id),
                     jar: jar,
+                    headers: HTTP_HEADERS,
                 });
 
                 var encountered_error = false;
@@ -224,14 +234,58 @@ function inprogress_by_season(season_key) {
         current_downloads.values());
 }
 
-function load_season_data(season, cb) {
-    if (!season.newest_download) {
-        return cb(new Error('No downloads available'));
+function parse_csv(fn, cb) {
+    // It seems crazily inefficient to read the file into memory,
+    // but that seems to be the fastest way
+    // See https://github.com/phihag/csv-speedtest for speed test
+    fs.readFile(fn, {encoding: 'binary'}, function(err, fcontents) {
+        if (err) return cb(err);
+        fcontents = fcontents.trim();
+
+        Baby.parse(fcontents, {
+            header: true,
+            complete: function(res) {
+                if (res.errors.length > 0) {
+                    return cb(new Error('Failed to parse ' + fn + ': ' + JSON.stringify(res.errors)));
+                }
+                var lines = res.data;
+                cb(null, lines);
+            },
+        });
+    });
+}
+
+function load_season_data(season, callback) {
+    var dl = season.newest_download;
+    if (!dl) {
+        return callback(new Error('No downloads available'));
     }
 
-    var data = {};
+    var dirname = path.join(DATA_ROOT, dl.id);
 
-    return cb(null, data);
+    var json_fn = path.join(dirname, 'cachev1.json');
+    fs.readFile(json_fn, {encoding: 'utf8'}, function(err, fcontents) {
+        if (err) {
+            let data = {};
+            async.each(dl.tasks, function(task_name, cb) {
+                var csv_fn = path.join(dirname, task_name + '.csv');
+                parse_csv(csv_fn, function(err, lines) {
+                    if (err) return cb(err);
+                    data[task_name] = lines;
+                    cb(err);
+                });
+            }, function(err) {
+                if (err) return callback(err);
+
+                atomic_write.writeFile(json_fn, JSON.stringify(data), {encoding: 'utf8'}, function(err) {
+                    callback(err, data);
+                });
+            });
+        } else {
+            let data = JSON.parse(fcontents);
+            callback(null, data);
+        }
+    });
 }
 
 module.exports = {

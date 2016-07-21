@@ -1,12 +1,22 @@
 'use strict';
 
 var async = require('async');
+var fs = require('fs');
 
 var downloads = require('./downloads');
+var data_access = require('./data_access');
+
+var check_names = fs.readdirSync(__dirname + '/checks');
+var CHECKS = check_names.map(cn => require('./checks/' + cn));
 
 // Yields all problems
 function* check(season, data) {
+	data_access.enrich(season, data);
 
+	// TODO catch errors by the extractors and emit them as well
+	for (var check of CHECKS) {
+		yield* check(season, data);
+	}
 }
 
 // Runs a new check and stores the results in the database

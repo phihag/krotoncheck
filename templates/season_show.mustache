@@ -2,7 +2,10 @@
 <h1>{{name}}</h1>
 
 {{#newest_download}}
-Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button class="analyze-button" role="button" data-season_key="{{key}}">Untersuchen</button>
+<form method="post" action="{{root_path}}s/{{key}}/recheck">
+{{{csrf_field}}}
+Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button class="analyze-button" role="submit" data-season_key="{{key}}">Untersuchen</button>
+</form>
 {{/newest_download}}
 
 {{#downloads_inprogress}}

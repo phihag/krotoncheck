@@ -2,6 +2,8 @@
 
 var downloads = require('./downloads');
 var render = require('./render');
+var check = require('./check');
+var utils = require('./utils');
 
 
 function add_handler(req, res, next) {
@@ -45,9 +47,25 @@ function show_handler(req, res, next) {
 	});
 }
 
+function recheck_handler(req, res, next) {
+	check.recheck(req.app.db, req.params.season_key, function(err) {
+		if (err) return next(err);
+		res.redirect(req.app.root_path + 's/' + encodeURIComponent(req.params.season_key) + '/');
+	});
+}
+
+function check_handler(req, res, next) {
+	check.recheck(req.app.db, req.params.season_key, function(err, problems) {
+		if (err) return next(err);
+		utils.render_json(res, problems);
+	}, false);
+}
+
 
 module.exports = {
 	add_handler,
 	add_dialog_handler,
 	show_handler,
+	recheck_handler,
+	check_handler,
 };

@@ -224,7 +224,18 @@ function inprogress_by_season(season_key) {
         current_downloads.values());
 }
 
+function load_season_data(season, cb) {
+    if (!season.newest_download) {
+        return cb(new Error('No downloads available'));
+    }
+
+    var data = {};
+
+    return cb(null, data);
+}
+
 module.exports = {
     start_handler,
     inprogress_by_season,
+    load_season_data,
 };

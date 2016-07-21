@@ -1,4 +1,3 @@
-show download status
 button to reanalyze
 add first test
 
@@ -9,5 +8,6 @@ automatically query name + season ID upon season creation
 breadcrumbs
 detailed download progress
 check that on download error status is correctly set
+show download status
 make utils.ensure_dir atomic
 check that failed renders don't crash server

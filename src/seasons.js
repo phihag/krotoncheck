@@ -1,7 +1,7 @@
 'use strict';
 
+var downloads = require('./downloads');
 var render = require('./render');
-var utils = require('./utils');
 
 
 function add_handler(req, res, next) {
@@ -21,9 +21,7 @@ function add_handler(req, res, next) {
 		tournament_id: tournament_id,
 		name: name,
 	}, function(err) {
-		if (err) {
-			return next(err);
-		}
+		if (err) return next(err);
 		res.redirect(req.app.root_path + 's/' + season_key);
 	});
 }
@@ -38,8 +36,11 @@ function show_handler(req, res, next) {
 		collection: 'seasons',
 		query: {key: req.params.season_key},
 	}], function(season) {
+		var downloads_inprogress = downloads.inprogress_by_season(season.key);
+
 		render(req, res, next, 'season_show', {
 			season: season,
+			downloads_inprogress: downloads_inprogress,
 		});
 	});
 }

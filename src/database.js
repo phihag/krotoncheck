@@ -16,7 +16,7 @@ function init(callback) {
 		fs.mkdirSync(db_dir);
 	}
 
-	['users', 'sessions', 'seasons', 'downloads'].forEach(function(key) {
+	['users', 'sessions', 'seasons'].forEach(function(key) {
 		db[key] = new Datastore({filename: db_dir + '/' + key, autoload: true});
 	});
 
@@ -48,47 +48,29 @@ function init(callback) {
 		});
 	};
 
-	async.waterfall([function(cb) {
-		setup_autonum(cb, db, 'downloads');
-	}], function(err) {
-		callback(err, db);
-	});
+	callback(null, db);
 }
 
 function fetch_all(db, specs, callback) {
-	var results = {};
-	var done = false;
-
-	specs.forEach(function(spec, index) {
+	async.map(specs, function(spec, cb) {
 		var queryFunc = spec.queryFunc || 'find';
 		if (queryFunc === '_findOne') {
 			queryFunc = 'findOne';
 		}
 
 		db[spec.collection][queryFunc](spec.query, function (err, docs) {
-			if (done) {
-				return;  // Error occured already
-			}
-			if (err) {
-				done = true;
-				return callback(err, null);
-			}
+			if (err) return cb(err);
 
 			if ((spec.queryFunc == '_findOne') && !docs) {
-				done = true;
-				return callback(new Error('Cannot find one of ' + spec.collection));
+				return cb(new Error('Cannot find one of ' + spec.collection));
 			}
 
-			results['r' + index] = docs;
-			if (utils.size(results) == specs.length) {
-				done = true;
-				var args = [null];
-				specs.forEach(function(spec, index) {
-					args.push(results['r' + index]);
-				});
-				return callback.apply(null, args);
-			}
+			cb(err, docs);
 		});
+	}, function(err, results) {
+		if (err) return callback(err);
+
+		callback(err, ...results);
 	});
 }
 
@@ -117,4 +99,5 @@ function setup_autonum(callback, db, collection, start) {
 
 module.exports = {
 	init: init,
+	setup_autonum: setup_autonum, // Currently unused(?)
 };

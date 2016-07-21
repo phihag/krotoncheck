@@ -9,20 +9,18 @@ function gen_token() {
 	return crypto.randomBytes(32).toString('hex');
 }
 
-function size(obj) {
-    var res = 0;
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            res++;
+// filter on any iterable
+function* filter(func, iterable) {
+    for (let el of iterable) {
+        if (func(el)) {
+            yield el;
         }
     }
-    return res;
 }
 
-function filter_by(ar, key, value) {
-    return ar.filter(function(v) {
-        return v[key] === value;
-    });
+// Like filter, but return an array
+function filterr(func, iterable) {
+    return Array.from(filter(func, iterable));
 }
 
 function sort_by(ar, key) {
@@ -166,7 +164,8 @@ module.exports = {
     download_page,
     ensure_dir,
     escapeRegExp,
-    filter_by,
+    filter,
+    filterr,
     format_iso8601,
     gen_token,
     make_key,
@@ -176,7 +175,6 @@ module.exports = {
     pad,
     render_json,
     sha512,
-    size,
     sort_by,
     today_iso8601,
     update,

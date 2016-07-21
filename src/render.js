@@ -72,6 +72,17 @@ function _render_mustache(template_id, data, callback) {
 	});
 }
 
+function mustache_format_timestamp() {
+	return function format_timestamp(text, renderfunc) {
+		var content = renderfunc(text);
+		var ts = parseInt(content, 10);
+		if (!ts) {
+			return '(Ungültiger Zeitstempel)';
+		}
+		return new Date(ts).toISOString();
+	};
+}
+
 function render(req, res, next, template_id, data) {
 	data.current_user = req.krotoncheck_user;
 	data.urlencode = encodeURIComponent;
@@ -79,6 +90,7 @@ function render(req, res, next, template_id, data) {
 	data.csrf_token = req.csrfToken();
 	data.csrf_field = '<input type="hidden" name="_csrf" value="' + escape_html(data.csrf_token) + '" />';
 	data.root_path = req.app.root_path;
+	data.format_timestamp = mustache_format_timestamp;
 	_render_mustache(template_id, data, function(err, content) {
 		if (err) {
 			return next(err);

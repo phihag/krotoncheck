@@ -13,7 +13,8 @@ function ui_init() {
 					return report_problem.network_error(err);
 				}
 
-				console.log('started download');
+				// TODO reload downloads inline?
+				location.reload();
 			});
 		});
 	});

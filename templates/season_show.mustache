@@ -1,11 +1,13 @@
 {{#season}}
 <h1>{{name}}</h1>
 
-Datenstatus 
+{{#newest_download}}
+Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button class="analyze-button" role="button" data-season_key="{{key}}">Untersuchen</button>
+{{/newest_download}}
 
-{{#current_downloads}}
-Currently downloading: {{id}}
-{{/current_downloads}}
+{{#downloads_inprogress}}
+<div class="download">Läuft seit {{#format_timestamp}}{{started_timestamp}}{{/format_timestamp}}</div>
+{{/downloads_inprogress}}
 
 <button class="download_button" role="button" data-season_key="{{key}}">Download starten</button>
 

@@ -9,7 +9,8 @@ var url = require('url');
 var utils = require('./utils');
 
 const BASE_URL = 'http://www.turnier.de/';
-const DOWNLOADS_ROOT = path.join(path.dirname(__dirname), 'data/download_cache/');
+const INPROGRESS_ROOT = path.join(path.dirname(__dirname), 'data/download_inprogress/');
+const DATA_ROOT = path.join(path.dirname(__dirname), 'data/download_data/');
 
 const ALL_TASKS = [
     'players',
@@ -21,6 +22,12 @@ const ALL_TASKS = [
     'clubranking',
     'matchfields',
 ];
+
+
+var uniq_id = Date.now() + '-' + process.pid;
+var dl_counter = 0;
+var current_downloads = new Map();
+
 
 function calc_url(task_name, tournament_id) {
     switch(task_name) {
@@ -69,8 +76,6 @@ function run_login(config, jar, cb) {
         form_data['ctl00$ctl00$ctl00$cphPage$cphPage$cphPage$pnlLogin$Password'] = config('tournament_password');
         let login_url = url.resolve(login_dialog_url, login_path);
 
-        login_url = 'http://www.turnier.de/member/login.aspx?returnurl=%2fdefault.aspx';
-
         request.post({
             url: login_url,
             form: form_data,
@@ -85,29 +90,30 @@ function run_login(config, jar, cb) {
     });
 }
 
-
 // started_cb gets called once the download job, with (err, download) as an argument
 // done_cb gets called once the download is finished, again with (err, download)
-function download_season(config, db, season, started_cb, done_cb) {
+function download_season(config, season, started_cb, done_cb) {
     var tournament_id = season.tournament_id;
 
     async.waterfall([function(cb) {
-        utils.ensure_dir(DOWNLOADS_ROOT, cb);
+        utils.ensure_dir(INPROGRESS_ROOT, cb);
     }, function(cb) {
-        db.downloads.insert({
-            season_key: season.key,
-            status: 'started',
-            started_timestamp: Date.now(),
-            tasks: ALL_TASKS,
-            file_sizes: {},
-            _id: db.downloads.autonum(),
-        }, cb);
-    }, function(dl, cb) {
-        var download_dir = path.join(DOWNLOADS_ROOT, dl._id);
+        utils.ensure_dir(DATA_ROOT, cb);
+    }, function(cb) {
+        var download_id = uniq_id + '_' + dl_counter;
+        dl_counter++;
+        var download_dir = path.join(INPROGRESS_ROOT, download_id);
         utils.ensure_dir(download_dir, function(err) {
-            cb(err, dl, download_dir);
+            var dl = {
+                id: download_id,
+                status: 'started',
+                started_timestamp: Date.now(),
+                tasks: ALL_TASKS,
+                season_key: season.key,
+            };
+            cb(err, dl);
         });
-    }], function(err, dl, download_dir) {
+    }], function(err, dl) {
         started_cb(err, dl);
 
         if (err) {
@@ -116,7 +122,8 @@ function download_season(config, db, season, started_cb, done_cb) {
 
         var jar = request.jar();
         run_login(config, jar, function() {
-            async.each(ALL_TASKS, function(task_name, cb) {
+            var download_dir = path.join(INPROGRESS_ROOT, dl.id);
+            async.each(dl.tasks, function(task_name, cb) {
                 var req = request({
                     url: calc_url(task_name, tournament_id),
                     jar: jar,
@@ -132,7 +139,8 @@ function download_season(config, db, season, started_cb, done_cb) {
                 }
 
                 req.on('error', on_error);
-                var pipe = req.pipe(fs.createWriteStream(calc_filename(download_dir, task_name), {
+                var fn = calc_filename(download_dir, task_name);
+                var pipe = req.pipe(fs.createWriteStream(fn, {
                     encoding: 'binary',
                 }));
                 pipe.on('error', on_error);
@@ -142,17 +150,12 @@ function download_season(config, db, season, started_cb, done_cb) {
                     }
                 });
             }, function(err) {
-                var fields = (err ? {
-                    status: 'error',
-                    error_message: err.message,
-                } : {
-                    status: 'finished'
-                });
-                fields.done_timestamp = Date.now();
-
-                db.downloads.update({_id: dl._id}, {$set: fields}, function(db_err) {
-                    done_cb(err || db_err);
-                });
+                if (err) {
+                    dl.done_timestamp = Date.now();
+                    dl.status = 'error';
+                    dl.error = err;
+                }
+                done_cb(err, dl);
             });
         });
     });
@@ -164,24 +167,64 @@ function start_handler(req, res, next) {
         collection: 'seasons',
         query: {key: req.params.season_key},
     }], function(season) {
-        download_season(req.app.config, req.app.db, season, function(err, dl) {
+        download_season(req.app.config, season, function(err, dl) {
             if (err) {
                 dl = {
                     status: 'error',
                     message: err.message,
                 };
+            } else {
+                current_downloads.set(dl.id, dl);
             }
 
             utils.render_json(res, {
                 download: dl,
             });
         }, function(err, dl) {
-            console.log('TODO: download done: ', err, dl);
-            console.log('TODO: should start analysis now');
+            if (err) {
+                dl.status = 'error';
+                dl.done_timestamp = Date.now();
+                dl.error = err;
+                // TODO: clean up?
+                return;
+            }
+
+            fs.rename(path.join(INPROGRESS_ROOT, dl.id), path.join(DATA_ROOT, dl.id), function(err) {
+                dl.done_timestamp = Date.now();
+                if (err) {
+                    dl.status = 'error';
+                    dl.error = err;
+                    // TODO: clean up
+                    return;
+                }
+
+                req.app.db.seasons.update({_id: season._id}, {
+                    $set: {newest_download: dl},
+                }, function(err) {
+                    if (err) {
+                        // TODO: clean up in DATA_ROOT
+                        dl.status = 'error';
+                        dl.error = err;
+                        return;
+                    }
+
+                    current_downloads.delete(dl.id);
+
+                    console.log('TODO: download done: ', dl);
+                    console.log('TODO: should start analysis now');
+                });
+            });
         });
     });
 }
 
+function inprogress_by_season(season_key) {
+    return utils.filterr(
+        cd => cd.season_key === season_key,
+        current_downloads.values());
+}
+
 module.exports = {
-    start_handler: start_handler,
+    start_handler,
+    inprogress_by_season,
 };

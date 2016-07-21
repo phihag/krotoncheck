@@ -1,3 +1,8 @@
+"redesign downloads
+	do not store running downloads on disk
+	upon finishing move download to data_dir
+	upon finishing update data_dir entry in seasons database
+
 show download status
 button to reanalyze
 add first test
@@ -8,3 +13,6 @@ forgot pw (send reset token)
 automatically query name + season ID upon season creation
 breadcrumbs
 detailed download progress
+check that on download error status is correctly set
+make utils.ensure_dir atomic
+check that failed renders don't crash server

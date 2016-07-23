@@ -1,4 +1,6 @@
-load data
+add a first testcase
+	include zurückgezogen
+	test only left side / only right side
 add first test
 	Mixed Herren vorne vor Damen
 
@@ -43,6 +45,10 @@ add more tests
 	Verlegung vom Verein in der OL/RL
 
 
+missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962
+
+add a parseerror class
+handle errors in checks
 ignore
 schedule
 send email out

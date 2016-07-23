@@ -1,5 +1,15 @@
 'use strict';
 
+function parse_bool(val) {
+	if (val === 'true') {
+		return true;
+	} else if (val === 'false') {
+		return false;
+	} else {
+		throw new Error('Invalid boolean value ' + JSON.stringify(val));
+	}
+}
+
 function enrich(season, data) {
 	var player_by_id = new Map();
 	for (let p of data.players) {
@@ -21,7 +31,9 @@ function enrich(season, data) {
 	for (let tm of data.teammatches) {
 		var t1 = team_by_id.get(tm.team1id);
 		var t2 = team_by_id.get(tm.team2id);
-		if (! (t1.status || t2.status)) {
+		var ohne_kampf = parse_bool(tm.flag_ok_gegen_team1) || parse_bool(tm.flag_ok_gegen_team2);
+
+		if (! (t1.Status || t2.Status || ohne_kampf)) {
 			data.active_teammatches.push(tm);
 			active_teammatch_ids.add(tm.matchid);
 		}

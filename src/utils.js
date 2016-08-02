@@ -23,6 +23,14 @@ function filterr(func, iterable) {
     return Array.from(filter(func, iterable));
 }
 
+function map_obj(keys, func) {
+    var res = {};
+    for (let k of keys) {
+        res[k] = func(k);
+    }
+    return res;
+}
+
 function sort_by(ar, key) {
     ar.sort(function(v1, v2) {
         if (v1[key] < v2[key]) {
@@ -169,6 +177,7 @@ module.exports = {
     format_iso8601,
     gen_token,
     make_key,
+    map_obj,
     match_all,
     multilineRegExp,
     natcmp,

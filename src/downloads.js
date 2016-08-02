@@ -1,15 +1,13 @@
 'use strict';
 
 var async = require('async');
-var atomic_write = require('atomic-write');
 var fs = require('fs');
 var path = require('path');
 var request = require('request');
 var url = require('url');
 
-var Baby = require('babyparse');
-
 var utils = require('./utils');
+var data_access = require('./data_access');
 
 const BASE_URL = 'http://www.turnier.de/';
 const INPROGRESS_ROOT = path.join(path.dirname(__dirname), 'data/download_inprogress/');
@@ -17,18 +15,6 @@ const DATA_ROOT = path.join(path.dirname(__dirname), 'data/download_data/');
 const HTTP_HEADERS = {
     'User-Agent': 'krotoncheck (phihag@phihag.de)',
 };
-
-const ALL_TASKS = [
-    'players',
-    'playermatches',
-    'teammatches',
-    'clubs',
-    'playerteam',
-    'locations',
-    'clubranking',
-    'matchfields',
-    'teams',
-];
 
 
 var uniq_id = Date.now() + '-' + process.pid;
@@ -117,7 +103,7 @@ function download_season(config, season, started_cb, done_cb) {
                 id: download_id,
                 status: 'started',
                 started_timestamp: Date.now(),
-                tasks: ALL_TASKS,
+                tasks: data_access.ALL_TASKS,
                 season_key: season.key,
             };
             cb(err, dl);
@@ -234,27 +220,6 @@ function inprogress_by_season(season_key) {
         current_downloads.values());
 }
 
-function parse_csv(fn, cb) {
-    // It seems crazily inefficient to read the file into memory,
-    // but that seems to be the fastest way
-    // See https://github.com/phihag/csv-speedtest for speed test
-    fs.readFile(fn, {encoding: 'binary'}, function(err, fcontents) {
-        if (err) return cb(err);
-        fcontents = fcontents.trim();
-
-        Baby.parse(fcontents, {
-            header: true,
-            complete: function(res) {
-                if (res.errors.length > 0) {
-                    return cb(new Error('Failed to parse ' + fn + ': ' + JSON.stringify(res.errors)));
-                }
-                var lines = res.data;
-                cb(null, lines);
-            },
-        });
-    });
-}
-
 function load_season_data(season, callback) {
     var dl = season.newest_download;
     if (!dl) {
@@ -262,30 +227,7 @@ function load_season_data(season, callback) {
     }
 
     var dirname = path.join(DATA_ROOT, dl.id);
-
-    var json_fn = path.join(dirname, 'cachev1.json');
-    fs.readFile(json_fn, {encoding: 'utf8'}, function(err, fcontents) {
-        if (err) {
-            let data = {};
-            async.each(dl.tasks, function(task_name, cb) {
-                var csv_fn = path.join(dirname, task_name + '.csv');
-                parse_csv(csv_fn, function(err, lines) {
-                    if (err) return cb(err);
-                    data[task_name] = lines;
-                    cb(err);
-                });
-            }, function(err) {
-                if (err) return callback(err);
-
-                atomic_write.writeFile(json_fn, JSON.stringify(data), {encoding: 'utf8'}, function(err) {
-                    callback(err, data);
-                });
-            });
-        } else {
-            let data = JSON.parse(fcontents);
-            callback(null, data);
-        }
-    });
+    data_access.load_data_cached(dirname, dl.tasks, callback);
 }
 
 module.exports = {

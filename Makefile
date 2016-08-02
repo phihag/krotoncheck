@@ -20,8 +20,7 @@ compile:
 	$(MAKE) -C static all
 
 test:
-	TODO
-	$(MAKE) lint
+	@npm test
 
 clean:
 	@npm clean

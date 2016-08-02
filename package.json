@@ -4,7 +4,8 @@
   "description": "Check Badminton league results according to NRW regulations",
   "main": "index.js",
   "scripts": {
-    "test": "make test"
+    "test": "mocha --delay test/",
+    "test:watch": "npm run test -- -w"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,8 @@
     "nedb": "*",
     "request": "*",
     "webworker-threads": "*"
+  },
+  "devDependencies": {
+    "mocha": "*"
   }
 }

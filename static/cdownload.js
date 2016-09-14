@@ -8,7 +8,7 @@ function ui_init() {
 
 			cutils.request(cutils.root_path() + 's/' + season_key + '/download-start', {
 				_csrf: cutils.csrf_token(),
-			}, function(err, doc) {
+			}, function(err/*, doc*/) {
 				if (err) {
 					return report_problem.network_error(err);
 				}
@@ -28,6 +28,10 @@ return {
 
 /*@DEV*/
 if ((typeof module !== 'undefined') && (typeof require !== 'undefined')) {
+	var cutils = require('./cutils.js');
+	var report_problem = require('./report_problem.js');
+	var uiu = require('./uiu.js');
+
 	module.exports = cdownload;
 }
 /*/@DEV*/

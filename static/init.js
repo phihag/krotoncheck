@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /*@DEV*/
 if ((typeof module !== 'undefined') && (typeof require !== 'undefined')) {
+	var cdownload = require('./cdownload.js');
+
 	var season_add_client = require('./season_add_client');
 }
 /*/@DEV*/

@@ -1,0 +1,31 @@
+[
+
+{
+	"message": "\"FV 1 hatte keine Spieler\" angegeben, aber Ergebnis nicht 21-0 21-0",
+	"match_id": "58",
+	"teammatch_id": "8"
+},
+{
+	"message": "\"BC Feder 1 hatte keine Spieler\" angegeben, aber Ergebnis nicht 0-21 0-21",
+	"match_id": "59",
+	"teammatch_id": "8"
+},
+{
+	"message": "\"Keine Spieler\" angegeben, aber Ergebnis eingetragen",
+	"match_id": "62",
+	"teammatch_id": "8"
+},
+
+{
+	"message": "\"Keine Spieler\" angegeben, aber Spieler eingetragen",
+	"match_id": "67",
+	"teammatch_id": "9"
+},
+{
+	"message": "\"FV 1 hatte keine Spieler\" angegeben, aber Ergebnis nicht 21-0 21-0",
+	"match_id": "71",
+	"teammatch_id": "9"
+}
+
+
+]

@@ -1,12 +1,14 @@
-add a first testcase
-	include zurückgezogen
-	test only left side / only right side
-add first test
+fix check for points if no players
+	should check for 21-0 21-0
+fix tests
 
 add more tests
-	Gültige Ergebnisse (bei Aufgabe Spiel beenden)
-	Spielstand = Sieger
 	Unbekannter Spieler
+	Aufstellungsfehler
+		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
+		Falschrum aufgestellt (HD / HE)
+	1 Spieler im HD / DD / MX
+	Spielstand = Sieger
 	Jugendspieler nicht einsatzberechtigt
 		spielt zum 3. Mal in der Halbsaison
 		gar nicht spielberechtigt
@@ -15,10 +17,8 @@ add more tests
 	Benachrichtigen wenn sich jemand festgespielt hat
 	Zu tief gespielt (falsche Mannschaft)
 	Zu wenig Spieler
-	Aufstellungsfehler
-		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
-		Falschrum aufgestellt (HD / HE)
 	Spieler hat dreimal gespielt
+		http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=12154
 	Spieler hat zweimal in der gleichen Disziplin gespielt
 	Spieler nicht in der Rangliste
 	Spieler ohne Ranglistenposition in der Rangliste
@@ -28,9 +28,7 @@ add more tests
 	Spielergebnis vor Spieldatum (-spielzeit)
 	Spielergebnis rechtzeitig eingetragen (RL/OL vs Rest, nicht gegen ohne)
 	Halle verändert -> Kommentar (mit Namen der Halle?)
-	1 Spieler im HD / DD / MX
 	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
-	Spiel ohne Kampf darf kein Detailergebnis haben
 	Mindestzahl der Spiele (5 in <VL | 8 in >= VL)
 		auch als Ergebnis von nicht spielberechtigt
 	keine Damen-Spiele in <VL
@@ -41,6 +39,7 @@ add more tests
 	Mannschaften eines Vereins immer am Anfang der Saison
 	Prüfen ob jede Mannschaft 4 Herren + 2 Damen (in der OL/RL wird nachgerückt)
 	Verlegung vom Verein in der OL/RL
+	vorgesehene Ersatzspieler in unter Verbands?liga
 
 
 missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962
@@ -65,3 +64,4 @@ add a test for 2 spaces in all files, and ==
 set up travis
 check errors in checks
 check errors in data_access.enrich (as called from checks)
+make sure 100% coverage

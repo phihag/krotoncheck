@@ -1,3 +1,5 @@
 tournamentid,teamid,code,number,name,contact,address,address2,address3,postalcode,city,state,country,phone,phone2,mobile,fax,fax2,email,website,externallink,clubcode,clubname,eventname,DrawID,DrawName,Status,locationcode,locationname
-1,1,01-1001-1,1,BC Feder 1,Martin Lemke,,,,,,,,,,,,,,,,01-1001,BC Feder,O19-S2-BL,01-001,draw?,,01-53225-1,53225 Bonn-Beuel
-1,2,01-1002-2,2,BC Shuttle 2,Martin Lemke,,,,,,,,,,,,,,,,01-1002,BC Shuttle,O19-S2-BL,01-001,draw?,,01-53225-1,53225 Bonn-Beuel
+1,1,01-1001-1,1,BC Feder 1,,,,,,,,,,,,,,,,,01-1001,BC Feder,O19-S2-BL,01-001,draw?,,,
+1,2,01-1002-2,2,BC Shuttle 2,,,,,,,,,,,,,,,,,01-1002,BC Shuttle,O19-S2-BL,01-001,draw?,,,
+1,3,01-1003-1,1,FV 1,,,,,,,,,,,,,,,,,01-1003,FV,O19-S2-BL,01-001,draw?,,,
+1,4,01-1004-1,1,BC Wrong 1,,,,,,,,,,,,,,,,,01-1004,BC Wrong,O19-S2-BL,01-001,draw?,,,

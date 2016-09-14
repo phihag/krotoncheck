@@ -24,6 +24,11 @@
         "es6": true,
     },
     "globals": {
+        " (test runner) ": true,
+        "describe": true,
+        "it": true,
+        "run": true,
+
     },
     "parserOptions": {
         "ecmaVersion": "6",

@@ -17,7 +17,7 @@ const CHECKS = utils.values(CHECKS_BY_NAME);
 function* check(season, data) {
 	data_access.enrich(season, data);
 
-	// TODO catch errors by the extractors and emit them as well
+	// TODO catch errors by the checkers and emit them as well
 	for (var check of CHECKS) {
 		yield* check(season, data);
 	}
@@ -25,7 +25,7 @@ function* check(season, data) {
 
 // Runs a new check and stores the results in the database
 // cb gets called with err, if any
-function recheck(db, season_key, callback, store=false) {
+function recheck(db, season_key, callback/*, store=false*/) {
 	async.waterfall([function(cb) {
 		db.fetch_all([{
 			queryFunc: '_findOne',

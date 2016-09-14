@@ -46,18 +46,40 @@ function enrich(season, data) {
 		teammatch_by_id.set(tm.matchid, tm);
 	}
 
+	var playermatches_by_teammatchid = new Map();
+	for (let pm of data.playermatches) {
+		let pms = playermatches_by_teammatchid.get(pm.teammatchid);
+		if (! pms) {
+			pms = [];
+			playermatches_by_teammatchid.set(pm.teammatchid, pms);
+		}
+		pms.push(pm);
+	}
+
 	data.active_teammatches = [];
 	let active_teammatch_ids = new Set();
 	for (let tm of data.teammatches) {
-		var t1 = team_by_id.get(tm.team1id);
+		for (let bool_key of [
+				'flag_ok_gegen_team1',
+				'flag_ok_gegen_team2',
+				'flag_umwertung_gegen_team1',
+				'flag_umwertung_gegen_team2',
+				'flag_umwertung_gegen_team1_beide',
+				'flag_umwertung_gegen_team2_beide',
+				'flag_umwertung_gegen_beide',
+				]) {
+			tm[bool_key] = parse_bool(tm[bool_key]);
+		}
+
+		let t1 = team_by_id.get(tm.team1id);
 		if (!t1) {
 			throw new Error('Team1 (ID: ' + tm.team1id + ')  in teammatch ' + tm.matchid + ' is missing');
 		}
-		var t2 = team_by_id.get(tm.team2id);
+		let t2 = team_by_id.get(tm.team2id);
 		if (!t2) {
 			throw new Error('Team2 (ID: ' + tm.team2id + ')  in teammatch ' + tm.matchid + ' is missing');
 		}
-		var ohne_kampf = parse_bool(tm.flag_ok_gegen_team1) || parse_bool(tm.flag_ok_gegen_team2);
+		let ohne_kampf = tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2;
 
 		if (! (t1.Status || t2.Status || ohne_kampf)) {
 			data.active_teammatches.push(tm);
@@ -66,9 +88,33 @@ function enrich(season, data) {
 	}
 
 	data.active_playermatches = [];
+	data.played_playermatches = [];
 	for (let pm of data.playermatches) {
-		if (active_teammatch_ids.has(pm.teammatchid)) {
-			data.active_playermatches.push(pm);
+		for (let int_key of [
+				'matchtypeno',
+				'winner',
+				'setcount',
+				'set1team1',
+				'set1team2',
+				'set2team1',
+				'set2team2',
+				'set3team1',
+				'set3team2']) {
+			pm[int_key] = parse_int(pm[int_key]);
+		}
+		for (let bool_key of ['flag_keinspiel_keinespieler', 'flag_keinspiel_keinspieler_team1', 'flag_keinspiel_keinspieler_team2', 'flag_aufgabe_team1', 'flag_aufgabe_team2', 'flag_umwertung_gegen_team1', 'flag_umwertung_gegen_team2']) {
+			pm[bool_key] = parse_bool(pm[bool_key]);
+		}
+
+		if (!active_teammatch_ids.has(pm.teammatchid)) {
+			continue;
+		}
+
+		data.active_playermatches.push(pm);
+
+		let not_played = pm.flag_keinspiel_keinespieler || pm.flag_keinspiel_keinspieler_team1 || pm.flag_keinspiel_keinspieler_team2;
+		if (! not_played) {
+			data.played_playermatches.push(pm);
 		}
 	}
 
@@ -86,8 +132,22 @@ function enrich(season, data) {
 		}
 		return res;
 	};
+	data.get_playermatches_by_teammatch_id = function(teammatch_id) {
+		var res = playermatches_by_teammatchid.get(teammatch_id);
+		if (!res) {
+			throw new Error('Konnte Spiel ' + JSON.stringify(teammatch_id) + ' nicht finden');
+		}
+		return res;
+	};
 	data.player_name = function(p) {
 		return p.vorname + ' ' + p.name;
+	};
+	data.match_name = function(pm) {
+		var res = pm.disziplin;
+		if (pm.matchtypeno) {
+			res = pm.matchtypeno + '. ' + res;
+		}
+		return res;
 	};
 }
 
@@ -143,9 +203,18 @@ function parse_csv(fn, cb) {
     });
 }
 
+function parse_int(s) {
+	let res = parseInt(s, 10);
+	if (isNaN(s)) {
+		throw new Error('Failed to parse integer from ' + JSON.stringify(s));
+	}
+	return res;
+}
+
 module.exports = {
 	enrich,
 	load_data_cached,
 	load_data,
 	ALL_TASKS,
+	parse_bool: parse_bool,
 };

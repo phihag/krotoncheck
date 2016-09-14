@@ -7,7 +7,6 @@ var path = require('path');
 
 var check = require('../src/check');
 var data_access = require('../src/data_access');
-var utils = require('../src/utils');
 
 
 const CHECKS_DIR = path.join(__dirname, 'expected');
@@ -36,6 +35,7 @@ setup_test(function(err, data) {
 					var check_func = check.CHECKS_BY_NAME[check_name];
 					var results = Array.from(check_func(TEST_SEASON, data));
 					assert.deepStrictEqual(results, expected);
+					done();
 				});
 				cb();
 			});

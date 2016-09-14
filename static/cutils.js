@@ -57,6 +57,8 @@ return {
 
 /*@DEV*/
 if ((typeof module !== 'undefined') && (typeof require !== 'undefined')) {
+	var uiu = require('./uiu.js');
+
 	module.exports = cutils;
 }
 /*/@DEV*/

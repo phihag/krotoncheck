@@ -1,10 +1,8 @@
-add problems table
-render problems
+(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
 
 add more tests
 	Unbekannter Spieler
 	Aufstellungsfehler
-		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
 		Falschrum aufgestellt (HD / HE)
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger

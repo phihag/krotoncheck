@@ -19,23 +19,11 @@ function* check_both(data, pm) {
 		return;
 	}
 
-	if (pm.winner === 0) {
-		return; // The entered players were not allowed to play
-	}
-
 	if (pm.setcount) {
 		yield {
 			match_id: pm.matchid,
 			teammatch_id: pm.teammatchid,
 			message: '"Keine Spieler" angegeben, aber Ergebnis eingetragen',
-		};
-	}
-
-	if (pm.team1spieler1spielerid || pm.team1spieler2spielerid || pm.team2spieler1spielerid || pm.team2spieler2spielerid) {
-		yield {
-			match_id: pm.matchid,
-			teammatch_id: pm.teammatchid,
-			message: '"Keine Spieler" angegeben, aber Spieler eingetragen',
 		};
 	}
 }

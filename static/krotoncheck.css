@@ -21,3 +21,14 @@ nav:after {
 input,textarea,button {
 	font-size: inherit;
 }
+
+
+a.problem {
+	display: block;
+	margin: 1em 0 1em 0;
+	text-decoration: none;
+	color: inherit;
+}
+.problem_header {
+	font-weight: bold;
+}

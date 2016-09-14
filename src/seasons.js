@@ -37,12 +37,34 @@ function show_handler(req, res, next) {
 		queryFunc: '_findOne',
 		collection: 'seasons',
 		query: {key: req.params.season_key},
-	}], function(season) {
+	}, {
+		queryFunc: 'findOne',
+		collection: 'problems',
+		query: {key: req.params.season_key},
+	}], function(season, problems_struct) {
 		var downloads_inprogress = downloads.inprogress_by_season(season.key);
 
 		render(req, res, next, 'season_show', {
 			season: season,
 			downloads_inprogress: downloads_inprogress,
+			problems: problems_struct ? problems_struct.found : [],
+		});
+	});
+}
+
+function show_problems_handler(req, res, next) {
+	req.app.db.efetch_all(next, [{
+		queryFunc: '_findOne',
+		collection: 'seasons',
+		query: {key: req.params.season_key},
+	}, {
+		queryFunc: 'findOne',
+		collection: 'problems',
+		query: {key: req.params.season_key},
+	}], function(season, problems_struct) {
+		render(req, res, next, 'season_problems_show', {
+			season: season,
+			problems: problems_struct ? problems_struct.found : [],
 		});
 	});
 }
@@ -51,7 +73,7 @@ function recheck_handler(req, res, next) {
 	check.recheck(req.app.db, req.params.season_key, function(err) {
 		if (err) return next(err);
 		res.redirect(req.app.root_path + 's/' + encodeURIComponent(req.params.season_key) + '/');
-	});
+	}, true);
 }
 
 function check_handler(req, res, next) {
@@ -68,4 +90,5 @@ module.exports = {
 	show_handler,
 	recheck_handler,
 	check_handler,
+	show_problems_handler,
 };

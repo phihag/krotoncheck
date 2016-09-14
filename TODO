@@ -1,6 +1,5 @@
-fix check for points if no players
-	should check for 21-0 21-0
-fix tests
+add problems table
+render problems
 
 add more tests
 	Unbekannter Spieler

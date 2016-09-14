@@ -16,13 +16,14 @@ function init(callback) {
 		fs.mkdirSync(db_dir);
 	}
 
-	['users', 'sessions', 'seasons'].forEach(function(key) {
+	['users', 'sessions', 'seasons', 'problems'].forEach(function(key) {
 		db[key] = new Datastore({filename: db_dir + '/' + key, autoload: true});
 	});
 
 	db.users.ensureIndex({fieldName: 'email', unique: true});
 	db.sessions.ensureIndex({fieldName: 'key', unique: true});
 	db.seasons.ensureIndex({fieldName: 'key', unique: true});
+	db.problems.ensureIndex({fieldName: 'key', unique: true});
 
 	var admin_email = 'krotoncheck@aufschlagwechsel.de';
 	db.users.find({email: admin_email}, function(err, docs) {

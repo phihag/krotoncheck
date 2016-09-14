@@ -1,0 +1,16 @@
+<div class="problems_list">
+{{#problems}}
+<a class="problem" href="{{turnier_url}}">
+<div class="problem_header">{{#teammatch}}
+{{team1name}} - {{team2name}} ({{teammatch_id}})
+{{/teammatch}}</div>
+
+{{#match}}
+<div>{{match_name}} ({{match_id}})</div>
+{{/match}}
+
+<div class="problem_message">{{message}}</div>
+</a>
+
+{{/problems}}
+</div>

@@ -6,6 +6,7 @@ var fs = require('fs');
 var data_access = require('./data_access');
 var downloads = require('./downloads');
 var utils = require('./utils');
+var problems = require('./problems');
 
 
 const CHECK_NAMES = fs.readdirSync(__dirname + '/checks').filter(fn => /\.js$/.test(fn)).map(fn => /^(.*)\.js$/.exec(fn)[1]);
@@ -25,7 +26,7 @@ function* check(season, data) {
 
 // Runs a new check and stores the results in the database
 // cb gets called with err, if any
-function recheck(db, season_key, callback/*, store=false*/) {
+function recheck(db, season_key, callback, store=false) {
 	async.waterfall([function(cb) {
 		db.fetch_all([{
 			queryFunc: '_findOne',
@@ -37,10 +38,14 @@ function recheck(db, season_key, callback/*, store=false*/) {
 			cb(err, season, data);
 		});
 	}, function(season, data, cb) {
-		var problems = Array.from(check(season, data));
-		console.log('problems found: ', problems);
-		// TODO actually save this in the season if store
-		cb(null, problems);
+		var found = Array.from(check(season, data));
+		problems.enrich(data, season, found);
+
+		if (!store) {
+			console.log('found problems', found);
+			return cb(null, found);
+		}
+		problems.store(db, season, found, cb);
 	}], callback);
 }
 

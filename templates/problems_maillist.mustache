@@ -1,22 +1,17 @@
 <div class="problems_list">
 {{#problems}}
 <p class="problem">
-
-<div><strong>{{#teammatch}}
+<strong>{{#teammatch}}
 {{team1name}} - {{team2name}} ({{teammatch_id}})
 {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
-{{/teammatch}}</strong></div>
-
-<div><a href="{{turnier_url}}">{{turnier_url}}</a></div>
+{{/teammatch}}</strong><br/>
+<a href="{{turnier_url}}">{{turnier_url}}</a><br/>
 
 {{#match}}
-<div>{{match_name}} ({{match_id}})</div>
+{{match_name}} ({{match_id}})<br/>
 {{/match}}
-
-<div class="problem_message">{{message}}</div>
-
+{{message}}
 </p>
-<br/>
 
 {{/problems}}
 </div>

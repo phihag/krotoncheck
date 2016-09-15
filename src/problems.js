@@ -12,6 +12,17 @@ function enrich(data, season, found) {
 			p.match_name = data.match_name(p.match);
 		}
 	});
+
+	found.sort(function(f1, f2) {
+		if (!f1.teammatch_id && f2.teammatch_id) {
+			return -1;
+		}
+		if (f1.teammatch_id && !f2.teammatch_id) {
+			return 1;
+		}
+
+		return natcmp(f1.teammatch_id, f2.teammatch_id);
+	});
 }
 
 function store(db, season, found, cb) {

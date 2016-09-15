@@ -71,3 +71,11 @@ turnierid;teammatchid;matchorder;matchid;disziplin;matchtypeno;team1spieler1spie
 1;9;6;70;HE;3;01-bcf-male3;;01-fcs-male3;;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
 1;9;7;71;DE;0;01-bcf-fem1;;;;1;0;0;0;0;0;0;0;;;2;0;false;false;true;false;false;false;false
 1;9;8;72;GD;0;01-bcf-male4;01-bcf-fem1;01-fcs-male4;01-bcf-fem2;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;1;73;HD;1;01-bcf-male1;01-bcf-male4;01-fv-m2;01-fv-m3;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;2;74;HD;2;01-bcf-male3;01-bcf-male2;01-fv-m1;01-fv-m4;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;3;75;DD;0;01-bcf-fem1;01-bcf-fem2;01-fv-f1;01-fv-f2;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;4;76;HE;1;01-bcf-male2;;01-fv-m5;;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;5;77;HE;2;01-bcf-male1;;01-fv-m7;;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;6;78;HE;3;01-bcf-male3;;01-fv-m3;;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;7;79;DE;0;01-bcf-fem1;;01-fv-f1;;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false
+1;10;8;80;GD;0;01-bcf-male4;01-bcf-fem1;01-fv-m4;01-fv-f2;1;2;21;0;21;0;0;0;;;2;0;false;false;false;false;false;false;false

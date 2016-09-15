@@ -1,4 +1,11 @@
+unbekannte Spieler
+	http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6586
+
+missing in VRL (youth players at seniors)
 (Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
+invalid team
+	HD and Doppel
+	HE and Einzel
 
 add more tests
 	Unbekannter Spieler

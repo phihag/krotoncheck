@@ -31,6 +31,22 @@ function parse_bool(val) {
 }
 
 function enrich(season, data) {
+	let vrls_by_clubs = new Map();
+	for (let cr of data.clubranking) {
+		let club_vrls = vrls_by_clubs.get(cr.clubcode);
+		if (!club_vrls) {
+			club_vrls = new Map();
+			vrls_by_clubs.set(cr.clubcode, club_vrls);
+		}
+		var vrl_type = parse_int(cr.typeid);
+		let line_vrl = club_vrls.get(vrl_type);
+		if (!line_vrl) {
+			line_vrl = new Map();
+			club_vrls.set(vrl_type, line_vrl);
+		}
+		line_vrl.set(cr.memberid, cr);
+	}
+
 	var player_by_id = new Map();
 	for (let p of data.players) {
 		player_by_id.set(p.spielerid, p);
@@ -149,6 +165,24 @@ function enrich(season, data) {
 		}
 		return res;
 	};
+	data.get_team = function(team_id) {
+		let res = team_by_id.get(team_id);
+		if (!res) {
+			throw new Error('Kann Team ' + team_id + ' nicht finden');
+		}
+		return res;
+	};
+	data.get_vrl_entry = function(club_id, vrl_type, player_id) {
+		let club_vrls = vrls_by_clubs.get(club_id);
+		if (!club_vrls) {
+			throw new Error('Kann VRL von Verein ' + club_id + ' nicht finden');
+		}
+		let res = club_vrls.get(vrl_type);
+		if (!res) {
+			throw new Error('Verein ' + club_id + ' hat keine VRL ' + vrl_type);
+		}
+		return res.get(player_id);
+	};
 	data.player_name = function(p) {
 		return p.vorname + ' ' + p.name;
 	};
@@ -159,6 +193,18 @@ function enrich(season, data) {
 		}
 		return res;
 	};
+	data.league_type = function(tm) {
+		if (/^01-[0-9]+$/.test(tm.staffelcode)) {
+			return 'O19';
+		}
+		if (/^01-[JS][0-9]+$/.test(tm.staffelcode)) {
+			return 'U19';
+		}
+		if (/^01-M[0-9]+$/.test(tm.staffelcode)) {
+			return 'Mini';
+		}
+		throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
+	}
 }
 
 function load_data(dirname, tasks, callback) {

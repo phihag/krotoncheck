@@ -4,6 +4,7 @@
 
 <div><strong>{{#teammatch}}
 {{team1name}} - {{team2name}} ({{teammatch_id}})
+{{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
 {{/teammatch}}</strong></div>
 
 <div><a href="{{turnier_url}}">{{turnier_url}}</a></div>
@@ -12,7 +13,7 @@
 <div>{{match_name}} ({{match_id}})</div>
 {{/match}}
 
-<div class="problem_message">{{message}}<br/></div>
+<div class="problem_message">{{message}}</div>
 
 </p>
 <br/>

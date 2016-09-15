@@ -37,8 +37,14 @@ function* check_all(data, tm, pms, team_idx) {
 			let ve = data.get_vrl_entry(team.clubcode, vrl_type, player_id);
 			if (!ve) {
 				let player = data.get_player(player_id);
-				let player_str = (player ?
-					(player.vorname + ' ' + player.name + '(' + player_id + ')') : player_id);
+				if ((pm.disziplin === 'GD') && (
+					((player_idx === 1) && (player.gender !== 'M')) ||
+					((player_idx === 2) && (player.gender !== 'F')))) {
+					// Incorrect gender, handled in mixed_geschlecht check
+					continue;
+				}
+
+				let player_str = player.vorname + ' ' + player.name + '(' + player_id + ')';
 
 				let message = (
 					'Kein VRL-Eintrag (Spalte ' + vrl_type + ') für ' + player_str +

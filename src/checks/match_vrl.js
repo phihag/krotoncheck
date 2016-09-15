@@ -14,7 +14,7 @@ function get_vrl_type(tm, pm, player_idx) {
 	if ((pm.disziplin === 'DD') || (pm.disziplin === 'DE') || ((pm.disziplin === 'GD') && player_idx === 2)) {
 		return is_hr ? 10 : 12;
 	}
-	throw new Error('Strange match ' + pm);
+	throw new Error('Unsupported discipline in match ' + pm);
 }
 
 function* check_all(data, tm, pms, team_idx) {

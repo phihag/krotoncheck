@@ -2,6 +2,8 @@ dist: trusty
 sudo: false
 
 language: node_js
+compiler:
+  - clang
 node_js:
   - "4.1"
   - 5

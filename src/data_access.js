@@ -204,7 +204,7 @@ function enrich(season, data) {
 			return 'Mini';
 		}
 		throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
-	}
+	};
 }
 
 function load_data(dirname, tasks, callback) {

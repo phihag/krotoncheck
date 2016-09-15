@@ -1,5 +1,8 @@
 'use strict';
 
+var utils = require('./utils.js');
+
+
 function enrich(data, season, found) {
 	found.forEach(function(p) {
 		if (p.teammatch_id) {
@@ -21,7 +24,14 @@ function enrich(data, season, found) {
 			return 1;
 		}
 
-		return natcmp(f1.teammatch_id, f2.teammatch_id);
+		if (f1.teammatch.ergebnisbestaetigt_user && !f2.teammatch.ergebnisbestaetigt_user) {
+			return -1;
+		}
+		if (!f1.teammatch.ergebnisbestaetigt_user && f2.teammatch.ergebnisbestaetigt_user) {
+			return 1;
+		}
+
+		return utils.natcmp(f1.teammatch_id, f2.teammatch_id);
 	});
 }
 

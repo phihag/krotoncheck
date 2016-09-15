@@ -1,16 +1,16 @@
-unbekannte Spieler
-	http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6586
-
-missing in VRL (youth players at seniors)
-(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
+fix tests
+add VRL test for missing in VRL
 invalid team
 	HD and Doppel
 	HE and Einzel
 
 add more tests
-	Unbekannter Spieler
-	Aufstellungsfehler
-		Falschrum aufgestellt (HD / HE)
+	more VRL
+		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
+		playing in lower team
+		fixed in
+		VRL for youth
+		VRL for mini
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
 	Jugendspieler nicht einsatzberechtigt
@@ -44,6 +44,7 @@ add more tests
 	Prüfen ob jede Mannschaft 4 Herren + 2 Damen (in der OL/RL wird nachgerückt)
 	Verlegung vom Verein in der OL/RL
 	vorgesehene Ersatzspieler in unter Verbands?liga
+	vrl order checks for youth players
 
 
 missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962

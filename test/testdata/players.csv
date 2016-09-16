@@ -11,6 +11,7 @@ spielerid;clubid;clubname;name;vorname;gebdatum;sex;nat;akl;jkz1;kz;privacystatu
 01-bcf-male10;01-1001;BC Feder;Daniel10;BCFl10;;M;;;;;
 01-bcf-male11;01-1001;BC Feder;Daniel11;BCFl11;;M;;;;;
 01-bcf-male12;01-1001;BC Feder;Daniel12;BCFl12;;M;;;;;
+01-bcf-inactive;01-1001;BC Feder;Nichtaktive;BCFl13;;M;;;;;
 01-bcf-fem1;01-1001;BC Feder;Daniela1;BCFl13;;F;;;;;
 01-bcf-fem2;01-1001;BC Feder;Daniela2;BCFl14;;F;;;;;
 01-bcf-fem3;01-1001;BC Feder;Daniela3;BCFl15;;F;;;;;
@@ -28,9 +29,9 @@ spielerid;clubid;clubname;name;vorname;gebdatum;sex;nat;akl;jkz1;kz;privacystatu
 01-fcs-male11;01-1002;FC Shuttle;Martin;FCS_lastname11;;M;;;;;
 01-fcs-male12;01-1002;FC Shuttle;Martin;FCS_lastname12;;M;;;;;
 01-fcs-fem1;01-1002;FC Shuttle;Martina;FCS_lastname13;;F;;;;;
-01-bcf-fem2;01-1002;FC Shuttle;Martina;FCS_lastname14;;F;;;;;
-01-bcf-fem3;01-1002;FC Shuttle;Martina;FCS_lastname15;;F;;;;;
-01-bcf-fem4;01-1002;FC Shuttle;Martina;FCS_lastname16;;F;;;;;
+01-fcs-fem2;01-1002;FC Shuttle;Martina;FCS_lastname14;;F;;;;;
+01-fcs-fem3;01-1002;FC Shuttle;Martina;FCS_lastname15;;F;;;;;
+01-fcs-fem4;01-1002;FC Shuttle;Martina;FCS_lastname16;;F;;;;;
 01-fv-m1;01-1003;FV;01-fv-m1 vorname;01-fv-m1 nachname;;M;;;;;
 01-fv-m2;01-1003;FV;01-fv-m2 vorname;01-fv-m2 nachname;;M;;;;;
 01-fv-m3;01-1003;FV;01-fv-m3 vorname;01-fv-m3 nachname;;M;;;;;

@@ -26,12 +26,11 @@ function* check_all(data, tm, pms, team_idx) {
 			continue; // Already handled
 		}
 
-		for (let player_idx = 1;player_idx < 2;player_idx++) {
+		for (let player_idx = 1;player_idx <= 2;player_idx++) {
 			let player_id = pm['team' + team_idx + 'spieler' + player_idx + 'spielerid'];
 			if (!player_id) {
 				continue;
 			}
-
 			let vrl_type = get_vrl_type(tm, pm, player_idx);
 
 			let ve = data.get_vrl_entry(team.clubcode, vrl_type, player_id);

@@ -33,6 +33,7 @@
     "webworker-threads": "*"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "eslint": "*"
   }
 }

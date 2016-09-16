@@ -33,9 +33,9 @@ lint: eslint ## Verify source code quality
 eslint: eslint-server eslint-client
 
 eslint-server:
-	@eslint src/*.js test/*.js
+	@node_modules/.bin/eslint src/*.js test/*.js
 
 eslint-client:
-	@eslint -c static/.eslintrc static/*.js
+	@node_modules/.bin/eslint -c static/.eslintrc static/*.js
 
 .PHONY: default compile help deps test clean run-server lint eslint eslint-server eslint-client

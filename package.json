@@ -1,6 +1,6 @@
 {
   "name": "krotoncheck",
-  "version": "2016.07.11",
+  "version": "2016.09.16",
   "description": "Check Badminton league results according to NRW regulations",
   "main": "index.js",
   "scripts": {

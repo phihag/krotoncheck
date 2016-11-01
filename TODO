@@ -1,13 +1,15 @@
 add date to teammatch
 Spielername in "TuS Jahn Werdohl 1 hatte keine Spieler" angegeben, aber Spieler 01-134864 eingetragen
-Schreibweise wäre (01-0801) ETG Recklinghausen bzw. (01-110641) Dennis Lanza 
 Unbekannte Spieler immer erkennen
-invalid team
-	HD and Doppel
-	HE and Einzel
 
 add more tests
-	more VRL
+	check VRL itself
+		Lückenlos bei der Nummerierung
+		keiner doppelt, inkl. DRL
+		Mind. 4 Herren und 2 Damen pro Team (Mini mind. 4 Spieler), dabei Berücksichtigung der "N" und J1/M1-Kennzeichen
+		Mind. 4 Herren, 2 Damen für OL aufwärts auch NACH dem Festspielen. (Felder "Fest in", "Fest ab") und inkl. Ende der Spielberechtigung
+		gültiges JugKZ in den O19-VRL bei Jugendspielern
+	more VRL application
 		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
 		playing in lower team
 		fixed in

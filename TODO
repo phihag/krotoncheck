@@ -1,4 +1,7 @@
-add VRL test for missing in VRL
+add date to teammatch
+Spielername in "TuS Jahn Werdohl 1 hatte keine Spieler" angegeben, aber Spieler 01-134864 eingetragen
+Schreibweise wäre (01-0801) ETG Recklinghausen bzw. (01-110641) Dennis Lanza 
+Unbekannte Spieler immer erkennen
 invalid team
 	HD and Doppel
 	HE and Einzel
@@ -10,20 +13,19 @@ add more tests
 		fixed in
 		VRL for youth
 		VRL for mini
+	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
+
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
 	Jugendspieler nicht einsatzberechtigt
 		spielt zum 3. Mal in der Halbsaison
-		gar nicht spielberechtigt
 	Spieler nicht mehr im Verein (während der Saison gewechselt, bis dann)
 	Gespielt obwohl festgespielt (nach Tabelle)
 	Benachrichtigen wenn sich jemand festgespielt hat
 	Zu tief gespielt (falsche Mannschaft)
-	Zu wenig Spieler
 	Spieler hat dreimal gespielt
 		http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=12154
 	Spieler hat zweimal in der gleichen Disziplin gespielt
-	Spieler nicht in der Rangliste
 	Spieler ohne Ranglistenposition in der Rangliste
 	Spieler hat zweimal am gleichen Tag in verschiedenen Mannschaften gespielt
 	Nur 2. Doppel / nur 2./3. Einzel etc.
@@ -32,8 +34,9 @@ add more tests
 	Spielergebnis rechtzeitig eingetragen (RL/OL vs Rest, nicht gegen ohne)
 	Halle verändert -> Kommentar (mit Namen der Halle?)
 	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
-	Mindestzahl der Spiele (5 in <VL | 8 in >= VL)
+	Mindestzahl der aufgestellten Spiele (5 in <VL | 8 in >= VL)
 		auch als Ergebnis von nicht spielberechtigt
+		spezielle Meldung wenn ein Team gar keine Spieler hatte
 	keine Damen-Spiele in <VL
 	Spiel ohne Uhrzeit
 	Mannschaft zum 3. Mal nicht angetreten
@@ -42,9 +45,13 @@ add more tests
 	Mannschaften eines Vereins immer am Anfang der Saison
 	Prüfen ob jede Mannschaft 4 Herren + 2 Damen (in der OL/RL wird nachgerückt)
 	Verlegung vom Verein in der OL/RL
-	vorgesehene Ersatzspieler in unter Verbands?liga
-	vrl order checks for youth players
-
+	vorgesehene Ersatzspieler in <VL
+	Ergebniseintrag zu spät (je nach OL/RL bzw. normal 24h / Montag 12:00)
+	formale Fehler in der VRL (Team fehlt, Nr. fehlt, Lücken in der VRL (Team-Position und DRL))
+	wenn Mannschaftsergebnis o.k. dann gar kein Detailergebnis (keine Spiele usw.)
+		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
+	unberechtigte Umwertung (Umwertung ohne das was falsch ist?)
+	Einsat von vorgesehenen Ersatzspielern ohne besondere Vorkommnisse
 
 missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962
 
@@ -69,3 +76,4 @@ set up travis
 check errors in checks
 check errors in data_access.enrich (as called from checks)
 make sure 100% coverage
+remove bcrypt in favor of something else

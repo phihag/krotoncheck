@@ -46,7 +46,7 @@ function* check_all(data, tm, pms, team_idx) {
 				let player_str = player.vorname + ' ' + player.name + '(' + player_id + ')';
 
 				let message = (
-					'Kein VRL-Eintrag (Spalte ' + vrl_type + ') für ' + player_str +
+					'Kein VRL-Eintrag für ' + player_str +
 					' im Verein ' + team.clubcode + '!');
 				yield {
 					teammatch_id: pm.teammatchid,

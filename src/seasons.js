@@ -52,6 +52,83 @@ function show_handler(req, res, next) {
 	});
 }
 
+function colorize_problem(problem) {
+	const tm = problem.teammatch;
+	problem.color = tm ? (tm.ergebnisbestaetigt_user ? 'red' : 'yellow') : 'black';
+	const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
+	problem.region = m ? m[1] : 'Sonstige Region';
+}
+
+function color_render(problems_struct) {
+	const problems = problems_struct ? problems_struct.found : [];
+
+	problems.forEach(colorize_problem);
+
+	const by_color = {};
+	for (const problem of problems) {
+		let col = by_color[problem.color];
+		if (! col) {
+			col = {
+				color: problem.color,
+				regions_map: {},
+			};
+			by_color[problem.color] = col;
+		}
+
+		let reg = col.regions_map[problem.region];
+		if (! reg) {
+			reg = {
+				name: problem.region,
+				teammatches_map: {},
+			};
+			col.regions_map[problem.region] = reg;
+		}
+
+		const tm = problem.teammatch;
+		if (!tm.matchid) {
+			throw new Error('Missing matchid');
+		}
+		let by_tm = reg.teammatches_map[tm.matchid];
+		if (!by_tm) {
+			by_tm = {
+				teammatch: tm,
+				turnier_url: problem.turnier_url,
+				teammatch_url: problem.teammatch_url,
+				teammatch_id: problem.teammatch_id,
+				problems: [],
+			};
+			reg.teammatches_map[tm.matchid] = by_tm;
+		}
+		by_tm.problems.push(problem);
+	}
+
+	const color_list = [];
+	for (const color_key in by_color) {
+		const col = by_color[color_key];
+		let keys = Object.keys(col.regions_map);
+		keys.sort();
+		col.regions = [];
+		for (const k of keys) {
+			const region = col.regions_map[k];
+			region.teammatches = [];
+
+			let tm_keys = Object.keys(region.teammatches_map);
+			tm_keys.sort();
+			for (const tmk of tm_keys) {
+				const tm = region.teammatches_map[tmk];
+				region.teammatches.push(tm);
+			}
+
+			col.regions.push(region);
+		}
+
+		color_list.push(col);
+	}
+
+	console.log(color_list[0].regions[0].teammatches[0].problems);
+	return color_list;
+}
+
 function show_problems_handler(req, res, next) {
 	req.app.db.efetch_all(next, [{
 		queryFunc: '_findOne',
@@ -62,9 +139,10 @@ function show_problems_handler(req, res, next) {
 		collection: 'problems',
 		query: {key: req.params.season_key},
 	}], function(season, problems_struct) {
+		const colors = color_render(problems_struct);
 		render(req, res, next, 'season_problems_show', {
 			season: season,
-			problems: problems_struct ? problems_struct.found : [],
+			colors: colors,
 		});
 	});
 }

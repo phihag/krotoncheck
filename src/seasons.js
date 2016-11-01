@@ -125,7 +125,6 @@ function color_render(problems_struct) {
 		color_list.push(col);
 	}
 
-	console.log(color_list[0].regions[0].teammatches[0].problems);
 	return color_list;
 }
 

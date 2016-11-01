@@ -21,9 +21,9 @@ const ALL_TASKS = [
 
 
 function parse_bool(val) {
-	if (val === 'true') {
+	if ((val === 'true') || (val === 'True')) {
 		return true;
-	} else if (val === 'false') {
+	} else if ((val === 'false') || (val === 'False')) {
 		return false;
 	} else {
 		throw new Error('Invalid boolean value ' + JSON.stringify(val));
@@ -83,6 +83,7 @@ function enrich(season, data) {
 				'flag_umwertung_gegen_team1_beide',
 				'flag_umwertung_gegen_team2_beide',
 				'flag_umwertung_gegen_beide',
+				'hrt',
 				]) {
 			tm[bool_key] = parse_bool(tm[bool_key]);
 		}
@@ -185,6 +186,9 @@ function enrich(season, data) {
 	};
 	data.player_name = function(p) {
 		return p.vorname + ' ' + p.name;
+	};
+	data.player_str = function(p) {
+		return p.vorname + ' ' + p.name + ' (' + p.spielerid + ')';
 	};
 	data.match_name = function(pm) {
 		var res = pm.disziplin;

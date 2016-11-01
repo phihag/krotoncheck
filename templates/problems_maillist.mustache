@@ -22,7 +22,7 @@
 {{#teammatches}}
 <p>
 <strong class="tm_title bg-{{color}}">{{#teammatch}}
-{{team1name}} - {{team2name}} {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
+{{#hrt}}{{team2name}} - {{team1name}}{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
 {{/teammatch}}</strong>
 <a href="{{turnier_url}}">{{turnier_url}}</a><br/>
 

@@ -2,7 +2,7 @@
 {{#problems}}
 <a class="problem" href="{{turnier_url}}">
 <div class="problem_header">{{#teammatch}}
-{{team1name}} - {{team2name}} ({{teammatch_id}})
+{{#hrt}}{{team2name}} - {{team1name}} [HRT]{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} ({{teammatch_id}})
 {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
 {{/teammatch}}</div>
 

@@ -22,6 +22,19 @@
 	"message": "Doppelter Eintrag in der Doppel-VRL 9 von (01-1005) Chaos VRL: (01-cv-m5) first5 last5 und (01-cv-m6) frst6 last6 sind beide an an Position 8",
 	"type": "vrl",
 	"vrl_typeid": "9"
+},
+{
+	"clubcode": "01-1005",
+	"message": "VRL-Zeile ohne Mannschaftszuordnung: VRL 9 von (01-1005) Chaos VRL, (01-cv-m6) frst6 last6",
+	"type": "vrl",
+	"vrl_typeid": "9"
+},
+{
+	"clubcode": "01-1005",
+	"message": "Mannschaftsnummer nicht aufsteigend in VRL 9 von (01-1005) Chaos VRL: (01-cv-m9) first9 last9 hat Mannschaftsnummer 1, aber vorherige Zeile war 2",
+	"type": "vrl",
+	"vrl_typeid": "9"
 }
+
 
 ]

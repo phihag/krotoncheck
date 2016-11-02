@@ -43,6 +43,8 @@ function* extract_vrls(data) {
 function* check_vrl(data, vrl) {
 	let last_id = 0;
 	let by_doubles_pos = new Map();
+	let last_team_num = 0;
+	let last_team_char = '';
 	for (const line of vrl.entries) {
 		if (line.position != line.teamposition) {
 			yield {
@@ -86,6 +88,59 @@ function* check_vrl(data, vrl) {
 			};
 		}
 		by_doubles_pos.set(position_doubles, line);
+
+		// Ascending team numbers
+		if (line.teamcode) {
+			let m = /^[0-9]+-[0-9]+-([JSM]?)([0-9]+)$/.exec(line.teamcode);
+			if (m) {
+				const team_char = m[1];
+				const team_num = parseInt(m[2]);
+
+				if ((team_char === last_team_char) && (last_team_num > team_num) && (last_team_num !== 0)) {
+					const message = (
+						'Mannschaftsnummer nicht aufsteigend in VRL ' +
+						vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
+						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+						' hat Mannschaftsnummer ' + team_char + team_num + ', aber vorherige Zeile war ' + last_team_char + last_team_num
+					);
+					yield {
+						type: 'vrl',
+						vrl_typeid: vrl.typeid,
+						clubcode: vrl.clubcode,
+						message: message,
+					};
+				}
+
+				last_team_char = team_char;
+				last_team_num = team_num;
+			} else {
+				const message = (
+					'Ungültiger Team-Code in VRL ' +
+					vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
+					JSON.stringify(line.teamcode)
+				);
+				yield {
+					type: 'vrl',
+					vrl_typeid: vrl.typeid,
+					clubcode: vrl.clubcode,
+					message: message,
+				};
+			}
+		} else {
+			if (last_team_num) { // If not, this may be a Bundesliga entry
+				const message = (
+					'VRL-Zeile ohne Mannschaftszuordnung: VRL ' +
+					vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ', ' +
+					'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
+				);
+				yield {
+					type: 'vrl',
+					vrl_typeid: vrl.typeid,
+					clubcode: vrl.clubcode,
+					message: message,
+				};
+			}
+		}
 
 	}
 }

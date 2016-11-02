@@ -1,7 +1,7 @@
 <div class="problems_list">
 {{#problems}}
 <a class="problem" href="{{turnier_url}}">
-<div class="problem_header">{{#teammatch}}
+<div class="problem_header">{{header}}{{#teammatch}}
 {{#hrt}}{{team2name}} - {{team1name}} [HRT]{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} ({{teammatch_id}})
 {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
 {{/teammatch}}</div>

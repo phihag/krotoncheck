@@ -1,0 +1,27 @@
+[
+{
+	"type": "vrl",
+	"clubcode": "01-1005",
+	"vrl_typeid": "9",
+	"message": "Lücke in der VRL 9 von (01-1005) Chaos VRL: Auf 0 folgt 2"
+},
+{
+	"type": "vrl",
+	"clubcode": "01-1005",
+	"vrl_typeid": "9",
+	"message": "Lücke in der VRL 9 von (01-1005) Chaos VRL: Auf 2 folgt 5"
+},
+{
+	"clubcode": "01-1005",
+	"vrl_typeid": "9",
+	"message": "Ungültige VRL 9 von (01-1005) Chaos VRL: position (8008) != teamposition (8) bei Spieler (01-cv-m5) first5 last5",
+	"type": "vrl"
+},
+{
+	"clubcode": "01-1005",
+	"message": "Doppelter Eintrag in der Doppel-VRL 9 von (01-1005) Chaos VRL: (01-cv-m5) first5 last5 und (01-cv-m6) frst6 last6 sind beide an an Position 8",
+	"type": "vrl",
+	"vrl_typeid": "9"
+}
+
+]

@@ -47,6 +47,11 @@ function enrich(season, data) {
 		line_vrl.set(cr.memberid, cr);
 	}
 
+	const club_by_id = new Map();
+	for (let c of data.clubs) {
+		club_by_id.set(c.code, c);
+	}
+
 	var player_by_id = new Map();
 	for (let p of data.players) {
 		player_by_id.set(p.spielerid, p);
@@ -173,7 +178,13 @@ function enrich(season, data) {
 		}
 		return res;
 	};
-	data.get_vrl_entry = function(club_id, vrl_type, player_id) {
+	data.get_club = function(club_id) {
+		let res = club_by_id.get(club_id);
+		if (!res) {
+			throw new Error('Kann Club ' + club_id + ' nicht finden');
+		}
+		return res;
+	};	data.get_vrl_entry = function(club_id, vrl_type, player_id) {
 		let club_vrls = vrls_by_clubs.get(club_id);
 		if (!club_vrls) {
 			throw new Error('Kann VRL von Verein ' + club_id + ' nicht finden');

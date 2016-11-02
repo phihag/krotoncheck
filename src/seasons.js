@@ -53,10 +53,15 @@ function show_handler(req, res, next) {
 }
 
 function colorize_problem(problem) {
-	const tm = problem.teammatch;
-	problem.color = tm ? (tm.ergebnisbestaetigt_user ? 'red' : 'yellow') : 'black';
-	const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
-	problem.region = m ? m[1] : 'Sonstige Region';
+	if (problem.type === 'vrl') {
+		problem.region = 'VRL';
+		problem.color = 'black';
+	} else {
+		const tm = problem.teammatch;
+		problem.color = tm ? (tm.ergebnisbestaetigt_user ? 'red' : 'yellow') : 'black';
+		const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
+		problem.region = m ? m[1] : 'Sonstige Region';
+	}
 }
 
 function color_render(problems_struct) {
@@ -79,27 +84,41 @@ function color_render(problems_struct) {
 		if (! reg) {
 			reg = {
 				name: problem.region,
-				teammatches_map: {},
+				groups_map: {},
 			};
 			col.regions_map[problem.region] = reg;
 		}
 
-		const tm = problem.teammatch;
-		if (!tm.matchid) {
-			throw new Error('Missing matchid');
+		let by_group;
+		if (problem.type === 'vrl') {
+			by_group = reg.groups_map[problem.header];
+			if (! by_group) {
+				by_group = {
+					turnier_url: problem.turnier_url,
+					problems: [],
+				};
+				reg.groups_map[problem.header] = by_group;
+			}
+		} else {
+			const tm = problem.teammatch;
+			if (!tm.matchid) {
+				throw new Error('Missing matchid');
+			}
+			by_group = reg.groups_map[tm.matchid];
+
+			if (!by_group) {
+				by_group = {
+					teammatch: tm,
+					turnier_url: problem.turnier_url,
+					teammatch_url: problem.teammatch_url,
+					teammatch_id: problem.teammatch_id,
+					problems: [],
+				};
+				reg.groups_map[tm.matchid] = by_group;
+			}
 		}
-		let by_tm = reg.teammatches_map[tm.matchid];
-		if (!by_tm) {
-			by_tm = {
-				teammatch: tm,
-				turnier_url: problem.turnier_url,
-				teammatch_url: problem.teammatch_url,
-				teammatch_id: problem.teammatch_id,
-				problems: [],
-			};
-			reg.teammatches_map[tm.matchid] = by_tm;
-		}
-		by_tm.problems.push(problem);
+		
+		by_group.problems.push(problem);
 	}
 
 	const color_list = [];
@@ -110,13 +129,13 @@ function color_render(problems_struct) {
 		col.regions = [];
 		for (const k of keys) {
 			const region = col.regions_map[k];
-			region.teammatches = [];
+			region.groups = [];
 
-			let tm_keys = Object.keys(region.teammatches_map);
+			let tm_keys = Object.keys(region.groups_map);
 			tm_keys.sort();
 			for (const tmk of tm_keys) {
-				const tm = region.teammatches_map[tmk];
-				region.teammatches.push(tm);
+				const tm = region.groups_map[tmk];
+				region.groups.push(tm);
 			}
 
 			col.regions.push(region);

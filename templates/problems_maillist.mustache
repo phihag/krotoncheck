@@ -19,9 +19,9 @@
 {{#colors}}
 {{#regions}}
 <h2>{{name}}</h2>
-{{#teammatches}}
+{{#groups}}
 <p>
-<strong class="tm_title bg-{{color}}">{{#teammatch}}
+<strong class="tm_title bg-{{color}}">{{header}}{{#teammatch}}
 {{#hrt}}{{team2name}} - {{team1name}}{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
 {{/teammatch}}</strong>
 <a href="{{turnier_url}}">{{turnier_url}}</a><br/>
@@ -34,7 +34,7 @@
 {{/problems}}
 </p>
 
-{{/teammatches}}
+{{/groups}}
 {{/regions}}
 {{/colors}}
 </div>

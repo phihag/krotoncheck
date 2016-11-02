@@ -9,6 +9,11 @@ add more tests
 		Mind. 4 Herren und 2 Damen pro Team (Mini mind. 4 Spieler), dabei Berücksichtigung der "N" und J1/M1-Kennzeichen
 		Mind. 4 Herren, 2 Damen für OL aufwärts auch NACH dem Festspielen. (Felder "Fest in", "Fest ab") und inkl. Ende der Spielberechtigung
 		gültiges JugKZ in den O19-VRL bei Jugendspielern
+		Jeder Eintrag muss die Zuordnung zu einer Mannschaft haben (Ausnahme in der NRW-Liga: die Stamspieler von Bundesligamannschaften)
+		Die Mannschaftsreihenfolge muss aufsteigend sein. Also nicht 1111222233*4*344*3*45555 usw.
+		Die erste Spalte LNR (lfd. Nr.) muss in NRW identisch sein mit dem Team-RL-Platz.
+		Hinweis zur DRL. Ist die DRL leer, gilt der Team-RL-Platz als DRL-Platz
+
 	more VRL application
 		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
 		playing in lower team

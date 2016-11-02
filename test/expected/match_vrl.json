@@ -1,9 +1,32 @@
 [
-
+{
+	"message": "Einzel falsch aufgestellt: BCFl2 Daniel2 (01-bcf-male2) ist VRL #2 und hat 1. HE gespielt. BCFl1 Daniel1 (01-bcf-male1) ist VRL #1 und hat 2. HE gespielt.",
+	"teammatch_id": "10"
+},
+{
+	"message": "Doppel falsch aufgestellt: 1. HD 01-fv-m2 nachname 01-fv-m2 vorname DVRL #2 / 01-fv-m3 nachname 01-fv-m3 vorname DVRL #3.\n2. HD 01-fv-m1 nachname 01-fv-m1 vorname DVRL #1 / 01-fv-m4 nachname 01-fv-m4 vorname DVRL #4.",
+	"teammatch_id": "10"
+},
+{
+	"message": "Einzel falsch aufgestellt: 01-fv-m7 nachname 01-fv-m7 vorname (01-fv-m7) ist VRL #7 und hat 2. HE gespielt. 01-fv-m3 nachname 01-fv-m3 vorname (01-fv-m3) ist VRL #3 und hat 3. HE gespielt.",
+	"teammatch_id": "10"
+},
 {
 	"match_id": "82",
 	"teammatch_id": "11",
 	"message": "Kein VRL-Eintrag für BCFl13 Nichtaktive(01-bcf-inactive) im Verein 01-1001!"
+},
+{
+	"message": "Einzel falsch aufgestellt: BCFl2 Daniel2 (01-bcf-male2) ist VRL #2 und hat 1. HE gespielt. BCFl1 Daniel1 (01-bcf-male1) ist VRL #1 und hat 2. HE gespielt.",
+	"teammatch_id": "11"
+},
+{
+	"message": "Doppel falsch aufgestellt: 1. HD 01-fv-m2 nachname 01-fv-m2 vorname DVRL #2 / 01-fv-m3 nachname 01-fv-m3 vorname DVRL #3.\n2. HD 01-fv-m1 nachname 01-fv-m1 vorname DVRL #1 / 01-fv-m4 nachname 01-fv-m4 vorname DVRL #4.",
+	"teammatch_id": "11"
+},
+{
+	"message": "Einzel falsch aufgestellt: 01-fv-m7 nachname 01-fv-m7 vorname (01-fv-m7) ist VRL #7 und hat 2. HE gespielt. 01-fv-m3 nachname 01-fv-m3 vorname (01-fv-m3) ist VRL #3 und hat 3. HE gespielt.",
+	"teammatch_id": "11"
 }
 
 ]

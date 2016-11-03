@@ -40,12 +40,87 @@ function* extract_vrls(data) {
 	}
 }
 
+function count_o19_players(players) {
+	let res = 0;
+	for (const p of players) {
+		// Nichtstammspieler
+		if (p.vkz1 === 'N') {
+			continue;
+		}
+		// Jugendspieler
+		if ((p.vkz1 === 'J1') || (p.vkz1 === 'S1') || (p.vkz1 === 'M1')) {
+			continue;
+		}
+		res++;
+	}
+	return res;
+}
+
+function* check_team(vrl, team_id, players) {
+	if ((vrl.typeid == '9') || (vrl.typeid == '11')) {
+		// Men O19
+		let pcount = count_o19_players(players);
+		if (pcount < 4) {
+			yield {
+				type: 'vrl',
+				clubcode: vrl.clubcode,
+				vrl_typeid: vrl.typeid,
+				message: 'Zu wenig (' + pcount + ') Stammspieler im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+			};
+		}
+	} else if ((vrl.typeid == '10') || (vrl.typeid == '12')) {
+		// Women O19
+		let pcount = count_o19_players(players);
+		if (pcount < 2) {
+			yield {
+				type: 'vrl',
+				clubcode: vrl.clubcode,
+				vrl_typeid: vrl.typeid,
+				message: 'Zu wenig (' + pcount + ') Stammspielerinnen im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+			};
+		}
+	} else if ((vrl.typeid == '17') || (vrl.typeid == '18')) {
+		// Boys U19, and mini
+		let pcount = players.length;
+		if (pcount < 4) {
+			yield {
+				type: 'vrl',
+				clubcode: vrl.clubcode,
+				vrl_typeid: vrl.typeid,
+				message: 'Zu wenig (' + pcount + ') Spieler im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+			};
+		}
+	} else if ((vrl.typeid == '14') || (vrl.typeid == '16')) {
+		// Girls U19
+		let pcount = players.length;
+		if (pcount < 2) {
+			yield {
+				type: 'vrl',
+				clubcode: vrl.clubcode,
+				vrl_typeid: vrl.typeid,
+				message: 'Zu wenig (' + pcount + ') Spielerinnen im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+			};
+		}
+	} else {
+		yield {
+			type: 'warning',
+			message: 'Unsupported VRL ' + vrl.typeid,
+		};
+	}
+}
+
 function* check_vrl(data, vrl) {
 	let last_id = 0;
 	let by_doubles_pos = new Map();
 	let last_team_num = 0;
 	let last_team_char = '';
+	const players_by_team = new Map();
 	for (const line of vrl.entries) {
+		if (!players_by_team.has(line.teamcode)) {
+			players_by_team.set(line.teamcode, []);
+		}
+		players_by_team.get(line.teamcode).push(line);
+
 		if (line.position != line.teamposition) {
 			yield {
 				type: 'vrl',
@@ -141,7 +216,15 @@ function* check_vrl(data, vrl) {
 				};
 			}
 		}
+	}
 
+	// Check that each team has enough players
+	for (const [team_id, players] of players_by_team.entries()) {
+		if (! team_id) {
+			// Bundesliga
+			continue;
+		}
+		yield* check_team(vrl, team_id, players);
 	}
 }
 

@@ -34,6 +34,18 @@
 	"message": "Mannschaftsnummer nicht aufsteigend in VRL 9 von (01-1005) Chaos VRL: (01-cv-m9) first9 last9 hat Mannschaftsnummer 1, aber vorherige Zeile war 2",
 	"type": "vrl",
 	"vrl_typeid": "9"
+},
+{
+	"clubcode": "01-1006",
+	"message": "Zu wenig (1) Stammspieler im Team 01-1006-1 (VRL 9 von Small Team)",
+	"type": "vrl",
+	"vrl_typeid": "9"
+},
+{
+	"clubcode": "01-1006",
+	"message": "Zu wenig (0) Stammspielerinnen im Team 01-1006-1 (VRL 10 von Small Team)",
+	"type": "vrl",
+	"vrl_typeid": "10"
 }
 
 

@@ -110,6 +110,7 @@ function* check_team(vrl, team_id, players) {
 }
 
 function* check_vrl(data, vrl) {
+	const is_o19 = ['9', '11', '10', '12'].includes(vrl.typeid);
 	let last_id = 0;
 	let by_doubles_pos = new Map();
 	let last_team_num = 0;
@@ -163,6 +164,42 @@ function* check_vrl(data, vrl) {
 			};
 		}
 		by_doubles_pos.set(position_doubles, line);
+
+		// Youth players in O19 with correct designations
+		if (is_o19) {
+			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);
+			if (m) {
+				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
+					// Alright, nothing to do here
+				} else if ((line.vkz1 === 'J1') || (line.vkz1 === 'M1')) {
+					// Ok as well
+				} else if (line.jkz1 === 'SE') {
+					// Special excemption by federation
+				} else if(line.jkz1) {
+					const message = (
+						'Falsches Jugendkennzeichen ' + JSON.stringify(line.jkz1) + ' in VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
+						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname + ' (AKL ' + line.akl + ')'
+					);
+					yield {
+						type: 'vrl',
+						vrl_typeid: vrl.typeid,
+						clubcode: vrl.clubcode,
+						message: message,
+					};
+				} else {
+					const message = (
+						'Jugendkennzeichen fehlt in VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
+						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
+					);
+					yield {
+						type: 'vrl',
+						vrl_typeid: vrl.typeid,
+						clubcode: vrl.clubcode,
+						message: message,
+					};
+				}
+			}
+		}
 
 		// Ascending team numbers
 		if (line.teamcode) {

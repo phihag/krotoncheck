@@ -36,6 +36,12 @@
 	"vrl_typeid": "9"
 },
 {
+	"clubcode": "01-1005",
+	"message": "Jugendkennzeichen fehlt in VRL 9 von (01-1005) Chaos VRL bei (01-cv-m13) first13 last13",
+	"type": "vrl",
+	"vrl_typeid": "9"
+},
+{
 	"clubcode": "01-1006",
 	"message": "Zu wenig (1) Stammspieler im Team 01-1006-1 (VRL 9 von Small Team)",
 	"type": "vrl",

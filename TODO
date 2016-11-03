@@ -5,7 +5,11 @@ Unbekannte Spieler immer erkennen
 add more tests
 	check VRL itself
 		Mind. 4 Herren, 2 Damen für OL aufwärts auch NACH dem Festspielen. (Felder "Fest in", "Fest ab") und inkl. Ende der Spielberechtigung
-		gültiges JugKZ in den O19-VRL bei Jugendspielern
+		Dass ein Spieler mit "J1" auch in der J1-Rangliste auf Platz 1-4 bzw. 1-2 stehen muss.
+		Dass ein Spieler mit "M1" auch in der M1-Rangliste auf Platz 1-4 stehen muss.
+		Dass diese Mannschaft auch noch aktiv sein müssen. Meldet sich eine solche Mannschat tab, entfällt zum gleichen Tag die Spielberechtigung in O19 (über Endedatum)
+		Gibt es U19-1 Spieler mit U19E-Kennzeichen, dann muss es mindestens 1 aktive Nachwauchsmannschaft geben. Meldet sich die letzte Nachwuchsmannschaft ab, entfällt zum gleichen Tag die Spielberechtigung in O19 (über Endedatum)
+		Ein Spieler darf nicht , nachdem er schon Spiele für einen anderen Club gemacht hat, in der VRL der gleichen Halbserie eines andere Clubs erscheinen (aber 2017/18 hoffentlich durch SpO-Änderung auch nicht mehr in einer Halbserie in 2 VRL erscheinen, selbst ganz ohne Spiele.) 
 
 	more VRL application
 		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
@@ -16,6 +20,7 @@ add more tests
 		backup player http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=224
 	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
 
+	2 Spiele am gleichen Tag in verschiedenen Mannschaften
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
 	Jugendspieler nicht einsatzberechtigt
@@ -48,11 +53,10 @@ add more tests
 	Verlegung vom Verein in der OL/RL
 	vorgesehene Ersatzspieler in <VL
 	Ergebniseintrag zu spät (je nach OL/RL bzw. normal 24h / Montag 12:00)
-	formale Fehler in der VRL (Team fehlt, Nr. fehlt, Lücken in der VRL (Team-Position und DRL))
 	wenn Mannschaftsergebnis o.k. dann gar kein Detailergebnis (keine Spiele usw.)
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
 	unberechtigte Umwertung (Umwertung ohne das was falsch ist?)
-	Einsat von vorgesehenen Ersatzspielern ohne besondere Vorkommnisse
+	Einsatz von vorgesehenen Ersatzspielern ohne besondere Vorkommnisse
 
 missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962
 

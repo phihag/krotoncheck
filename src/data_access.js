@@ -184,7 +184,8 @@ function enrich(season, data) {
 			throw new Error('Kann Club ' + club_id + ' nicht finden');
 		}
 		return res;
-	};	data.get_vrl_entry = function(club_id, vrl_type, player_id) {
+	};
+	data.get_vrl_entry = function(club_id, vrl_type, player_id) {
 		let club_vrls = vrls_by_clubs.get(club_id);
 		if (!club_vrls) {
 			throw new Error('Kann VRL von Verein ' + club_id + ' nicht finden');

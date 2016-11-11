@@ -3,6 +3,7 @@
 var crypto = require('crypto');
 var fs = require('fs');
 var http = require('http');
+var timezone = require('timezone');
 
 
 function gen_token() {
@@ -168,6 +169,26 @@ function ensure_dir(dirname, cb) {
     });
 }
 
+const TZ_ID = 'Europe/Berlin';
+var german_tz = timezone(require('timezone/' + TZ_ID));
+function weekday(ts) {
+    return parseInt(german_tz(ts, '%w'));
+}
+
+function parse_date(dstr) {
+    const m = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/.exec(dstr);
+    if (!m) {
+        throw new Error('Cannot parse date ' + dstr);
+    }
+    var res = german_tz(m[3] + '-' + m[2] + '-' + m[1] + ' ' + m[4], TZ_ID);
+    return res;
+}
+
+function monday_1200(ts) {
+    var monday_str = german_tz(ts, TZ_ID, '+1 monday', '%Y-%m-%d 12:00:00');
+    return german_tz(monday_str, TZ_ID);
+}
+
 module.exports = {
     download_page,
     ensure_dir,
@@ -179,13 +200,16 @@ module.exports = {
     make_key,
     map_obj,
     match_all,
+    monday_1200,
     multilineRegExp,
     natcmp,
     pad,
+    parse_date,
     render_json,
     sha512,
     sort_by,
     today_iso8601,
     update,
     values,
+    weekday,
 };

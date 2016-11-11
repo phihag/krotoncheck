@@ -18,6 +18,10 @@ const CHECKS = utils.values(CHECKS_BY_NAME);
 function* check(season, data) {
 	data_access.enrich(season, data);
 
+	if (!season.check_now) {
+		season.check_now = Date.now();
+	}
+
 	// TODO catch errors by the checkers and emit them as well
 	for (var check of CHECKS) {
 		yield* check(season, data);

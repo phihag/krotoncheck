@@ -3,6 +3,9 @@ Spielername in "TuS Jahn Werdohl 1 hatte keine Spieler" angegeben, aber Spieler 
 Unbekannte Spieler immer erkennen
 
 add more tests
+	Ergebnis vor Spielbeginn
+		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=4661
+		add a test
 	check VRL itself
 		Mind. 4 Herren, 2 Damen für OL aufwärts auch NACH dem Festspielen. (Felder "Fest in", "Fest ab") und inkl. Ende der Spielberechtigung
 		Dass ein Spieler mit "J1" auch in der J1-Rangliste auf Platz 1-4 bzw. 1-2 stehen muss.

@@ -30,6 +30,7 @@
     "mustache-express": "*",
     "nedb": "*",
     "request": "*",
+    "timezone": "*",
     "webworker-threads": "*"
   },
   "devDependencies": {

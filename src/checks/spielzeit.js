@@ -3,10 +3,15 @@
 var utils = require('../utils');
 
 function* check_tm(now, tm) {
+	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
+		return; // Not played at all
+	}
+
 	const played = utils.parse_date(tm.spieldatum);
 
-	if (tm.mannschaftsergebnis_eintragedatum) {
-		const team_entered = utils.parse_date(tm.mannschaftsergebnis_eintragedatum);
+	const team_entered = tm.mannschaftsergebnis_eintragedatum ? utils.parse_date(tm.mannschaftsergebnis_eintragedatum) : null;
+	const entered = tm.detailergebnis_eintragedatum ? utils.parse_date(tm.detailergebnis_eintragedatum) : null;
+	if (team_entered !== null) {
 		if (team_entered < played) {
 			const message = (
 				'Mannschaftsergebnis vor Spieldatum eingetragen ' +
@@ -28,9 +33,8 @@ function* check_tm(now, tm) {
 		[5, 6].includes(utils.weekday(played)) ?
 		(0)
 		: (played + 48 * 3600000));
-	if (tm.detailergebnis_eintragedatum) {
-		const entered = utils.parse_date(tm.detailergebnis_eintragedatum);
-		if (entered < played) {
+	if (entered !== null) {
+				if (entered < played) {
 			const message = (
 				'Detailergebnis vor Spieldatum eingetragen ' +
 				'(' + tm.detailergebnis_eintragedatum +

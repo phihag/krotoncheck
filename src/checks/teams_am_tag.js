@@ -14,6 +14,9 @@ function all_players(data, tm, team_idx) {
 	let res = new Set();
 	const pms = data.get_playermatches_by_teammatch_id(tm.matchid);
 	for (const pm of pms) {
+		if (pm['flag_umwertung_gegen_team' + team_idx]) { // Already noted
+			continue;
+		}
 		for (let player_idx = 1;player_idx <= 2;player_idx++) {
 			let player_id = pm['team' + team_idx + 'spieler' + player_idx + 'spielerid'];
 			if (player_id) {

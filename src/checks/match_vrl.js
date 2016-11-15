@@ -2,19 +2,33 @@
 
 var utils = require('../utils.js');
 
-function get_vrl_type(tm, pm, player_idx) {
+function get_vrl_type(league_type, tm, pm, player_idx) {
 	if (! /^[HR]$/.test(tm.runde)) {
 		throw new Error('Ungültige Runde ' + tm.runde);
 	}
-	var is_hr = (tm.runde === 'H');
+	const is_hr = (tm.runde === 'H');
 
-	if ((pm.disziplin === 'HD') || (pm.disziplin === 'HE') || ((pm.disziplin === 'GD') && player_idx === 1)) {
-		return is_hr ? 9 : 11;
+	if (league_type === 'O19') {
+		if ((pm.disziplin === 'HD') || (pm.disziplin === 'HE') || ((pm.disziplin === 'GD') && player_idx === 1)) {
+			return is_hr ? 9 : 11;
+		}
+		if ((pm.disziplin === 'DD') || (pm.disziplin === 'DE') || ((pm.disziplin === 'GD') && player_idx === 2)) {
+			return is_hr ? 10 : 12;
+		}
+	} else if (league_type == 'Mini') {
+		return is_hr ? 17 : 18;
+	} else if (league_type == 'U19') {
+		if ((pm.disziplin === 'HD') || (pm.disziplin === 'HE') || ((pm.disziplin === 'GD') && player_idx === 1)) {
+			return is_hr ? 17 : 18;
+		}
+		if ((pm.disziplin === 'DD') || (pm.disziplin === 'DE') || ((pm.disziplin === 'GD') && player_idx === 2)) {
+			return is_hr ? 14 : 16;
+		}
+	} else {
+		throw new Error('Unsupported league type ' + league_type);
 	}
-	if ((pm.disziplin === 'DD') || (pm.disziplin === 'DE') || ((pm.disziplin === 'GD') && player_idx === 2)) {
-		return is_hr ? 10 : 12;
-	}
-	throw new Error('Unsupported discipline in match ' + pm);
+
+	throw new Error('Unsupported discipline ' + JSON.stringify(pm.disziplin) + ' in match ' + pm.matchid);
 }
 
 function is_doubles(discipline) {
@@ -22,8 +36,8 @@ function is_doubles(discipline) {
 }
 
 function* check_all(data, tm, pms, team_idx) {
-	let team = data.get_team(tm['team' + team_idx + 'id']);
-
+	const team = data.get_team(tm['team' + team_idx + 'id']);
+	const league_type = data.league_type(tm);
 	const pm_ratings_by_discipline = {};
 
 	// Check if everyone present in VRL
@@ -48,23 +62,29 @@ function* check_all(data, tm, pms, team_idx) {
 			if (!player_id) {
 				continue;
 			}
-			let vrl_type = get_vrl_type(tm, pm, player_idx);
+			let vrl_type = get_vrl_type(league_type, tm, pm, player_idx);
 
 			let ve = data.get_vrl_entry(team.clubcode, vrl_type, player_id);
 			if (!ve) {
 				let player = data.get_player(player_id);
 				if ((pm.disziplin === 'GD') && (
-					((player_idx === 1) && (player.gender !== 'M')) ||
-					((player_idx === 2) && (player.gender !== 'F')))) {
+					((player_idx === 1) && (player.sex === 'F')) ||
+					((player_idx === 2) && (player.sex === 'M')))) {
 					// Incorrect gender, handled in mixed_geschlecht check
 					continue;
 				}
+				if (league_type === 'U19') {
+					// Look up in Mini database
+					const mini_vrl_type = get_vrl_type('Mini', tm, pm, player_idx);
+					const mini_ve = data.get_vrl_entry(team.clubcode, mini_vrl_type, player_id);
+					if (mini_ve) {
+						continue;
+					}
+				}
 
-				let player_str = player.vorname + ' ' + player.name + '(' + player_id + ')';
-
-				let message = (
-					'Kein VRL-Eintrag für ' + player_str +
-					' im Verein ' + team.clubcode + '!'); // Spalte vrl_type
+				const message = (
+					'Kein ' + league_type + '-VRL-Eintrag für ' + data.player_str(player) +
+					' bei ' + team.name + '.'); // Spalte vrl_type
 				yield {
 					teammatch_id: pm.teammatchid,
 					match_id: pm.matchid,
@@ -151,10 +171,6 @@ function* check_all(data, tm, pms, team_idx) {
 }
 
 function* check(data, tm) {
-	if (data.league_type(tm) !== 'O19') {
-		return;
-	}
-
 	let pms = data.get_playermatches_by_teammatch_id(tm.matchid);
 
 	yield* check_all(data, tm, pms, 1);

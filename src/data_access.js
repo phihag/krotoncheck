@@ -17,6 +17,7 @@ const ALL_TASKS = [
     'clubranking',
     'matchfields',
     'teams',
+    'users',
 ];
 
 
@@ -75,6 +76,13 @@ function enrich(season, data) {
 			playermatches_by_teammatchid.set(pm.teammatchid, pms);
 		}
 		pms.push(pm);
+	}
+
+	const stbs_by_league_code = new Map();
+	for (const line of data.users) {
+		if (line.rolename === 'Staffelbetreuer') {
+			stbs_by_league_code.set(line.roledata, line);
+		}
 	}
 
 	data.active_teammatches = [];
@@ -220,6 +228,13 @@ function enrich(season, data) {
 			return 'Mini';
 		}
 		throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
+	};
+	data.get_stb = function(tm) {
+		const res = stbs_by_league_code.get(tm.staffelcode);
+		if (!res) {
+			throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
+		}
+		return res;
 	};
 }
 

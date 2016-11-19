@@ -12,6 +12,7 @@ function enrich(data, season, found) {
 			if (p.teammatch2_id) {
 				p.turnier2_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch2_id;
 			}
+			p.stb = data.get_stb(p.teammatch);
 		} else if (p.type === 'vrl') {
 			const club = data.get_club(p.clubcode);
 			p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;

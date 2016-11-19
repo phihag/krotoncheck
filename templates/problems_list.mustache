@@ -4,7 +4,12 @@
 <div class="problem_header">{{header}}{{#teammatch}}
 {{#hrt}}{{team2name}} - {{team1name}} [HRT]{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} ({{teammatch_id}})
 {{#ergebnisbestaetigt_user}}(bestätigt){{/ergebnisbestaetigt_user}}
-{{/teammatch}}</div>
+{{/teammatch}}
+</div>
+{{#stb}}
+<div>{{#teammatch}}{{spieldatum}}{{/teammatch}}, StB {{firstname}} {{lastname}}</div>
+{{/stb}}
+
 
 {{#match}}
 <div>{{match_name}} ({{match_id}})</div>

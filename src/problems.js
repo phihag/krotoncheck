@@ -35,10 +35,10 @@ function enrich(data, season, found) {
 			return 0;
 		}
 
-		if (f1.teammatch.ergebnisbestaetigt_user && !f2.teammatch.ergebnisbestaetigt_user) {
+		if (f1.teammatch.ergebnisbestaetigt_datum && !f2.teammatch.ergebnisbestaetigt_datum) {
 			return -1;
 		}
-		if (!f1.teammatch.ergebnisbestaetigt_user && f2.teammatch.ergebnisbestaetigt_user) {
+		if (!f1.teammatch.ergebnisbestaetigt_datum && f2.teammatch.ergebnisbestaetigt_datum) {
 			return 1;
 		}
 

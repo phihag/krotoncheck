@@ -58,7 +58,7 @@ function colorize_problem(problem) {
 		problem.color = 'black';
 	} else {
 		const tm = problem.teammatch;
-		problem.color = tm ? (tm.ergebnisbestaetigt_user ? 'red' : 'yellow') : 'black';
+		problem.color = tm ? (tm.ergebnisbestaetigt_datum ? 'red' : 'yellow') : 'black';
 		const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
 		problem.region = m ? m[1] : 'Sonstige Region';
 	}

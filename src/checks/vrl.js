@@ -109,6 +109,11 @@ function* check_team(vrl, team_id, players) {
 	}
 }
 
+function* check_u19e(data, vrl, line) {
+	// TODO
+	//console.log(line);
+}
+
 function* check_vrl(data, vrl) {
 	const is_o19 = ['9', '11', '10', '12'].includes(vrl.typeid);
 	let last_id = 0;
@@ -132,10 +137,20 @@ function* check_vrl(data, vrl) {
 		}
 
 		const position = parseInt(line.teamposition);
+		if (isNaN(position)) {
+			yield {
+				type: 'vrl',
+				vrl_typeid: vrl.typeid,
+				clubcode: vrl.clubcode,
+				message: 'teamposition-Feld fehlt in VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
+			};
+			last_id = '[keine Position angegeben]';
+			continue;
+		}
 		const position_doubles = line.teampositiondouble ? parseInt(line.teampositiondouble) : position;
 
 		// No gaps in VRL
-		if ((last_id + 1) !== position) {
+		if (last_id !== (position - 1)) {
 			yield {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
@@ -170,7 +185,7 @@ function* check_vrl(data, vrl) {
 			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);
 			if (m) {
 				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
-					// Alright, nothing to do here
+					yield* check_u19e(data, vrl, line);
 				} else if ((line.vkz1 === 'J1') || (line.vkz1 === 'M1')) {
 					// Ok as well
 				} else if (line.jkz1 === 'SE') {

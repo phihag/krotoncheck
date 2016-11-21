@@ -26,8 +26,6 @@ add more tests
 	Spieler hat dreimal gespielt
 		http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=12154
 	Spieler hat zweimal in der gleichen Disziplin gespielt
-	Spieler ohne Ranglistenposition in der Rangliste
-	Spieler hat zweimal am gleichen Tag in verschiedenen Mannschaften gespielt
 	Nur 2. Doppel / nur 2./3. Einzel etc.
 	Schiedsrichter in der Regionalliga
 	Spielergebnis vor Spieldatum (-spielzeit)

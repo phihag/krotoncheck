@@ -1,7 +1,5 @@
 'use strict';
 
-var utils = require('../utils.js');
-
 function get_vrl_type(league_type, tm, pm, player_idx) {
 	if (! /^[HR]$/.test(tm.runde)) {
 		throw new Error('Ungültige Runde ' + tm.runde);
@@ -144,8 +142,8 @@ function* check_all(data, tm, pms, team_idx) {
 				const min2 = Math.min(mr2.ratings[0], mr2.ratings[1]);
 
 				if ((sum1 < sum2) || ((sum1 === sum2) && (min1 < min2))) {
- 					continue;
- 				}
+					continue;
+				}
 
 				if (mr1.pm.flag_keinspiel_keinespieler && mr2.pm.flag_keinspiel_keinespieler) {
 					continue; // Both sides wrong?
@@ -173,11 +171,11 @@ function* check_all(data, tm, pms, team_idx) {
 					teammatch_id: tm.matchid,
 					message: message,
 				};
- 			} else {
- 				// Singles
- 				if (mr1.ratings[0] < mr2.ratings[0]) {
- 					continue;
- 				}
+			} else {
+				// Singles
+				if (mr1.ratings[0] < mr2.ratings[0]) {
+					continue;
+				}
 
 				if (mr1.pm.flag_keinspiel_keinespieler && mr2.pm.flag_keinspiel_keinespieler) {
 					continue; // Both sides wrong?
@@ -198,7 +196,7 @@ function* check_all(data, tm, pms, team_idx) {
 					teammatch_id: tm.matchid,
 					message: message,
 				};
- 			}
+			}
 		}
 	}
 }

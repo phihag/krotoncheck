@@ -33,7 +33,7 @@ lint: eslint ## Verify source code quality
 eslint: eslint-server eslint-client
 
 eslint-server:
-	@node_modules/.bin/eslint src/*.js test/*.js
+	@node_modules/.bin/eslint src/ test/*.js
 
 eslint-client:
 	@node_modules/.bin/eslint -c static/.eslintrc static/*.js

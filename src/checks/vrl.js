@@ -1,8 +1,5 @@
 'use strict';
-
 // Check the VRLs themselves
-
-var utils = require('../utils.js');
 
 function* extract_vrls(data) {
 	let clubcode;
@@ -158,6 +155,10 @@ function* check_u19e(data, vrl, line) {
 	}
 }
 
+function* check_in_youth_team(data, vrl, line) {
+	// TODO
+}
+
 function* check_vrl(data, vrl) {
 	const is_o19 = ['9', '11', '10', '12'].includes(vrl.typeid);
 	let last_id = 0;
@@ -231,7 +232,7 @@ function* check_vrl(data, vrl) {
 				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
 					yield* check_u19e(data, vrl, line);
 				} else if ((line.vkz1 === 'J1') || (line.vkz1 === 'M1')) {
-					// Ok as well
+					yield* check_in_youth_team(data, vrl, line);
 				} else if (line.jkz1 === 'SE') {
 					// Special excemption by federation
 				} else if(line.jkz1) {

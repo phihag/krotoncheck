@@ -147,6 +147,10 @@ function* check_all(data, tm, pms, team_idx) {
  					continue;
  				}
 
+				if (mr1.pm.flag_keinspiel_keinespieler && mr2.pm.flag_keinspiel_keinespieler) {
+					continue; // Both sides wrong?
+				}
+
 				let p1a = data.get_player(mr1.player_ids[0]);
 				let p1b = data.get_player(mr1.player_ids[1]);
 				let p2a = data.get_player(mr2.player_ids[0]);
@@ -174,6 +178,10 @@ function* check_all(data, tm, pms, team_idx) {
  				if (mr1.ratings[0] < mr2.ratings[0]) {
  					continue;
  				}
+
+				if (mr1.pm.flag_keinspiel_keinespieler && mr2.pm.flag_keinspiel_keinespieler) {
+					continue; // Both sides wrong?
+				}
 
 				let p1 = data.get_player(mr1.player_ids[0]);
 				let p2 = data.get_player(mr2.player_ids[0]);

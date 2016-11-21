@@ -35,6 +35,25 @@ function is_doubles(discipline) {
 	return ((discipline === 'HD') || (discipline === 'GD') || (discipline === 'DD'));
 }
 
+function contains_backup_player(data, tm, players) {
+	const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
+	if (!backup_players) {
+		return false;
+	}
+
+	const notes = data.get_matchfield(tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
+	if (!notes) {
+		return false;
+	}
+
+	for (const p of players) {
+		if (backup_players.includes(p.name) && notes.includes(p.name)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function* check_all(data, tm, pms, team_idx) {
 	const team = data.get_team(tm['team' + team_idx + 'id']);
 	const league_type = data.league_type(tm);
@@ -133,6 +152,10 @@ function* check_all(data, tm, pms, team_idx) {
 				let p2a = data.get_player(mr2.player_ids[0]);
 				let p2b = data.get_player(mr2.player_ids[1]);
 
+				if (contains_backup_player(data, tm, [p1a, p1b, p2a, p2b])) {
+					continue;
+				}
+
 				const message = (
 					'Doppel falsch aufgestellt: ' +
 					data.match_name(mr1.pm) + ' ' +
@@ -146,8 +169,6 @@ function* check_all(data, tm, pms, team_idx) {
 					teammatch_id: tm.matchid,
 					message: message,
 				};
-
-
  			} else {
  				// Singles
  				if (mr1.ratings[0] < mr2.ratings[0]) {
@@ -157,7 +178,11 @@ function* check_all(data, tm, pms, team_idx) {
 				let p1 = data.get_player(mr1.player_ids[0]);
 				let p2 = data.get_player(mr2.player_ids[0]);
 
-					const message = (
+				if (contains_backup_player(data, tm, [p1, p2])) {
+					continue;
+				}
+
+				const message = (
 						'Einzel falsch aufgestellt: ' +
 						data.player_str(p1) + ' ist VRL #' + mr1.ratings[0] + ' und hat ' + data.match_name(mr1.pm) + ' gespielt. ' +
 						data.player_str(p2) + ' ist VRL #' + mr2.ratings[0] + ' und hat ' + data.match_name(mr2.pm) + ' gespielt.');

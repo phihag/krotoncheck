@@ -85,6 +85,12 @@ function enrich(season, data) {
 		}
 	}
 
+	const match_fields_map = new Map();
+	for (const line of data.matchfields) {
+		const key = line.MatchID + '_' + line.MatchField;
+		match_fields_map.set(key, line.ValueText);
+	}
+
 	data.active_teammatches = [];
 	let active_teammatch_ids = new Set();
 	for (let tm of data.teammatches) {
@@ -235,6 +241,10 @@ function enrich(season, data) {
 			throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
 		}
 		return res;
+	};
+	data.get_matchfield = function(tm, label) {
+		const key = tm.matchid + '_' + label;
+		return match_fields_map.get(key);
 	};
 }
 

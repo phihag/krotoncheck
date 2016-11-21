@@ -58,17 +58,28 @@ function enrich(season, data) {
 		player_by_id.set(p.spielerid, p);
 	}
 
-	var team_by_id = new Map();
+	const team_by_id = new Map();
 	for (let t of data.teams) {
 		team_by_id.set(t.code, t);
 	}
 
-	var teammatch_by_id = new Map();
+	const teams_by_club = new Map();
+	for (const t of data.teams) {
+		const club = t.clubcode;
+		let teams = teams_by_club.get(club);
+		if (!teams) {
+			teams = [];
+			teams_by_club.set(club, teams);
+		}
+		teams.push(t);
+	}
+
+	const teammatch_by_id = new Map();
 	for (let tm of data.teammatches) {
 		teammatch_by_id.set(tm.matchid, tm);
 	}
 
-	var playermatches_by_teammatchid = new Map();
+	const playermatches_by_teammatchid = new Map();
 	for (let pm of data.playermatches) {
 		let pms = playermatches_by_teammatchid.get(pm.teammatchid);
 		if (! pms) {
@@ -223,28 +234,33 @@ function enrich(season, data) {
 		}
 		return res;
 	};
-	data.league_type = function(tm) {
-		if (/^01-[0-9]+$/.test(tm.staffelcode)) {
+	data.league_type = function(staffelcode) {
+		if (/^01-[0-9]+$/.test(staffelcode)) {
 			return 'O19';
 		}
-		if (/^01-[JS][0-9]+$/.test(tm.staffelcode)) {
+		if (/^01-[JS][0-9]+$/.test(staffelcode)) {
 			return 'U19';
 		}
-		if (/^01-M[0-9]+$/.test(tm.staffelcode)) {
+		if (/^01-M[0-9]+$/.test(staffelcode)) {
 			return 'Mini';
 		}
-		throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
+		throw new Error('Unknown league code ' + JSON.stringify(staffelcode));
 	};
 	data.get_stb = function(tm) {
+		// Careful: May not be present for old leagues
 		const res = stbs_by_league_code.get(tm.staffelcode);
-		if (!res) {
-			throw new Error('Unknown league code ' + JSON.stringify(tm.staffelcode));
-		}
 		return res;
 	};
 	data.get_matchfield = function(tm, label) {
 		const key = tm.matchid + '_' + label;
 		return match_fields_map.get(key);
+	};
+	data.get_teams_by_club = function(club_code) {
+		const res = teams_by_club.get(club_code);
+		if (!res) {
+			throw new Error('Unknown club code ' + JSON.stringify(club_code));
+		}
+		return res;
 	};
 }
 

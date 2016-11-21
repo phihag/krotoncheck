@@ -1,13 +1,9 @@
-Ersatzspieler
-http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=13444
-
 add more tests
 	check VRL itself
 		Mind. 4 Herren, 2 Damen für OL aufwärts auch NACH dem Festspielen. (Felder "Fest in", "Fest ab") und inkl. Ende der Spielberechtigung
 		Dass ein Spieler mit "J1" auch in der J1-Rangliste auf Platz 1-4 bzw. 1-2 stehen muss.
 		Dass ein Spieler mit "M1" auch in der M1-Rangliste auf Platz 1-4 stehen muss.
 		Dass diese Mannschaft auch noch aktiv sein müssen. Meldet sich eine solche Mannschat tab, entfällt zum gleichen Tag die Spielberechtigung in O19 (über Endedatum)
-		Gibt es U19-1 Spieler mit U19E-Kennzeichen, dann muss es mindestens 1 aktive Nachwauchsmannschaft geben. Meldet sich die letzte Nachwuchsmannschaft ab, entfällt zum gleichen Tag die Spielberechtigung in O19 (über Endedatum)
 		Ein Spieler darf nicht , nachdem er schon Spiele für einen anderen Club gemacht hat, in der VRL der gleichen Halbserie eines andere Clubs erscheinen (aber 2017/18 hoffentlich durch SpO-Änderung auch nicht mehr in einer Halbserie in 2 VRL erscheinen, selbst ganz ohne Spiele.) 
 
 	more VRL application
@@ -35,7 +31,6 @@ add more tests
 	Nur 2. Doppel / nur 2./3. Einzel etc.
 	Schiedsrichter in der Regionalliga
 	Spielergebnis vor Spieldatum (-spielzeit)
-	Spielergebnis rechtzeitig eingetragen (RL/OL vs Rest, nicht gegen ohne)
 	Halle verändert -> Kommentar (mit Namen der Halle?)
 	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
 	Mindestzahl der aufgestellten Spiele (5 in <VL | 8 in >= VL)
@@ -86,3 +81,4 @@ check errors in checks
 check errors in data_access.enrich (as called from checks)
 make sure 100% coverage
 remove bcrypt in favor of something else
+show time in local timezone

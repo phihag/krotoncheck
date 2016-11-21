@@ -52,6 +52,13 @@
 	"message": "Zu wenig (0) Stammspielerinnen im Team 01-1006-1 (VRL 10 von Small Team)",
 	"type": "vrl",
 	"vrl_typeid": "10"
+},
+
+{
+	"clubcode": "01-1007",
+	"message": "Keine Schüler/Jugend/Mini-Teams, aber U19E-Spieler (01-ny-m6) firsty6 lasty6 (in AK U19-1) in VRL 9 von No YouthA",
+	"type": "vrl",
+	"vrl_typeid": "9"
 }
 
 

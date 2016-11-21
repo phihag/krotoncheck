@@ -110,8 +110,52 @@ function* check_team(vrl, team_id, players) {
 }
 
 function* check_u19e(data, vrl, line) {
-	// TODO
-	//console.log(line);
+	if (line.akl === 'U19-2') {
+		return; // §10.1 JSpO: always allowed
+	}
+
+	const teams = data.get_teams_by_club(line.playerclubcode);
+	let withdrawn_all = undefined;
+	for (const t of teams) {
+		const lid = data.league_type(t.DrawID);
+		if ((lid !== 'Mini') && (lid !== 'U19')) {
+			continue;
+		}
+
+		if (t.Status) {
+			if (withdrawn_all === undefined) {
+				withdrawn_all = true;
+			}
+		} else {
+			withdrawn_all = false;
+		}
+	}
+
+	if (withdrawn_all === undefined) {
+		const message = (
+			'Keine Schüler/Jugend/Mini-Teams, aber U19E-Spieler ' +
+			'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+			' (in AK U19-1) in VRL ' + vrl.typeid + ' von ' + vrl.clubname
+		);
+		yield {
+			type: 'vrl',
+			clubcode: vrl.clubcode,
+			vrl_typeid: vrl.typeid,
+			message: message,
+		};
+	} else if ((withdrawn_all === true) && (!line.enddate)) {
+		const message = (
+			'Alle Schüler/Jugend/Mini-Teams zurückgezogen, aber U19E-Spieler ' +
+			'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+			' (in AK U19-1) in VRL ' + vrl.typeid + ' von ' + vrl.clubname
+		);
+		yield {
+			type: 'vrl',
+			clubcode: vrl.clubcode,
+			vrl_typeid: vrl.typeid,
+			message: message,
+		};
+	}
 }
 
 function* check_vrl(data, vrl) {

@@ -56,7 +56,7 @@ function contains_backup_player(data, tm, players) {
 
 function* check_all(data, tm, pms, team_idx) {
 	const team = data.get_team(tm['team' + team_idx + 'id']);
-	const league_type = data.league_type(tm);
+	const league_type = data.league_type(tm.staffelcode);
 	const pm_ratings_by_discipline = {};
 
 	// Check if everyone present in VRL

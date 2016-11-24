@@ -2,7 +2,11 @@
 
 var utils = require('../utils');
 
+
 function* check_tm(now, tm) {
+	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
+	const REPORT_TEAM_RLOL = 6 * 3600;
+
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all
 	}
@@ -33,9 +37,8 @@ function* check_tm(now, tm) {
 		[5, 6].includes(utils.weekday(played)) ?
 		(0)
 		: (played + 48 * 3600000));
-	const GRACE_TIME = 15 * 60000; // Some teams enter their line-up before the start
 	if (entered !== null) {
-				if (entered < played - GRACE_TIME) {
+				if (entered < played - GRACE_TIME_BEFORE) {
 			const message = (
 				'Detailergebnis vor Spieldatum eingetragen ' +
 				'(' + tm.detailergebnis_eintragedatum +

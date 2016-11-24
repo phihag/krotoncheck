@@ -196,6 +196,10 @@ function enrich(season, data) {
 		}
 		return res;
 	};
+	data.try_get_team = function(team_id) {
+		//console.log(team_by_id.keys(), team_id, team_by_id.get(team_id));
+		return team_by_id.get(team_id);
+	};
 	data.get_team = function(team_id) {
 		let res = team_by_id.get(team_id);
 		if (!res) {
@@ -213,11 +217,22 @@ function enrich(season, data) {
 	data.get_vrl_entry = function(club_id, vrl_type, player_id) {
 		let club_vrls = vrls_by_clubs.get(club_id);
 		if (!club_vrls) {
-			throw new Error('Kann VRL von Verein ' + club_id + ' nicht finden');
+			throw new Error('Kann VRLs von Verein ' + club_id + ' nicht finden');
 		}
 		let res = club_vrls.get(vrl_type);
 		if (!res) {
 			throw new Error('Verein ' + club_id + ' hat keine VRL ' + vrl_type);
+		}
+		return res.get(player_id);
+	};
+	data.try_get_vrl_entry = function(club_id, vrl_type, player_id) {
+		let club_vrls = vrls_by_clubs.get(club_id);
+		if (!club_vrls) {
+			throw new Error('Kann VRLs von Verein ' + club_id + ' nicht finden');
+		}
+		let res = club_vrls.get(vrl_type);
+		if (!res) {
+			return res;
 		}
 		return res.get(player_id);
 	};
@@ -329,5 +344,6 @@ module.exports = {
 	load_data_cached,
 	load_data,
 	ALL_TASKS,
-	parse_bool: parse_bool,
+	parse_bool,
+	parse_int,
 };

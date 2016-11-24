@@ -22,9 +22,18 @@ function* check(season, data) {
 		season.check_now = Date.now();
 	}
 
-	// TODO catch errors by the checkers and emit them as well
-	for (var check of CHECKS) {
-		yield* check(season, data);
+	for (const check_name of CHECK_NAMES) {
+		const check = CHECKS_BY_NAME[check_name];
+		try {
+			yield* check(season, data);
+		} catch(e) {
+			console.error(e);
+			yield {
+				type: 'internal-error',
+				header: 'Interner Fehler in Überprüfung ' + check_name,
+				message: e.message + '\n' + e.stack,
+			};
+		}
 	}
 }
 

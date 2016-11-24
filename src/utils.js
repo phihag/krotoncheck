@@ -97,6 +97,16 @@ function make_key(name) {
         replace(/[^a-z.0-9_.]/g, ''));
 }
 
+function cmp(a, b) {
+    if (a < b) {
+        return -1;
+    } else if (a == b) {
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
 function natcmp(as, bs){
     var a, b, a1, b1, i= 0, n, L;
     var rx = /(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
@@ -190,6 +200,7 @@ function monday_1200(ts) {
 }
 
 module.exports = {
+    cmp,
     download_page,
     ensure_dir,
     escapeRegExp,

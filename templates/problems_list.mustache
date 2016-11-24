@@ -1,11 +1,18 @@
 <div class="problems_list">
 {{#problems}}
-<a class="problem" href="{{turnier_url}}">
+{{#turnier_url}}
+<div class="problem" 
+<a href="{{turnier_url}}">
+{{/turnier_url}}
 <div class="problem_header">{{header}}{{#teammatch}}
 {{#hrt}}{{team2name}} - {{team1name}} [HRT]{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} ({{teammatch_id}})
 {{#ergebnisbestaetigt_datum}}(bestätigt){{/ergebnisbestaetigt_datum}}
 {{/teammatch}}
 </div>
+{{#turnier_url}}
+</a>
+{{/turnier_url}}
+
 {{#stb}}
 <div>{{#teammatch}}{{spieldatum}}{{/teammatch}}, StB {{firstname}} {{lastname}}</div>
 {{/stb}}
@@ -15,8 +22,29 @@
 <div>{{match_name}} ({{match_id}})</div>
 {{/match}}
 
+{{#turnier_url}}
+<a class="hidden_link" href="{{turnier_url}}">
+{{/turnier_url}}
 <div class="problem_message">{{message}}</div>
+{{#turnier_url}}
 </a>
+{{/turnier_url}}
+
+{{#ignored}}
+<form method="POST" action="{{root_path}}s/{{#season}}{{key}}/unignore{{/season}}">
+{{{csrf_field}}}
+<input type="hidden" name="problem_id" value="{{id}}" />
+<button class="ignore_button" role="submit">Nicht ignorieren</button>
+</form>
+{{/ignored}}
+{{^ignored}}
+<form method="POST" action="{{root_path}}s/{{#season}}{{key}}/ignore{{/season}}">
+{{{csrf_field}}}
+<input type="hidden" name="problem_id" value="{{id}}" />
+<button class="ignore_button" role="submit">Ignorieren</button>
+</form>
+{{/ignored}}
+</div>
 
 {{/problems}}
 </div>

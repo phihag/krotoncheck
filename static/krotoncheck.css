@@ -23,15 +23,27 @@ input,textarea,button {
 }
 
 
-a.problem {
+.problem {
 	display: block;
 	margin: 1em 0 1em 0;
-	text-decoration: none;
-	color: inherit;
 }
 .problem_header {
 	font-weight: bold;
 }
 .problems_maillist {
 	font-size: 14px;
+}
+.problem_message {
+	white-space: pre-wrap;
+}
+
+.hidden_link {
+	text-decoration: none;
+	color: inherit;
+}
+
+.ignore_button {
+	padding: 0.06em 0.1em;
+	font-size: 80%;
+	cursor: pointer;
 }

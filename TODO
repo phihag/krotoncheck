@@ -1,11 +1,7 @@
 add more tests
 	check VRL itself
 		Mind. 4 Herren, 2 Damen für OL aufwärts auch NACH dem Festspielen. (Felder "Fest in", "Fest ab") und inkl. Ende der Spielberechtigung
-		Dass ein Spieler mit "J1" auch in der J1-Rangliste auf Platz 1-4 bzw. 1-2 stehen muss.
-		Dass ein Spieler mit "M1" auch in der M1-Rangliste auf Platz 1-4 stehen muss.
-		Dass diese Mannschaft auch noch aktiv sein müssen. Meldet sich eine solche Mannschat tab, entfällt zum gleichen Tag die Spielberechtigung in O19 (über Endedatum)
 		Ein Spieler darf nicht , nachdem er schon Spiele für einen anderen Club gemacht hat, in der VRL der gleichen Halbserie eines andere Clubs erscheinen (aber 2017/18 hoffentlich durch SpO-Änderung auch nicht mehr in einer Halbserie in 2 VRL erscheinen, selbst ganz ohne Spiele.) 
-
 	more VRL application
 		(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
 		playing in lower team
@@ -14,6 +10,10 @@ add more tests
 		VRL for mini
 		backup player http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=224
 	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
+
+	Bernd Mails
+		3 Einsätze von Jugend-Spieler
+
 
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
@@ -28,7 +28,6 @@ add more tests
 	Spieler hat zweimal in der gleichen Disziplin gespielt
 	Nur 2. Doppel / nur 2./3. Einzel etc.
 	Schiedsrichter in der Regionalliga
-	Spielergebnis vor Spieldatum (-spielzeit)
 	Halle verändert -> Kommentar (mit Namen der Halle?)
 	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
 	Mindestzahl der aufgestellten Spiele (5 in <VL | 8 in >= VL)
@@ -56,12 +55,11 @@ make sure to get 100% coverage over all checks
 benchmark check + data_access overhead
 add date to teammatch
 
-add a parseerror class
-handle errors in checks
 ignore
 schedule
 send email out
 grep for all TODOs
+make sure sorts are always stable
 
 check/load/enrich in a separate thread
 forgot pw (send reset token)

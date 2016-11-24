@@ -14,7 +14,7 @@ function _count_players(players, ts, team) {
 		}
 
 		if (p.parsed_fixed_from && (p.parsed_fixed_from <= ts)) {
-			if (p.fixed_in != p.number) {
+			if (p.fixed_in != team.number) {
 				continue;
 			}
 		} else {
@@ -29,7 +29,8 @@ function _count_players(players, ts, team) {
 }
 
 
-function* check_enough_players(data, team, vrl_typeid, min_count) {
+function* check_enough_players(data, team, vrl_typeid, gender) {
+	const min_count = (gender == 'M') ? 4 : 2;
 	const entries = data.get_vrl_entries(team.clubcode, vrl_typeid);
 	if (!entries) {
 		return; // VRL not published yet
@@ -37,7 +38,7 @@ function* check_enough_players(data, team, vrl_typeid, min_count) {
 
 	// Collect all players who qualified for this team (directly or via fixed_in)
 	const players = entries.filter(p => 
-		((team.code == p.teamcode) || (p.fixed_in == p.number)) && data_access.o19_is_regular(p)
+		((team.code == p.teamcode) || (p.fixed_in == team.number)) && data_access.o19_is_regular(p)
 	);
 
 	const dates = [];
@@ -59,8 +60,9 @@ function* check_enough_players(data, team, vrl_typeid, min_count) {
 		const pcount = _count_players(players, d, team);
 		if (pcount < min_count) {
 			const message = (
-				'Zu wenig (' + pcount + ') Spieler (inkl. Nachrücker) im Team ' + team.name +
-				' (VRL ' + vrl_typeid + ' von ' + team.clubname + ') ' +
+				'Zu wenig (' + pcount + ') Spieler' + ((gender === 'M') ? '' : 'innen') + ' (inkl. Nachrücker)' +
+				' im Team (' + team.code + ') ' + team.name +
+				' (VRL ' + vrl_typeid + ') ' +
 				'am ' + utils.ts2dstr(d)
 			);
 			yield {
@@ -79,9 +81,9 @@ module.exports = function*(season, data) {
 			continue;
 		}
 
-		yield* check_enough_players(data, team, 9, 4);
-		yield* check_enough_players(data, team, 10, 2);
-		yield* check_enough_players(data, team, 11, 4);
-		yield* check_enough_players(data, team, 12, 2);
+		yield* check_enough_players(data, team, 9, 'M');
+		yield* check_enough_players(data, team, 10, 'F');
+		yield* check_enough_players(data, team, 11, 'M');
+		yield* check_enough_players(data, team, 12, 'F');
 	}
 };

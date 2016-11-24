@@ -9,8 +9,12 @@ describe('utils', function() {
 	it('parse_date', function() {
 		assert.strictEqual(utils.parse_date('11.11.2016 17:48:13'), 1478882893000);
 		assert.strictEqual(utils.parse_date('14.11.2016 12:00:00'), 1479121200000);
-		
+		assert.strictEqual(utils.parse_date('14.11.2016 00:00:00'), 1479078000000);
+		assert.strictEqual(utils.parse_date('14.11.2016'), 1479078000000);
+	});
 
+	it('next_day', function() {
+		assert.strictEqual(utils.next_day(1478882893000), 1478969293000);
 	});
 
 	it('weekday', function() {

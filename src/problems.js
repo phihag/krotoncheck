@@ -91,9 +91,14 @@ function colorize_problem(problem) {
 		problem.color = 'black';
 	} else {
 		const tm = problem.teammatch;
-		problem.color = tm ? (tm.ergebnisbestaetigt_datum ? 'red' : 'yellow') : 'black';
-		const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
-		problem.region = m ? m[1] : 'Sonstige Region';
+		if (tm) {
+			problem.color = tm.ergebnisbestaetigt_datum ? 'red' : 'yellow';
+			const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
+			problem.region = m ? m[1] : 'Sonstige Region';
+		} else {
+			problem.color = 'black';
+			problem.region = problem.type;
+		}
 	}
 	if (problem.ignored) {
 		problem.color = 'green';
@@ -134,6 +139,16 @@ function color_render(problems_struct) {
 					problems: [],
 				};
 				reg.groups_map[problem.turnier_url] = by_group;
+			}
+		} else if (problem.type === 'internal-error') {
+			const key = 'Interne Fehler';
+			by_group = reg.groups_map[key];
+			if (! by_group) {
+				by_group = {
+					turnier_url: 'mailto:phiha@phihag.de?subject=Interner+Fehler+in+krotoncheck',
+					problems: [],
+				};
+				reg.groups_map[key] = by_group;
 			}
 		} else {
 			const tm = problem.teammatch;

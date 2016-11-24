@@ -6,15 +6,9 @@ var data_access = require('../data_access');
 function count_o19_players(players) {
 	let res = 0;
 	for (const p of players) {
-		// Nichtstammspieler
-		if (p.vkz1 === 'N') {
-			continue;
+		if (data_access.o19_is_regular(p)) {
+			res++;
 		}
-		// Jugendspieler
-		if ((p.vkz1 === 'J1') || (p.vkz1 === 'S1') || (p.vkz1 === 'M1')) {
-			continue;
-		}
-		res++;
 	}
 	return res;
 }
@@ -132,7 +126,7 @@ function* check_in_youth_team(data, is_hr, line) {
 			vrl_type = is_hr ? 14 : 16;
 			top = 2;
 		} else {
-			throw new Error('Ungültige Geschlechtsangabe: ' + JSON.stringify(line.sex))
+			throw new Error('Ungültige Geschlechtsangabe: ' + JSON.stringify(line.sex));
 		}
 	} else if (expect_team === 'M1') {
 		vrl_type = is_hr ? 17 : 18;
@@ -171,7 +165,7 @@ function* check_in_youth_team(data, is_hr, line) {
 			clubcode: clubcode,
 			vrl_typeid: line.typeid,
 			message: message,
-		}
+		};
 	} else {
 		if (line.enddate) {
 			// Retracted or moved
@@ -194,7 +188,7 @@ function* check_in_youth_team(data, is_hr, line) {
 				clubcode: clubcode,
 				vrl_typeid: line.typeid,
 				message: message,
-			}
+			};
 		}
 	}
 

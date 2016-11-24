@@ -186,18 +186,31 @@ function weekday(ts) {
 }
 
 function parse_date(dstr) {
-    const m = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/.exec(dstr);
+    const m = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})(?: ([0-9]{2}:[0-9]{2}:[0-9]{2}))?$/.exec(dstr);
     if (!m) {
         throw new Error('Cannot parse date ' + dstr);
     }
-    var res = german_tz(m[3] + '-' + m[2] + '-' + m[1] + ' ' + m[4], TZ_ID);
-    return res;
+    const time_str = m[4] ? m[4] : '00:00:00';
+    return german_tz(m[3] + '-' + pad(m[2], 2) + '-' + pad(m[1], 2) + ' ' + time_str, TZ_ID);
+}
+
+function next_day(ts) {
+    return german_tz(ts, TZ_ID, '+1 day');
 }
 
 function monday_1200(ts) {
-    var monday_str = german_tz(ts, TZ_ID, '+1 monday', '%Y-%m-%d 12:00:00');
+    const monday_str = german_tz(ts, TZ_ID, '+1 monday', '%Y-%m-%d 12:00:00');
     return german_tz(monday_str, TZ_ID);
 }
+
+function ts2str(ts) {
+    return german_tz(ts, TZ_ID, '%Y-%m-%d %H:%M:%S');
+}
+
+function ts2dstr(ts) {
+    return german_tz(ts, TZ_ID, '%d.%m.%Y');
+}
+
 
 module.exports = {
     cmp,
@@ -214,12 +227,15 @@ module.exports = {
     monday_1200,
     multilineRegExp,
     natcmp,
+    next_day,
     pad,
     parse_date,
     render_json,
     sha512,
     sort_by,
     today_iso8601,
+    ts2str,
+    ts2dstr,
     update,
     values,
     weekday,

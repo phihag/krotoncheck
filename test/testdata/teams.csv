@@ -6,3 +6,5 @@ tournamentid,teamid,code,number,name,contact,address,address2,address3,postalcod
 1,5,01-1007-1,1,No YouthA 1,,,,,,,,,,,,,,,,,01-1007,No YotuhA,O19-S2-BL,01-024,draw?,,,
 1,6,01-1006-J1,J1,Small Team J1,,,,,,,,,,,,,,,,,01-1006,Small Team,U19-S1-BL,01-900,,,,
 1,7,01-1008-J1,J1,RetractYouth J1,,,,,,,,,,,,,,,,,01-1008,RetractYouth,U19-S1-BL,01-900,,Mannschaftsrückzug,,
+1,8,01-1009-2,2,TopTeam 2,,,,,,,,,,,,,,,,,01-1009,Top Team,O19-RL,01-001,(001) Regionalliga West,,,
+1,9,01-1009-J1,J1,TopTeam J1,,,,,,,,,,,,,,,,,01-1009,Top Team,U19-S1-BL,01-900,,,,

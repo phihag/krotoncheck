@@ -1,10 +1,13 @@
 'use strict';
 
+var assert = require('assert');
 var async = require('async');
 var atomic_write = require('atomic-write');
 var Baby = require('babyparse');
 var fs = require('fs');
 var path = require('path');
+
+var utils = require('./utils');
 
 
 const ALL_TASKS = [
@@ -35,6 +38,13 @@ function enrich(season, data) {
 	let vrls_by_clubs = new Map();
 	for (let cr of data.clubranking) {
 		cr.typeid = parse_int(cr.typeid);
+		for (const date_key of ['fixed_from', 'startdate', 'enddate']) {
+			if (cr[date_key]) {
+				const ts = utils.parse_date(cr[date_key]);
+				assert(typeof ts == 'number');
+				cr['parsed_' + date_key] = ts;
+			}
+		}
 
 		let club_vrls = vrls_by_clubs.get(cr.clubcode);
 		if (!club_vrls) {
@@ -294,6 +304,17 @@ function enrich(season, data) {
 			}
 		}
 	};
+	data.get_vrl_entries = function(clubcode, typeid) {
+		const vrls = vrls_by_clubs.get(clubcode);
+		if (!vrls) {
+			throw new Error('Cannot find VRLs of club ' + JSON.stringify(clubcode));
+		}
+		const vrl_map = vrls.get(typeid);
+		if (!vrl_map) {
+			return vrl_map;
+		}
+		return vrl_map.entries;
+	};
 }
 
 function load_data(dirname, tasks, callback) {
@@ -356,6 +377,18 @@ function parse_int(s) {
 	return res;
 }
 
+function o19_is_regular(p) {
+	// Nichtstammspieler
+	if (p.vkz1 === 'N') {
+		return false;
+	}
+	// Jugendspieler
+	if ((p.vkz1 === 'J1') || (p.vkz1 === 'S1') || (p.vkz1 === 'M1')) {
+		return false;
+	}
+	return true;
+}
+
 module.exports = {
 	enrich,
 	load_data_cached,
@@ -363,4 +396,5 @@ module.exports = {
 	ALL_TASKS,
 	parse_bool,
 	parse_int,
+	o19_is_regular,
 };

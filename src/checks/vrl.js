@@ -3,42 +3,6 @@
 
 var data_access = require('../data_access');
 
-function* extract_vrls(data) {
-	let clubcode;
-	let clubname;
-	let typeid = null;
-
-	let entries = [];
-
-	for (const line of data.clubranking) {
-		if ((clubcode !== line.clubcode) || (typeid !== line.typeid)) {
-			// Commit current
-			if (typeid !== null) {
-				yield {
-					clubcode: clubcode,
-					clubname: clubname,
-					typeid: typeid,
-					entries: entries,
-				};
-			}
-			typeid = line.typeid;
-			clubcode = line.clubcode;
-			clubname = line.clubname;
-			entries = [];
-		}
-		entries.push(line);
-	}
-
-	if (typeid !== null) {
-		yield {
-			clubcode: clubcode,
-			clubname: clubname,
-			typeid: typeid,
-			entries: entries,
-		};
-	}
-}
-
 function count_o19_players(players) {
 	let res = 0;
 	for (const p of players) {
@@ -56,7 +20,7 @@ function count_o19_players(players) {
 }
 
 function* check_team(vrl, team_id, players) {
-	if ((vrl.typeid == '9') || (vrl.typeid == '11')) {
+	if ((vrl.typeid == 9) || (vrl.typeid == 11)) {
 		// Men O19
 		let pcount = count_o19_players(players);
 		if (pcount < 4) {
@@ -67,7 +31,7 @@ function* check_team(vrl, team_id, players) {
 				message: 'Zu wenig (' + pcount + ') Stammspieler im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
 			};
 		}
-	} else if ((vrl.typeid == '10') || (vrl.typeid == '12')) {
+	} else if ((vrl.typeid == 10) || (vrl.typeid == 12)) {
 		// Women O19
 		let pcount = count_o19_players(players);
 		if (pcount < 2) {
@@ -78,7 +42,7 @@ function* check_team(vrl, team_id, players) {
 				message: 'Zu wenig (' + pcount + ') Stammspielerinnen im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
 			};
 		}
-	} else if ((vrl.typeid == '17') || (vrl.typeid == '18')) {
+	} else if ((vrl.typeid == 17) || (vrl.typeid == 18)) {
 		// Boys U19, and mini
 		let pcount = players.length;
 		if (pcount < 4) {
@@ -89,7 +53,7 @@ function* check_team(vrl, team_id, players) {
 				message: 'Zu wenig (' + pcount + ') Spieler im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
 			};
 		}
-	} else if ((vrl.typeid == '14') || (vrl.typeid == '16')) {
+	} else if ((vrl.typeid == 14) || (vrl.typeid == 16)) {
 		// Girls U19
 		let pcount = players.length;
 		if (pcount < 2) {
@@ -277,7 +241,7 @@ function* check_in_youth_team(data, is_hr, line) {
 }
 
 function* check_vrl(data, vrl) {
-	const is_o19 = ['9', '11', '10', '12'].includes(vrl.typeid);
+	const is_o19 = [9, 11, 10, 12].includes(vrl.typeid);
 	let last_id = 0;
 	let by_doubles_pos = new Map();
 	let last_team_num = 0;
@@ -344,7 +308,7 @@ function* check_vrl(data, vrl) {
 
 		// Youth players in O19 with correct designations
 		if (is_o19) {
-			const is_hr = ['9', '10'].includes(vrl.typeid);
+			const is_hr = [9, 10].includes(vrl.typeid);
 			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);
 			if (m) {
 				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
@@ -458,9 +422,7 @@ function* check_vrl(data, vrl) {
 
 
 module.exports = function*(season, data) {
-	const vrls = extract_vrls(data);
-
-	for (const vrl of vrls) {
+	for (const vrl of data.all_vrlinfos()) {
 		yield* check_vrl(data, vrl);
 	}
 };

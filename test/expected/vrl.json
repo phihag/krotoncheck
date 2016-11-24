@@ -2,18 +2,18 @@
 {
 	"type": "vrl",
 	"clubcode": "01-1005",
-	"vrl_typeid": "9",
+	"vrl_typeid": 9,
 	"message": "Lücke in der VRL 9 von (01-1005) Chaos VRL: Auf 0 folgt 2"
 },
 {
 	"type": "vrl",
 	"clubcode": "01-1005",
-	"vrl_typeid": "9",
+	"vrl_typeid": 9,
 	"message": "Lücke in der VRL 9 von (01-1005) Chaos VRL: Auf 2 folgt 5"
 },
 {
 	"clubcode": "01-1005",
-	"vrl_typeid": "9",
+	"vrl_typeid": 9,
 	"message": "Ungültige VRL 9 von (01-1005) Chaos VRL: position (8008) != teamposition (8) bei Spieler (01-cv-m5) first5 last5",
 	"type": "vrl"
 },
@@ -21,63 +21,63 @@
 	"clubcode": "01-1005",
 	"message": "Doppelter Eintrag in der Doppel-VRL 9 von (01-1005) Chaos VRL: (01-cv-m5) first5 last5 und (01-cv-m6) frst6 last6 sind beide an an Position 8",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 {
 	"clubcode": "01-1005",
 	"message": "VRL-Zeile ohne Mannschaftszuordnung: VRL 9 von (01-1005) Chaos VRL, (01-cv-m6) frst6 last6",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 {
 	"clubcode": "01-1005",
 	"message": "Mannschaftsnummer nicht aufsteigend in VRL 9 von (01-1005) Chaos VRL: (01-cv-m9) first9 last9 hat Mannschaftsnummer 1, aber vorherige Zeile war 2",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 {
 	"clubcode": "01-1005",
 	"message": "Jugendkennzeichen fehlt in VRL 9 von (01-1005) Chaos VRL bei (01-cv-m13) first13 last13",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 {
 	"clubcode": "01-1006",
 	"message": "Spieler (01-st-m4)   steht mit Kennzeichen J1 in der O19-VRL(9) von (01-1006) Small Team, fehlt aber in der U19-VRL (17)",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 {
 	"clubcode": "01-1006",
 	"message": "Zu wenig (1) Stammspieler im Team 01-1006-1 (VRL 9 von Small Team)",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 {
 	"clubcode": "01-1006",
 	"message": "Spielerin (01-st-f2) firststf2 laststf2 steht mit Kennzeichen J1 in der O19-VRL(10) von (01-1006) Small Team, gehört aber nicht zu den Top 2 in J1, sondern ist Nr. 3 in Small Team J1 (VRL 14)",
 	"type": "vrl",
-	"vrl_typeid": "10"
+	"vrl_typeid": 10
 },
 {
 	"clubcode": "01-1006",
 	"message": "Zu wenig (0) Stammspielerinnen im Team 01-1006-1 (VRL 10 von Small Team)",
 	"type": "vrl",
-	"vrl_typeid": "10"
+	"vrl_typeid": 10
 },
 
 {
 	"clubcode": "01-1007",
 	"message": "Keine Schüler/Jugend/Mini-Teams, aber U19E-Spieler (01-ny-m6) firsty6 lasty6 (in AK U19-1) in VRL 9 von No YouthA",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 },
 
 {
 	"clubcode": "01-1008",
 	"message": "Spieler (01-ry-m6) rym6l rym6f steht mit Kennzeichen J1 (ohne Enddatum) in der O19-VRL(9) von (01-1008) RetractYouth, aber die Mannschaft 01-1008-J1 hat Status \"Mannschaftsrückzug\"",
 	"type": "vrl",
-	"vrl_typeid": "9"
+	"vrl_typeid": 9
 }
 
 ]

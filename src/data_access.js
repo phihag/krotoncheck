@@ -34,18 +34,23 @@ function parse_bool(val) {
 function enrich(season, data) {
 	let vrls_by_clubs = new Map();
 	for (let cr of data.clubranking) {
+		cr.typeid = parse_int(cr.typeid);
+
 		let club_vrls = vrls_by_clubs.get(cr.clubcode);
 		if (!club_vrls) {
 			club_vrls = new Map();
+			club_vrls.clubname = cr.clubname;
 			vrls_by_clubs.set(cr.clubcode, club_vrls);
 		}
-		var vrl_type = parse_int(cr.typeid);
+		const vrl_type = cr.typeid;
 		let line_vrl = club_vrls.get(vrl_type);
 		if (!line_vrl) {
 			line_vrl = new Map();
 			club_vrls.set(vrl_type, line_vrl);
+			line_vrl.entries = [];
 		}
 		line_vrl.set(cr.memberid, cr);
+		line_vrl.entries.push(cr);
 	}
 
 	const club_by_id = new Map();
@@ -197,7 +202,6 @@ function enrich(season, data) {
 		return res;
 	};
 	data.try_get_team = function(team_id) {
-		//console.log(team_by_id.keys(), team_id, team_by_id.get(team_id));
 		return team_by_id.get(team_id);
 	};
 	data.get_team = function(team_id) {
@@ -276,6 +280,19 @@ function enrich(season, data) {
 			throw new Error('Unknown club code ' + JSON.stringify(club_code));
 		}
 		return res;
+	};
+	data.all_vrlinfos = function*() {
+		for (const [clubcode, club_vrls] of vrls_by_clubs.entries()) {
+			const clubname = club_vrls.clubname;
+			for (const [typeid, mem_map] of club_vrls.entries()) {
+				yield {
+					clubcode,
+					clubname,
+					typeid,
+					entries: mem_map.entries,
+				};
+			}
+		}
 	};
 }
 

@@ -59,7 +59,7 @@ function* check_all(data, tm, pms, team_idx) {
 
 	// Check if everyone present in VRL
 	for (let pm of pms) {
-		if (pm['flag_umwertung_gegen_team' + team_idx]) {
+		if (pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler) {
 			continue; // Already handled
 		}
 

@@ -5,7 +5,7 @@ var utils = require('../utils');
 
 function* check_tm(now, tm) {
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
-	const REPORT_TEAM_RLOL = 6 * 3600;
+	//const REPORT_TEAM_RLOL = 6 * 3600;
 
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all
@@ -33,10 +33,10 @@ function* check_tm(now, tm) {
 		// TODO in OL too late?
 	}
 
-	const report_until = (
+/*	const report_until = (
 		[5, 6].includes(utils.weekday(played)) ?
 		(0)
-		: (played + 48 * 3600000));
+		: (played + 48 * 3600000));*/
 	if (entered !== null) {
 				if (entered < played - GRACE_TIME_BEFORE) {
 			const message = (

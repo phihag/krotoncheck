@@ -1,6 +1,5 @@
 'use strict';
 
-var data_access = require('../data_access');
 var utils = require('../utils');
 
 function _count_players(players, ts, team) {

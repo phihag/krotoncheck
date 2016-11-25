@@ -81,6 +81,10 @@ module.exports = function*(season, data) {
 			continue;
 		}
 
+		if (team.Status === 'Mannschaftsrückzug') {
+			continue;
+		}
+
 		yield* check_enough_players(data, team, 9, 'M');
 		yield* check_enough_players(data, team, 10, 'F');
 		yield* check_enough_players(data, team, 11, 'M');

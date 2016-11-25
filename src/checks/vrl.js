@@ -79,7 +79,7 @@ function* check_u19e(data, vrl, line) {
 			continue;
 		}
 
-		if (t.Status) {
+		if (t.Status === 'Mannschaftsrückzug') {
 			if (withdrawn_all === undefined) {
 				withdrawn_all = true;
 			}
@@ -216,7 +216,7 @@ function* check_in_youth_team(data, is_hr, line) {
 		return;
 	}
 
-	if (team.Status) { // = team retracted
+	if (team.Status === 'Mannschaftsrückzug') {
 		const message = (
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +

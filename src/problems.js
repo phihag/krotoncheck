@@ -88,7 +88,7 @@ function prepare_render(season, problems) {
 function colorize_problem(problem) {
 	if (problem.type === 'vrl') {
 		problem.region = 'VRL';
-		problem.color = 'black';
+		problem.color = 'lightgray';
 	} else {
 		const tm = problem.teammatch;
 		if (tm) {
@@ -135,6 +135,7 @@ function color_render(problems_struct) {
 			by_group = reg.groups_map[problem.turnier_url];
 			if (! by_group) {
 				by_group = {
+					header: 'VRL ' + problem.clubcode,
 					turnier_url: problem.turnier_url,
 					problems: [],
 				};

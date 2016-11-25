@@ -40,12 +40,15 @@ function contains_backup_player(data, tm, players) {
 	}
 
 	const notes = data.get_matchfield(tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
-	if (!notes) {
+	const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
+	if (!notes && !resigned) {
 		return false;
 	}
 
 	for (const p of players) {
-		if (backup_players.includes(p.name) && notes.includes(p.name)) {
+		if (backup_players.includes(p.name) && (
+				(notes && notes.includes(p.name)) ||
+				(resigned && resigned.includes(p.name)))) {
 			return true;
 		}
 	}
@@ -95,6 +98,15 @@ function* check_all(data, tm, pms, team_idx) {
 					const mini_vrl_type = get_vrl_type('Mini', tm, pm, player_idx);
 					const mini_ve = data.get_vrl_entry(team.clubcode, mini_vrl_type, player_id);
 					if (mini_ve) {
+						continue;
+					}
+				} else if (league_type === 'Mini') {
+					// Look up in U19 database
+					const vpm = {disziplin: ((player.sex === 'F') ? 'DE' : 'HE')};
+					const u19_vrl_type = get_vrl_type('U19', tm, vpm, player_idx);
+					const u19_ve = data.get_vrl_entry(team.clubcode, u19_vrl_type, player_id);
+					if (u19_ve) {
+						// TODO check that allowed by age
 						continue;
 					}
 				}

@@ -113,8 +113,13 @@ function enrich(season, data) {
 
 	const match_fields_map = new Map();
 	for (const line of data.matchfields) {
-		const key = line.MatchID + '_' + line.MatchField;
-		match_fields_map.set(key, line.ValueText);
+		const tm_id = line.MatchID;
+		let tm_matchfields = match_fields_map.get(tm_id);
+		if (!tm_matchfields) {
+			tm_matchfields = new Map();
+			match_fields_map.set(tm_id, tm_matchfields);
+		}
+		tm_matchfields.set(line.MatchField, line.ValueText);
 	}
 
 	data.active_teammatches = [];
@@ -281,8 +286,11 @@ function enrich(season, data) {
 		return res;
 	};
 	data.get_matchfield = function(tm, label) {
-		const key = tm.matchid + '_' + label;
-		return match_fields_map.get(key);
+		const tm_matchfields = match_fields_map.get(tm.matchid);
+		if (!tm_matchfields) {
+			return null;
+		}
+		return tm_matchfields.get(label);
 	};
 	data.get_teams_by_club = function(club_code) {
 		const res = teams_by_club.get(club_code);

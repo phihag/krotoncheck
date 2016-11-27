@@ -1,6 +1,7 @@
 'use strict';
 
 var utils = require('../utils');
+var data_access = require('../data_access');
 
 function _count_players(players, ts, team) {
 	let res = 0;
@@ -17,9 +18,6 @@ function _count_players(players, ts, team) {
 				continue;
 			}
 		} else {
-			if (p.vkz1 === 'N') {
-				continue;
-			}
 			if (p.teamcode != team.code) {
 				continue;
 			}
@@ -41,7 +39,7 @@ function* check_enough_players(data, team, vrl_typeid, gender) {
 	// Collect all players who qualified for this team (directly or via fixed_in)
 	const players = entries.filter(p => 
 		((team.code == p.teamcode) || (p.fixed_in == team.number)) &&
-		(p.vkz1 !== 'J1') && (p.vkz1 !== 'S1') && (p.vkz1 !== 'M1')
+		data_access.o19_is_regular(p)
 	);
 
 	const dates = [];

@@ -346,7 +346,7 @@ function enrich(season, data) {
 			return m[1];
 		}
 		return 'Sonstiges';
-	}
+	};
 }
 
 function team2num(team) {

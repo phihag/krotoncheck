@@ -16,6 +16,7 @@ function enrich(data, season, found) {
 			p.region = data.get_region(p.teammatch.eventname);
 		} else if (p.type === 'vrl') {
 			const club = data.get_club(p.clubcode);
+			p.club_name = club.name;
 			p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
 			p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
 			p.region = data.get_club_region(p.clubcode);
@@ -135,7 +136,7 @@ function color_render(problems_struct) {
 			by_group = reg.groups_map[problem.turnier_url];
 			if (! by_group) {
 				by_group = {
-					header: 'VRL ' + problem.clubcode,
+					header: ('(' + problem.clubcode + ') ' + problem.club_name),
 					turnier_url: problem.turnier_url,
 					problems: [],
 				};
@@ -177,7 +178,12 @@ function color_render(problems_struct) {
 	for (const color_key in by_color) {
 		const col = by_color[color_key];
 		let keys = Object.keys(col.regions_map);
-		keys.sort();
+		keys.sort(function(k1, k2) {
+			const REGIONS_ORDER = ['NRW', 'N1', 'N2', 'S1', 'S2', 'Sonstiges'];
+			const idx1 = REGIONS_ORDER.indexOf(k1);
+			const idx2 = REGIONS_ORDER.indexOf(k2);
+			return idx1 - idx2;
+		});
 		col.regions = [];
 		for (const k of keys) {
 			const region = col.regions_map[k];

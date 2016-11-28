@@ -323,6 +323,43 @@ function enrich(season, data) {
 		}
 		return vrl_map.entries;
 	};
+	data.get_club_region = function(clubcode) {
+		const teams = data.get_teams_by_club(clubcode);
+
+		let max_team = null;
+		let max_num = Number.POSITIVE_INFINITY;
+		for (const t of teams) {
+			if (team2num(t) < max_num) {
+				max_team = t;
+				max_num = team2num(t);
+			}
+		}
+
+		return data.get_region(max_team.eventname);
+	};
+	data.get_region = function(eventname) {
+		if (['O19-RL', 'O19-OL'].includes(eventname)) {
+			return 'NRW';
+		}
+		const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(eventname);
+		if (m) {
+			return m[1];
+		}
+		return 'Sonstiges';
+	}
+}
+
+function team2num(team) {
+	const m = /^([JSM]?)([0-9]+)$/.exec(team.number);
+	if (!m) {
+		throw new Error('Cannot parse number ' + team.number);
+	}
+	return ({
+		'': 0,
+		'J': 1000,
+		'S': 2000,
+		'M': 3000,
+	}[m[1]] + parseInt(m[2]));
 }
 
 function load_data(dirname, tasks, callback) {

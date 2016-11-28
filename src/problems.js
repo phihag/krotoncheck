@@ -13,10 +13,12 @@ function enrich(data, season, found) {
 				p.turnier2_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch2_id;
 			}
 			p.stb = data.get_stb(p.teammatch);
+			p.region = data.get_region(p.teammatch.eventname);
 		} else if (p.type === 'vrl') {
 			const club = data.get_club(p.clubcode);
 			p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
 			p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
+			p.region = data.get_club_region(p.clubcode);
 		}
 		if (p.match_id) {
 			p.match = data.get_match(p.match_id);
@@ -87,14 +89,12 @@ function prepare_render(season, problems) {
 
 function colorize_problem(problem) {
 	if (problem.type === 'vrl') {
-		problem.region = 'VRL';
 		problem.color = 'lightgray';
 	} else {
 		const tm = problem.teammatch;
 		if (tm) {
 			problem.color = tm.ergebnisbestaetigt_datum ? 'red' : 'yellow';
-			const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(tm.eventname);
-			problem.region = m ? m[1] : 'Sonstige Region';
+			// region already set in enrich (above)
 		} else {
 			problem.color = 'black';
 			problem.region = problem.type;

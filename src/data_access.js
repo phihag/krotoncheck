@@ -329,9 +329,15 @@ function enrich(season, data) {
 		let max_team = null;
 		let max_num = Number.POSITIVE_INFINITY;
 		for (const t of teams) {
-			if (team2num(t) < max_num) {
+			let team_score = team2num(t);
+
+			if (data.get_region(t.eventname) === 'NRW') {
+				team_score += 100000;
+			}
+
+			if (team_score < max_num) {
 				max_team = t;
-				max_num = team2num(t);
+				max_num = team_score;
 			}
 		}
 

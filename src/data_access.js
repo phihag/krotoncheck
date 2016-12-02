@@ -94,6 +94,10 @@ function enrich(season, data) {
 		teammatch_by_id.set(tm.matchid, tm);
 	}
 
+	for (const tm of data.teammatches) {
+		tm.ts = utils.parse_date(tm.spieldatum);
+	}
+
 	const playermatches_by_teammatchid = new Map();
 	for (let pm of data.playermatches) {
 		let pms = playermatches_by_teammatchid.get(pm.teammatchid);
@@ -124,11 +128,19 @@ function enrich(season, data) {
 			continue; // Cancelled team and therefore teammatch
 		}
 		pm.tm = tm;
-		pm.ts = utils.parse_date(tm.spieldatum);
 		pm.is_hr = (tm.runde === 'H');
 	}
 	all_pms.sort(function(pm1, pm2) {
-		return pm1.ts - pm2.ts;
+		if (!pm1.tm && pm2.tm) {
+			return -1;
+		}
+		if (pm1.tm && !pm2.tm) {
+			return 1;
+		}
+		if (!pm1.tm && !pm2.tm) {
+			return utils.cmp(parse_int(pm1.matchid), parse_int(pm2.matchid));
+		}
+		return pm1.tm.ts - pm2.tm.ts;
 	});
 	for (const pm of all_pms) {
 		_add_player(pm.team1spieler1spielerid, pm);
@@ -385,6 +397,13 @@ function enrich(season, data) {
 			return m[1];
 		}
 		return 'Sonstiges';
+	};
+	data.get_player_matches = function(pcode, is_hr) {
+		const res = matches_by_player.get(pcode);
+		if (!res) {
+			return [];
+		}
+		return res[is_hr ? 'hr' : 'rr'];
 	};
 }
 

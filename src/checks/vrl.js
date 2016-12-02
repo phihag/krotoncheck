@@ -2,6 +2,8 @@
 // Check the VRLs themselves
 
 var data_access = require('../data_access');
+var utils = require('../utils');
+
 
 function count_o19_players(players) {
 	let res = 0;
@@ -229,6 +231,37 @@ function* check_in_youth_team(data, is_hr, line) {
 			type: 'vrl',
 			clubcode: clubcode,
 			vrl_typeid: line.typeid,
+			message,
+		};
+	}
+
+	// Check matches in O19
+	const pms = data.get_player_matches(line.memberid, is_hr);
+	const tms = utils.uniq(pms.filter(pm => {
+		if (pm.flag_umwertung_gegen_team1) {
+			if ((pm.team1spieler1spielerid === line.memberid) || (pm.team1spieler2spielerid === line.memberid)) {
+				return false;
+			}
+		}
+		if (pm.flag_umwertung_gegen_team2) {
+			if ((pm.team2spieler1spielerid === line.memberid) || (pm.team2spieler2spielerid === line.memberid)) {
+				return false;
+			}
+		}
+		return true;
+	}).map(pm => pm.tm));
+	const o19_tms = tms.filter(tm =>
+		data.league_type(tm.staffelcode) === 'O19'
+	);
+	for (let i = 2;i < o19_tms.length;i++) {
+		const o19tm = o19_tms[i];
+		const message = (
+			expect_team + '-Spieler' + (line.sex === 'F' ? 'in' : '') +
+			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+			' wurde mehr als zweimal im O19-Bereich eingesetzt (§11.1.2 JSpO)'
+		);
+		yield {
+			teammatch_id: o19tm.matchid,
 			message,
 		};
 	}

@@ -215,6 +215,16 @@ function zip(...items) {
     return items[0].map((_, idx) => items.map(ar => ar[idx]));
 }
 
+function uniq(ar) {
+    const res = [];
+    for (const v of ar) {
+        if (!res.includes(v)) {
+            res.push(v);
+        }
+    }
+    return res;
+}
+
 module.exports = {
     cmp,
     download_page,
@@ -237,8 +247,9 @@ module.exports = {
     sha512,
     sort_by,
     today_iso8601,
-    ts2str,
     ts2dstr,
+    ts2str,
+    uniq,
     update,
     values,
     weekday,

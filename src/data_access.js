@@ -68,7 +68,7 @@ function enrich(season, data) {
 		club_by_id.set(c.code, c);
 	}
 
-	var player_by_id = new Map();
+	const player_by_id = new Map();
 	for (let p of data.players) {
 		player_by_id.set(p.spielerid, p);
 	}
@@ -102,6 +102,39 @@ function enrich(season, data) {
 			playermatches_by_teammatchid.set(pm.teammatchid, pms);
 		}
 		pms.push(pm);
+	}
+	const matches_by_player = new Map();
+	function _add_player(pcode, pm) {
+		if (!pcode) return;
+		let all_matches = matches_by_player.get(pcode);
+		if (!all_matches) {
+			all_matches = {
+				hr: [],
+				rr: [],
+			};
+			matches_by_player.set(pcode, all_matches);
+		}
+		const round_matches = all_matches[pm.is_hr ? 'hr' : 'rr'];
+		round_matches.push(pm);
+	}
+	const all_pms = data.playermatches.slice();
+	for (const pm of all_pms) {
+		const tm = teammatch_by_id.get(pm.teammatchid);
+		if (!tm) {
+			continue; // Cancelled team and therefore teammatch
+		}
+		pm.tm = tm;
+		pm.ts = utils.parse_date(tm.spieldatum);
+		pm.is_hr = (tm.runde === 'H');
+	}
+	all_pms.sort(function(pm1, pm2) {
+		return pm1.ts - pm2.ts;
+	});
+	for (const pm of all_pms) {
+		_add_player(pm.team1spieler1spielerid, pm);
+		_add_player(pm.team1spieler2spielerid, pm);
+		_add_player(pm.team2spieler1spielerid, pm);
+		_add_player(pm.team2spieler2spielerid, pm);
 	}
 
 	const stbs_by_league_code = new Map();
@@ -368,6 +401,14 @@ function team2num(team) {
 	}[m[1]] + parseInt(m[2]));
 }
 
+function teamid2clubid(team_id) {
+	const m = /^(01-[0-9]+)-[MSJ]?[0-9]+$/.exec(team_id);
+	if (!m) {
+		throw new Error('Cannot parse team id ' + team_id);
+	}
+	return m[1];
+}
+
 function load_data(dirname, tasks, callback) {
 	let data = {};
 	async.each(tasks, function(task_name, cb) {
@@ -448,4 +489,5 @@ module.exports = {
 	parse_bool,
 	parse_int,
 	o19_is_regular,
+	teamid2clubid,
 };

@@ -211,6 +211,9 @@ function ts2dstr(ts) {
     return german_tz(ts, TZ_ID, '%d.%m.%Y');
 }
 
+function zip(...items) {
+    return items[0].map((_, idx) => items.map(ar => ar[idx]));
+}
 
 module.exports = {
     cmp,
@@ -239,4 +242,5 @@ module.exports = {
     update,
     values,
     weekday,
+    zip,
 };

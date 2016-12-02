@@ -29,4 +29,11 @@ describe('utils', function() {
 		assert.strictEqual(utils.monday_1200(utils.parse_date('14.11.2016 23:59:59')), 1479121200000 + 7 * 24 * 3600000);
 	});
 
+	it('zip', function() {
+		assert.deepStrictEqual(
+			utils.zip([1, 2, 3], [4, 5, 6]),
+			[[1, 4], [2, 5], [3, 6]]
+		);
+	});
+
 });

@@ -17,7 +17,9 @@ function enrich(data, season, found) {
 		} else if (p.type === 'vrl') {
 			const club = data.get_club(p.clubcode);
 			p.club_name = club.name;
-			p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
+			if (p.vrl_typeid) {
+				p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
+			}
 			p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
 			p.region = data.get_club_region(p.clubcode);
 		}

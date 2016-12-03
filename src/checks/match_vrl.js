@@ -106,7 +106,6 @@ function* check_all(data, tm, pms, team_idx) {
 					const u19_vrl_type = get_vrl_type('U19', tm, vpm, player_idx);
 					const u19_ve = data.get_vrl_entry(team.clubcode, u19_vrl_type, player_id);
 					if (u19_ve) {
-						// TODO check that allowed by age
 						continue;
 					}
 				}
@@ -117,9 +116,42 @@ function* check_all(data, tm, pms, team_idx) {
 				yield {
 					teammatch_id: pm.teammatchid,
 					match_id: pm.matchid,
-					message: message,
+					message,
 				};
 				continue;
+			}
+
+			if (ve.startdate) {
+				if (tm.ts < ve.parsed_startdate) {
+					const message = (
+						'(' + ve.memberid + ')' + ve.firstname + ' ' + ve.lastname +
+						' ist erst ab ' + ve.startdate +
+						' für (' + ve.clubcode + ') ' + ve.clubname +
+						' spielberechtigt, hat aber vorher am ' +
+						tm.spieldatum + ' gespielt'
+					);
+					yield {
+						teammatch_id: pm.teammatchid,
+						match_id: pm.match_id,
+						message,
+					};
+				}
+			}
+			if (ve.enddate) {
+				if (tm.ts > ve.parsed_enddate) {
+					const message = (
+						'(' + ve.memberid + ')' + ve.firstname + ' ' + ve.lastname +
+						' ist nur bis zum ' + ve.startdate +
+						' für (' + ve.clubcode + ') ' + ve.clubname +
+						' spielberechtigt, hat aber danach am ' +
+						tm.spieldatum + ' gespielt'
+					);
+					yield {
+						teammatch_id: pm.teammatchid,
+						match_id: pm.match_id,
+						message,
+					};
+				}
 			}
 
 			let pos = parseInt(ve.teamposition);

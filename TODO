@@ -1,17 +1,13 @@
 add more tests
 	more VRL application
 		playing in lower team
-		fixed in
-		VRL for youth
-		VRL for mini
-		backup player http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=224
+		startdate
+		fixed in, but played in other team (look at fixed_start)
 	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
 
-
-	festgespielt aber kein Fixed_in
+	festgespielt aber kein fixed_in
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
-	Spieler nicht mehr im Verein (während der Saison gewechselt, bis dann)
 	Gespielt obwohl festgespielt (nach Tabelle)
 	Benachrichtigen wenn sich jemand festgespielt hat
 	Zu tief gespielt (falsche Mannschaft)
@@ -26,12 +22,10 @@ add more tests
 		auch als Ergebnis von nicht spielberechtigt
 		spezielle Meldung wenn ein Team gar keine Spieler hatte
 	keine Damen-Spiele in <VL
-	Spiel ohne Uhrzeit
 	Mannschaft zum 3. Mal nicht angetreten
 	Letzter Spieltag darf nicht überschritten werden (unterschiedlich O19 | OL/RL | U19)
 	Spieler zu alt (Jugend)
 	Mannschaften eines Vereins in einer Staffel sollen immer am Anfang der Saison gegeneinander spielen
-	Prüfen ob jede Mannschaft 4 Herren + 2 Damen (in der OL/RL wird nachgerückt)
 	Verlegung vom Verein in der OL/RL
 	vorgesehene Ersatzspieler in <VL
 	Ergebniseintrag zu spät (je nach OL/RL bzw. normal 24h / Montag 12:00)

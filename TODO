@@ -1,15 +1,12 @@
 add more tests
 	more VRL application
 		playing in lower team
-		fixed in, but played in other team (look at fixed_start)
 	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
 
 	festgespielt aber kein fixed_in
+	Benachrichtigen wenn sich jemand festgespielt hat
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
-	Gespielt obwohl festgespielt (nach Tabelle)
-	Benachrichtigen wenn sich jemand festgespielt hat
-	Zu tief gespielt (falsche Mannschaft)
 	Spieler hat dreimal gespielt
 		http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=12154
 	Spieler hat zweimal in der gleichen Disziplin gespielt
@@ -47,7 +44,7 @@ send email out
 grep for all TODOs
 make sure sorts are always stable
 
-check/load/enrich in a separate thread
+check/load/enrich in a separate thread/process
 forgot pw (send reset token)
 automatically query name + season ID upon season creation
 breadcrumbs

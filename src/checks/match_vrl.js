@@ -124,7 +124,7 @@ function* check_all(data, tm, pms, team_idx) {
 			if (ve.startdate) {
 				if (tm.ts < ve.parsed_startdate) {
 					const message = (
-						'(' + ve.memberid + ')' + ve.firstname + ' ' + ve.lastname +
+						'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
 						' ist erst ab ' + ve.startdate +
 						' für (' + ve.clubcode + ') ' + ve.clubname +
 						' spielberechtigt, hat aber vorher am ' +
@@ -132,7 +132,7 @@ function* check_all(data, tm, pms, team_idx) {
 					);
 					yield {
 						teammatch_id: pm.teammatchid,
-						match_id: pm.match_id,
+						match_id: pm.matchid,
 						message,
 					};
 				}
@@ -140,7 +140,7 @@ function* check_all(data, tm, pms, team_idx) {
 			if (ve.enddate) {
 				if (tm.ts > ve.parsed_enddate) {
 					const message = (
-						'(' + ve.memberid + ')' + ve.firstname + ' ' + ve.lastname +
+						'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
 						' ist nur bis zum ' + ve.startdate +
 						' für (' + ve.clubcode + ') ' + ve.clubname +
 						' spielberechtigt, hat aber danach am ' +
@@ -148,7 +148,25 @@ function* check_all(data, tm, pms, team_idx) {
 					);
 					yield {
 						teammatch_id: pm.teammatchid,
-						match_id: pm.match_id,
+						match_id: pm.matchid,
+						message,
+					};
+				}
+			}
+
+			if (ve.fixed_in && (!ve.fixed_from || (ve.parsed_fixed_from <= tm.ts))) {
+				if (ve.fixed_in !== team.number) {
+					const message = (
+						'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
+						' ist in ' + ve.clubname + ' ' + ve.fixed_in +
+						(ve.fixed_from ? (' (ab ' + ve.fixed_from + ')') : '') +
+						' festgeschrieben, hat aber am ' + tm.spieldatum +
+						' für (' + team.code + ') ' + team.name +
+						' gespielt.'
+					);
+					yield {
+						teammatch_id: pm.teammatchid,
+						match_id: pm.matchid,
 						message,
 					};
 				}

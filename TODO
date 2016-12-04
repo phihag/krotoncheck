@@ -1,5 +1,6 @@
 add more tests
-	more VRL application
+	Schiedsrichter in der Regionalliga
+	more VRL application (match_vrl)
 		playing in lower team
 	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
 
@@ -11,7 +12,6 @@ add more tests
 		http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=12154
 	Spieler hat zweimal in der gleichen Disziplin gespielt
 	Nur 2. Doppel / nur 2./3. Einzel etc.
-	Schiedsrichter in der Regionalliga
 	Halle verändert -> Kommentar (mit Namen der Halle?)
 	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
 	Mindestzahl der aufgestellten Spiele (5 in <VL | 8 in >= VL)

@@ -17,7 +17,6 @@ const HTTP_HEADERS = {
 };
 
 
-var uniq_id = Date.now() + '-' + process.pid;
 var dl_counter = 0;
 var current_downloads = new Map();
 
@@ -26,6 +25,7 @@ function calc_url(task_name, tournament_id) {
     switch(task_name) {
     case 'playermatches':
     case 'teammatches':
+    case 'matchcomments':
         return (BASE_URL +
             'sport/admin/export' + task_name + '.aspx' +
             '?id=' + encodeURIComponent(tournament_id) + '&ft=1&sd=20000101000000&ed=20990101000000');
@@ -95,11 +95,11 @@ function download_season(config, season, started_cb, done_cb) {
     }, function(cb) {
         utils.ensure_dir(DATA_ROOT, cb);
     }, function(cb) {
-        var download_id = uniq_id + '_' + dl_counter;
+        var download_id = Date.now() + '-' + process.pid + '_' + dl_counter;
         dl_counter++;
         var download_dir = path.join(INPROGRESS_ROOT, download_id);
         utils.ensure_dir(download_dir, function(err) {
-            var dl = {
+            const dl = {
                 id: download_id,
                 status: 'started',
                 started_timestamp: Date.now(),

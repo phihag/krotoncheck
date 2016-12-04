@@ -149,7 +149,7 @@ function color_render(problems_struct) {
 			by_group = reg.groups_map[key];
 			if (! by_group) {
 				by_group = {
-					turnier_url: 'mailto:phiha@phihag.de?subject=Interner+Fehler+in+krotoncheck',
+					turnier_url: 'mailto:phihag@phihag.de?subject=Interner+Fehler+in+krotoncheck',
 					problems: [],
 				};
 				reg.groups_map[key] = by_group;

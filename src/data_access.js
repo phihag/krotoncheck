@@ -21,6 +21,7 @@ const ALL_TASKS = [
     'matchfields',
     'teams',
     'users',
+    'matchcomments',
 ];
 
 
@@ -165,6 +166,16 @@ function enrich(season, data) {
 			match_fields_map.set(tm_id, tm_matchfields);
 		}
 		tm_matchfields.set(line.MatchField, line.ValueText);
+	}
+
+	const matchcomments_by_tmid = new Map();
+	for (let line of data.matchcomments) {
+		let mcs = matchcomments_by_tmid.get(line.matchid);
+		if (!mcs) {
+			mcs = [];
+			matchcomments_by_tmid.set(line.matchid, mcs);
+		}
+		mcs.push(line);
 	}
 
 	data.active_teammatches = [];
@@ -404,6 +415,24 @@ function enrich(season, data) {
 			return [];
 		}
 		return res[is_hr ? 'hr' : 'rr'];
+	};
+	data.get_stb_note = function(tm, textfilter) {
+		const comments = matchcomments_by_tmid.get(tm);
+		if (!comments) {
+			return null;
+		}
+
+		for (const c of comments) {
+			if (c['Comment type'] !== 'Wettkampfkommentar') {
+				continue;
+			}
+
+			if (textfilter(c.nachricht)) {
+				return c;
+			}
+		}
+
+		return null;
 	};
 }
 

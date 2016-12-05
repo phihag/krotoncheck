@@ -328,10 +328,28 @@ function* check_vrl(data, vrl) {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
 				clubcode: vrl.clubcode,
-				message: message,
+				message,
 			};
 		}
 		by_doubles_pos.set(position_doubles, line);
+
+		if (line.vkz3 === 'FIX') {
+			if (!line.fixed_in && (!line.fixed_from || !line.fixed_in)) {
+				const message = (
+					'FIX-Kennzeichen ohne ' +
+					(!line.fixed_from ? (line.fixed_in ? '"Fest ab"-Wert' : '"Fest in"- und ohne "Fest ab"-Wert') : '"Fest in"-Wert') +
+					' in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' ' +
+					' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+				);
+
+				yield {
+					type: 'vrl',
+					vrl_typeid: vrl.typeid,
+					clubcode: vrl.clubcode,
+					message,
+				};
+			}
+		}
 
 		// Youth players in O19 with correct designations
 		if (is_o19) {

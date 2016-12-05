@@ -1,5 +1,8 @@
 'use strict';
 
+const laws = require('../laws');
+
+
 function get_vrl_type(league_type, tm, pm, player_idx) {
 	if (! /^[HR]$/.test(tm.runde)) {
 		throw new Error('Ungültige Runde ' + tm.runde);
@@ -154,6 +157,7 @@ function* check_all(data, tm, pms, team_idx) {
 				}
 			}
 
+			// Check that player is allowed to play for the team
 			if (ve.fixed_in && (!ve.fixed_from || (ve.parsed_fixed_from <= tm.ts))) {
 				if (ve.fixed_in !== team.number) {
 					const message = (
@@ -163,6 +167,22 @@ function* check_all(data, tm, pms, team_idx) {
 						' festgeschrieben, hat aber am ' + tm.spieldatum +
 						' für (' + team.code + ') ' + team.name +
 						' gespielt.'
+					);
+					yield {
+						teammatch_id: pm.teammatchid,
+						match_id: pm.matchid,
+						message,
+					};
+				}
+			} else if (ve.teamcode !== team.code) {
+				// Playing as backup player - verify that that's allowed
+				const registered_in = data.get_team(ve.teamcode);
+
+				if (! laws.is_backup(registered_in, team)) {
+					const message = (
+						ve.firstname + ' ' + ve.lastname + ' (' + ve.memberid + ')' +
+						' ist Spieler von (' + registered_in.code + ') ' + registered_in.name +
+						', hat aber für die tiefere Mannschaft (' + team.code + ') ' + team.name + ' gespielt'
 					);
 					yield {
 						teammatch_id: pm.teammatchid,

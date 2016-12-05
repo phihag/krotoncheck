@@ -185,6 +185,11 @@ function weekday(ts) {
     return parseInt(german_tz(ts, '%w'));
 }
 
+const WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+function weekday_destr(ts) {
+    return WEEKDAYS[weekday(ts)];
+}
+
 function parse_date(dstr) {
     const m = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})(?: ([0-9]{2}:[0-9]{2}:[0-9]{2}))?$/.exec(dstr);
     if (!m) {
@@ -205,6 +210,10 @@ function monday_1200(ts) {
 
 function ts2str(ts) {
     return german_tz(ts, TZ_ID, '%Y-%m-%d %H:%M:%S');
+}
+
+function ts2destr(ts) {
+    return german_tz(ts, TZ_ID, '%d.%m.%Y %H:%M:%S');
 }
 
 function ts2dstr(ts) {
@@ -247,11 +256,13 @@ module.exports = {
     sha512,
     sort_by,
     today_iso8601,
+    ts2destr,
     ts2dstr,
     ts2str,
     uniq,
     update,
     values,
     weekday,
+    weekday_destr,
     zip,
 };

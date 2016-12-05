@@ -1,11 +1,12 @@
 add more tests
-	Schiedsrichter in der Regionalliga
-	more VRL application (match_vrl)
-		playing in lower team
-	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
+	Ergebniseintrag noch nicht erfolgt (ignore retracted teams and the like)
 
 	festgespielt aber kein fixed_in
 	Benachrichtigen wenn sich jemand festgespielt hat
+
+	vorgesehene Ersatzspieler in <VL
+
+	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
 	1 Spieler im HD / DD / MX
 	Spielstand = Sieger
 	Spieler hat dreimal gespielt
@@ -20,23 +21,16 @@ add more tests
 	keine Damen-Spiele in <VL
 	Mannschaft zum 3. Mal nicht angetreten
 	Letzter Spieltag darf nicht überschritten werden (unterschiedlich O19 | OL/RL | U19)
-	Spieler zu alt (Jugend)
 	Mannschaften eines Vereins in einer Staffel sollen immer am Anfang der Saison gegeneinander spielen
 	Verlegung vom Verein in der OL/RL
-	vorgesehene Ersatzspieler in <VL
-	Ergebniseintrag zu spät (je nach OL/RL bzw. normal 24h / Montag 12:00)
 	wenn Mannschaftsergebnis o.k. dann gar kein Detailergebnis (keine Spiele usw.)
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
-	unberechtigte Umwertung (Umwertung ohne das was falsch ist?)
 	Einsatz von vorgesehenen Ersatzspielern ohne besondere Vorkommnisse
 	(Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD)
 
-rewrite teams_am_tag to go per-player
-make sure to detect as many corner cases as possible, 2015 output should be empty
 missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962
 make sure to get 100% coverage over all checks
 benchmark check + data_access overhead
-add date to teammatch
 
 ignore
 schedule
@@ -61,3 +55,4 @@ check errors in data_access.enrich (as called from checks)
 make sure 100% coverage
 remove bcrypt in favor of something else
 show time in local timezone
+unberechtigte Umwertung (Umwertung ohne das was falsch ist?)

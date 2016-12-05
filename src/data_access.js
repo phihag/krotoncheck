@@ -416,8 +416,8 @@ function enrich(season, data) {
 		}
 		return res[is_hr ? 'hr' : 'rr'];
 	};
-	data.get_stb_note = function(tm, textfilter) {
-		const comments = matchcomments_by_tmid.get(tm);
+	data.get_stb_note = function(tm_id, textfilter) {
+		const comments = matchcomments_by_tmid.get(tm_id);
 		if (!comments) {
 			return null;
 		}

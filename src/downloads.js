@@ -1,13 +1,14 @@
 'use strict';
 
-var async = require('async');
-var fs = require('fs');
-var path = require('path');
-var request = require('request');
-var url = require('url');
+const async = require('async');
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
+const url = require('url');
 
-var utils = require('./utils');
-var data_access = require('./data_access');
+const check = require('./check');
+const utils = require('./utils');
+const data_access = require('./data_access');
 
 const BASE_URL = 'http://www.turnier.de/';
 const INPROGRESS_ROOT = path.join(path.dirname(__dirname), 'data/download_inprogress/');
@@ -206,8 +207,7 @@ function start_handler(req, res, next) {
 
                     current_downloads.delete(dl.id);
 
-                    console.log('TODO: download done: ', dl);
-                    console.log('TODO: should start analysis now');
+                    check.recheck(req.app.db, season._id, function() {}, true);
                 });
             });
         });

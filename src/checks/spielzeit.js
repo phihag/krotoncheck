@@ -100,9 +100,13 @@ function* check_tm(data, now, tm) {
 			};
 		}
 	} else {
-		/*
-		TODO: check that match has not been cancelled etc.
 		if (report_until < now) {
+			const team1 = data.get_team(tm.team1id);
+			const team2 = data.get_team(tm.team2id);
+			if ((team1.Status === 'Mannschaftsrückzug') || (team2.Status === 'Mannschaftsrückzug')) {
+				return;
+			}
+
 			const message = (
 				'Detailergebnis zu spät eingetragen: ' +
 				'Spiel um ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
@@ -113,7 +117,6 @@ function* check_tm(data, now, tm) {
 				message: message,
 			};
 		}
-		*/
 	}
 }
 

@@ -6,7 +6,6 @@ const path = require('path');
 const request = require('request');
 const url = require('url');
 
-const check = require('./check');
 const utils = require('./utils');
 const data_access = require('./data_access');
 
@@ -207,6 +206,7 @@ function start_handler(req, res, next) {
 
                     current_downloads.delete(dl.id);
 
+                    const check = require('./check');
                     check.recheck(req.app.db, season._id, function() {}, true);
                 });
             });

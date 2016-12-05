@@ -50,6 +50,11 @@ function* check_tm(data, now, tm) {
 		return;
 	}
 
+	if (tm.mannschaftsergebnis_user.endsWith('(A)')) {
+		// Changed by admin
+		return;
+	}
+
 	const is_olrl = /^01-00[123]$/.test(tm.staffelcode);
 	if (is_olrl) {
 		if (first_entered) {

@@ -55,6 +55,12 @@ function* check_tm(data, now, tm) {
 		return;
 	}
 
+	const team1 = data.get_team(tm.team1id);
+	const team2 = data.get_team(tm.team2id);
+	if ((team1.Status === 'Mannschaftsrückzug') || (team2.Status === 'Mannschaftsrückzug')) {
+		return;
+	}
+
 	const is_olrl = /^01-00[123]$/.test(tm.staffelcode);
 	if (is_olrl) {
 		if (first_entered) {
@@ -74,7 +80,7 @@ function* check_tm(data, now, tm) {
 				const message = (
 					'Mannschaftsergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
-					'aber immer noch nicht eingetragen um ' + utils.ts2destr(now) +
+					'aber immer noch nicht eingetragen' +
 					' (vgl. §4.1 Anlage 6 SpO)');
 				yield {
 					teammatch_id: tm.matchid,
@@ -101,17 +107,11 @@ function* check_tm(data, now, tm) {
 		}
 	} else {
 		if (report_until < now) {
-			const team1 = data.get_team(tm.team1id);
-			const team2 = data.get_team(tm.team2id);
-			if ((team1.Status === 'Mannschaftsrückzug') || (team2.Status === 'Mannschaftsrückzug')) {
-				return;
-			}
-
 			const message = (
 				'Detailergebnis zu spät eingetragen: ' +
 				'Spiel um ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
-				'aber immer noch nicht eingetragen um ' + utils.ts2destr(now) +
-				' (Nachverlegung vergessen?)');
+				'aber immer noch nicht eingetragen' +
+				' (Nachverlegung vergessen oder Spiel ausgefallen?)');
 			yield {
 				teammatch_id: tm.matchid,
 				message: message,

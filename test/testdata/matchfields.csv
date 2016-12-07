@@ -1,2 +1,3 @@
 TournamentID;MatchID;MatchField;ValueText;ValueInt
-141752;9;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;"Klaus Hartmann; Sven Anstötz";
+1;9;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;"Klaus Hartmann; Sven Anstötz";
+1;1;vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO);Some Guy (really just a normal backup player);

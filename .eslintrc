@@ -4,7 +4,8 @@
         "no-console": 0,
         "quotes": [
             2,
-            "single"
+            "single",
+            {"allowTemplateLiterals": true}
         ],
         "linebreak-style": [
             2,

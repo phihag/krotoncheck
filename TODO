@@ -1,24 +1,16 @@
 add more tests
 	festgespielt aber kein fixed_in
-	Benachrichtigen wenn sich jemand festgespielt hat
 
-	Kommentareintrag zur Aufgabe fehlt (nach Eintrag)
-	1 Spieler im HD / DD / MX
-	Spielstand = Sieger
-	Spieler hat dreimal gespielt
-		http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=12154
-	Spieler hat zweimal in der gleichen Disziplin gespielt
-	Nur 2. Doppel / nur 2./3. Einzel etc.
-	Halle verändert -> Kommentar (mit Namen der Halle?)
-	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
 	Mindestzahl der aufgestellten Spiele (5 in <VL | 8 in >= VL)
 		auch als Ergebnis von nicht spielberechtigt
 		spezielle Meldung wenn ein Team gar keine Spieler hatte
 	keine Damen-Spiele in <VL
+	Spielstand = Sieger
+	Nur 2. Doppel / nur 2./3. Einzel etc.
+	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
 	Mannschaft zum 3. Mal nicht angetreten
 	Letzter Spieltag darf nicht überschritten werden (unterschiedlich O19 | OL/RL | U19)
 	Mannschaften eines Vereins in einer Staffel sollen immer am Anfang der Saison gegeneinander spielen
-	Verlegung vom Verein in der OL/RL
 	wenn Mannschaftsergebnis o.k. dann gar kein Detailergebnis (keine Spiele usw.)
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
 	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD

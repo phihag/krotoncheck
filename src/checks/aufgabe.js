@@ -39,10 +39,41 @@ function match_winner(pm) {
 	return 0;
 }
 
+function* check_comment(data, pm) {
+	const resigned = data.get_matchfield(pm.tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
+	if (resigned) {
+		return;
+	}
+
+	const notes = data.get_matchfield(pm.tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
+	if (notes) {
+		return;
+	}
+
+	// Look for a comment - not quite correct, but still close
+	const comment = data.get_comment(pm.teammatchid, text => /krank|verletz|aufgegeben|Aufgabe/i.test(text));
+	if (comment) {
+		return;
+	}
+
+	// Already handled?
+	if (data.get_stb_note(pm.teammatchid, text => text.includes('F20-'))) {
+		return;
+	}
+
+	yield {
+		teammatch_id: pm.teammatchid,
+		match_id: pm.matchid,
+		message: 'Spielaufgabe im ' + data.match_name(pm) + ', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1)',
+	};
+}
+
 function* check_match(data, pm, team_idx) {
 	if (! pm['flag_aufgabe_team' + team_idx]) {
 		return;
 	}
+
+	yield* check_comment(data, pm);
 
 	if (! pm['team' + team_idx + 'spieler1spielerid']) {
 		yield {

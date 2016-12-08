@@ -1,0 +1,20 @@
+[
+
+{
+	"match_id": "99",
+	"teammatch_id": "13",
+	"message": "Nur 1 Spieler im DD für Top Team 3 (01-1009-3): 01-tt-f3 vor 01-tt-f3 nach (01-tt-f3)"
+},
+
+{
+	"message": "01-tt-m8 vor 01-tt-m8 nach (01-tt-m8) hat 3 Spiele (1. HD, 1. HE, GD) gespielt (§57.3a SpO)",
+	"teammatch_id": "14"
+},
+{
+	"message": "01-fv-m4 vorname 01-fv-m4 nachname (01-fv-m4) hat 1. HD und 2. HD gespielt (Verstoß gegen §57.3b SpO)",
+	"teammatch_id": "14"
+}
+
+
+
+]

@@ -267,6 +267,45 @@ function* check_in_youth_team(data, is_hr, line) {
 	}
 }
 
+function* check_start(season, is_hr, vrl_date, line) {
+	if (!vrl_date || !line.kz || line.startdate || line.enddate) {
+		return;
+	}
+
+	const m = /^[Aa]b\s+([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4})\s*$/.exec(line.kz);
+	if (!m) {
+		return;
+	}
+
+	const startdate = utils.parse_date(m[1]);
+	if (startdate <= vrl_date) {
+		return;
+	}
+
+	const HR_GRACE_TIME = 11 * 24 * 60 * 60 * 1000;
+	if (is_hr && startdate <= vrl_date + HR_GRACE_TIME) {
+		return;
+	}
+
+	// Special excemption for club move
+	if ((season.key === 'nrw2016') && ['01-0955', '01-0971'].includes(line.clubcode)) {
+		return;
+	}
+
+	const message = (
+		line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+		' nachgemeldet (' + m[1] + ', VRL-Abgabe ' + utils.ts2dstr(vrl_date) + '),' +
+		' aber Startdatum fehlt' +
+		' in der VRL ' + line.typeid + ' von (' + line.clubcode + ') ' + line.clubname
+	);
+	yield {
+		type: 'vrl',
+		vrl_typeid: line.typeid,
+		clubcode: line.clubcode,
+		message,
+	};
+}
+
 function* check_vrl(season, data, vrl) {
 	const is_o19 = [9, 11, 10, 12].includes(vrl.typeid);
 	const is_hr = [9, 10, 14, 17].includes(vrl.typeid);
@@ -404,29 +443,8 @@ function* check_vrl(season, data, vrl) {
 			}
 		}
 
-		/* Hidden for now upon further feedback from Bernd Wessels
 		// Incorrectly noted start
-		if (vrl_date && line.kz && !line.startdate) {
-			const m = /^[Aa]b\s+([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4})\s*$/.exec(line.kz);
-			if (m) {
-				const startdate = utils.parse_date(m[1]);
-				if (startdate > vrl_date) {
-					const message = (
-						line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
-						' nachgemeldet (' + m[1] + ', VRL-Abgabe ' + season[date_key] + '),' +
-						' aber Startdatum fehlt' +
-						' in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname
-					);
-					yield {
-						type: 'vrl',
-						vrl_typeid: vrl.typeid,
-						clubcode: vrl.clubcode,
-						message,
-					};
-				}
-			}
-		}
-		*/
+		yield* check_start(season, is_hr, vrl_date, line);
 
 		// Ascending team numbers
 		if (line.teamcode) {

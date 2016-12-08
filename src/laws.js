@@ -65,6 +65,23 @@ function is_backup(registered_in, played_in) {
 		((registered_age_idx === played_age_idx) && (registered_team_idx > played_team_idx)));
 }
 
+function is_doubles(discipline) {
+	switch (discipline) {
+	case 'HD':
+	case 'DD':
+	case 'GD':
+	case 'Doppel':
+		return true;
+	case 'HE':
+	case 'DE':
+	case 'Einzel':
+		return false;
+	default:
+		throw new Error('Unknown discipline ' + JSON.stringify(discipline));
+	}
+}
+
 module.exports = {
 	is_backup,
+	is_doubles,
 };

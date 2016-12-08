@@ -36,7 +36,7 @@ function parse_bool(val) {
 }
 
 function enrich(season, data) {
-	let vrls_by_clubs = new Map();
+	const vrls_by_clubs = new Map();
 	for (let cr of data.clubranking) {
 		cr.typeid = parse_int(cr.typeid);
 		for (const date_key of ['fixed_from', 'startdate', 'enddate']) {
@@ -108,6 +108,7 @@ function enrich(season, data) {
 		}
 		pms.push(pm);
 	}
+
 	const matches_by_player = new Map();
 	function _add_player(pcode, pm) {
 		if (!pcode) return;
@@ -122,25 +123,17 @@ function enrich(season, data) {
 		const round_matches = all_matches[pm.is_hr ? 'hr' : 'rr'];
 		round_matches.push(pm);
 	}
-	const all_pms = data.playermatches.slice();
-	for (const pm of all_pms) {
+	const all_pms = [];
+	for (const pm of data.playermatches) {
 		const tm = teammatch_by_id.get(pm.teammatchid);
 		if (!tm) {
 			continue; // Cancelled team and therefore teammatch
 		}
 		pm.tm = tm;
 		pm.is_hr = (tm.runde === 'H');
+		all_pms.push(pm);
 	}
 	all_pms.sort(function(pm1, pm2) {
-		if (!pm1.tm && pm2.tm) {
-			return -1;
-		}
-		if (pm1.tm && !pm2.tm) {
-			return 1;
-		}
-		if (!pm1.tm && !pm2.tm) {
-			return utils.cmp(parse_int(pm1.matchid), parse_int(pm2.matchid));
-		}
 		return pm1.tm.ts - pm2.tm.ts;
 	});
 	for (const pm of all_pms) {
@@ -424,6 +417,24 @@ function enrich(season, data) {
 
 		for (const c of comments) {
 			if (c['Comment type'] !== 'Wettkampfkommentar') {
+				continue;
+			}
+
+			if (textfilter(c.nachricht)) {
+				return c;
+			}
+		}
+
+		return null;
+	};
+	data.get_comment = function(tm_id, textfilter) {
+		const comments = matchcomments_by_tmid.get(tm_id);
+		if (!comments) {
+			return null;
+		}
+
+		for (const c of comments) {
+			if (c['Comment type'] !== 'Spielkommentar') {
 				continue;
 			}
 

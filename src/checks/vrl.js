@@ -267,8 +267,12 @@ function* check_in_youth_team(data, is_hr, line) {
 	}
 }
 
-function* check_vrl(data, vrl) {
+function* check_vrl(season, data, vrl) {
 	const is_o19 = [9, 11, 10, 12].includes(vrl.typeid);
+	const is_hr = [9, 10, 14, 17].includes(vrl.typeid);
+	const date_key = 'vrldate_' + (is_o19 ? 'o19' : 'u19') + '_' + (is_hr ? 'hr' : 'rr');
+	const vrl_date = season[date_key] ? utils.parse_date(season[date_key]) : null;
+
 	let last_id = 0;
 	let by_doubles_pos = new Map();
 	let last_team_num = 0;
@@ -353,7 +357,6 @@ function* check_vrl(data, vrl) {
 
 		// Youth players in O19 with correct designations
 		if (is_o19) {
-			const is_hr = [9, 10].includes(vrl.typeid);
 			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);
 			if (m) {
 				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
@@ -387,7 +390,7 @@ function* check_vrl(data, vrl) {
 				}
 			} else if (line.jkz1 || (line.vkz1 === 'J1') || (line.vkz1 === 'S1') || (line.vkz1 === 'M1')) {
 				const message = (
-					'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+					line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
 					' hat Kennzeichen ' + (line.jkz1 || line.vkz1) + ',' +
 					' aber Altersklasse ' + JSON.stringify(line.akl) +
 					' in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname
@@ -396,10 +399,34 @@ function* check_vrl(data, vrl) {
 					type: 'vrl',
 					vrl_typeid: vrl.typeid,
 					clubcode: vrl.clubcode,
-					message: message,
+					message,
 				};
 			}
 		}
+
+		/* Hidden for now upon further feedback from Bernd Wessels
+		// Incorrectly noted start
+		if (vrl_date && line.kz && !line.startdate) {
+			const m = /^[Aa]b\s+([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4})\s*$/.exec(line.kz);
+			if (m) {
+				const startdate = utils.parse_date(m[1]);
+				if (startdate > vrl_date) {
+					const message = (
+						line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+						' nachgemeldet (' + m[1] + ', VRL-Abgabe ' + season[date_key] + '),' +
+						' aber Startdatum fehlt' +
+						' in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname
+					);
+					yield {
+						type: 'vrl',
+						vrl_typeid: vrl.typeid,
+						clubcode: vrl.clubcode,
+						message,
+					};
+				}
+			}
+		}
+		*/
 
 		// Ascending team numbers
 		if (line.teamcode) {
@@ -468,6 +495,6 @@ function* check_vrl(data, vrl) {
 
 module.exports = function*(season, data) {
 	for (const vrl of data.all_vrlinfos()) {
-		yield* check_vrl(data, vrl);
+		yield* check_vrl(season, data, vrl);
 	}
 };

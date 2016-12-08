@@ -1,6 +1,15 @@
 {{#season}}
 <h1>{{name}}</h1>
 
+<form method="post" action="{{root_path}}s/{{key}}/change" class="season_info">
+{{{csrf_field}}}
+<label><span>VRL-Abgabefrist Hinrunde O19</span><input name="vrldate_o19_hr" value="{{vrldate_o19_hr}}" /></label>
+<label><span>VRL-Abgabefrist Hinrunde U19</span><input name="vrldate_u19_hr" value="{{vrldate_u19_hr}}" /></label>
+<label><span>VRL-Abgabefrist Rückrunde O19</span><input name="vrldate_o19_rr" value="{{vrldate_o19_rr}}" /></label>
+<label><span>VRL-Abgabefrist Rückrunde U19</span><input name="vrldate_u19_rr" value="{{vrldate_u19_rr}}" /></label>
+<button role="submit">Ändern</button>
+</form>
+
 {{#newest_download}}
 <form method="post" action="{{root_path}}s/{{key}}/recheck">
 {{{csrf_field}}}
@@ -13,7 +22,6 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 {{/downloads_inprogress}}
 
 <button class="download_button" role="button" data-season_key="{{key}}">Download starten</button>
-
 
 {{>problems_list}}
 

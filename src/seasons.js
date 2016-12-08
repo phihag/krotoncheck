@@ -1,20 +1,20 @@
 'use strict';
 
-var downloads = require('./downloads');
-var render = require('./render');
-var check = require('./check');
-var utils = require('./utils');
-var problems = require('./problems');
+const downloads = require('./downloads');
+const render = require('./render');
+const check = require('./check');
+const utils = require('./utils');
+const problems = require('./problems');
 
 
 function add_handler(req, res, next) {
-	var m = /.*\?id=([A-Za-z0-9-]{36})$/.exec(req.body.url);
+	const m = /.*\?id=([A-Za-z0-9-]{36})$/.exec(req.body.url);
 	if (!m) {
 		return next(new Error('cannot find tournament ID'));
 	}
-	var tournament_id = m[1];
-	var name = req.body.name;
-	var season_key = req.body.season_key;
+	const tournament_id = m[1];
+	const name = req.body.name;
+	const season_key = req.body.season_key;
 	if (!season_key || (! /^[a-z0-9]+$/.test(season_key))) {
 		return next(new Error('invalid season key'));
 	}
@@ -91,6 +91,18 @@ function unignore_handler(req, res, next) {
 	});
 }
 
+function change_handler(req, res, next) {
+	const fields = {};
+	for (const field_name of ['vrldate_o19_hr', 'vrldate_u19_hr', 'vrldate_o19_rr', 'vrldate_u19_rr']) {
+		fields[field_name] = req.body[field_name];
+	}
+
+	req.app.db.seasons.update({key: req.params.season_key},	{$set: fields}, {}, function(err) {
+		if (err) return next(err);
+		res.redirect(req.app.root_path + 's/' + encodeURIComponent(req.params.season_key) + '/');
+	});
+}
+
 function recheck_handler(req, res, next) {
 	check.recheck(req.app.db, req.params.season_key, function(err) {
 		if (err) return next(err);
@@ -109,6 +121,7 @@ function check_handler(req, res, next) {
 module.exports = {
 	add_dialog_handler,
 	add_handler,
+	change_handler,
 	check_handler,
 	ignore_handler,
 	recheck_handler,

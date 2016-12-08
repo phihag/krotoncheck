@@ -11,3 +11,15 @@
 	display: inline-block;
 	min-width: 3em;
 }
+
+.season_info {
+	margin: 0 0 1em 0;
+}
+.season_info > label {
+	display: block;
+}
+.season_info > label > span {
+	display: inline-block;
+	min-width: 14em;
+	margin-right: 0.5em;
+}

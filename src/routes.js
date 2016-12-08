@@ -25,6 +25,7 @@ function setup(app) {
 	app.get('/s/:season_key/', seasons.show_handler);
 	app.post('/s/:season_key/recheck', seasons.recheck_handler);
 	app.get('/s/:season_key/check', seasons.check_handler);
+	app.post('/s/:season_key/change', seasons.change_handler);
 	app.get('/s/:season_key/problems', seasons.show_problems_handler);
 	app.post('/s/:season_key/ignore', seasons.ignore_handler);
 	app.post('/s/:season_key/unignore', seasons.unignore_handler);

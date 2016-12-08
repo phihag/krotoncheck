@@ -37,6 +37,16 @@ function* check(season, data) {
 	}
 }
 
+/* Temporary while we're not sure whether to include those messages
+function* check(season, data) {
+	for (const p of real_check(season, data)) {
+		if (p.message.includes('VRL-Abgabe')) {
+			yield p;
+		}
+	}
+}
+*/
+
 // Runs a new check and stores the results in the database
 // cb gets called with err, if any
 function recheck(db, season_key, callback, store=false) {

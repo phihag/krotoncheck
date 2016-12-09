@@ -57,7 +57,7 @@ function contains_backup_player(data, tm, players) {
 	return false;
 }
 
-function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx) {
+function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx, flagged) {
 	const pm_is_doubles = laws.is_doubles(pm.disziplin);
 
 	if (!pm_ratings_by_discipline[pm.disziplin]) {
@@ -195,7 +195,7 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 	}
 
 	const expected_players = pm_is_doubles ? 2 : 1;
-	if (match_ratings.ratings.length === expected_players) {
+	if ((match_ratings.ratings.length === expected_players) && !flagged) {
 		pm_ratings_by_discipline[pm.disziplin].push(match_ratings);
 	}
 }
@@ -212,16 +212,15 @@ function* check_all(data, tm, pms, team_idx) {
 
 	// Check if everyone present in VRL
 	for (let pm of pms) {
-		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx));
-
 		const flagged = pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler;
-		let blacklisted = [];
+		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx, flagged));
+
 		if (! flagged) { // Not already handled
 			yield* problems;
 		}
 
 		// Take note of who is valid and who got blacklisted
-		blacklisted = problems.map(problem => problem.player_id);
+		let blacklisted = problems.map(problem => problem.player_id);
 		for (let player_idx = 1;player_idx <= 2;player_idx++) {
 			let player_id = pm['team' + team_idx + 'spieler' + player_idx + 'spielerid'];
 			if (!player_id) {

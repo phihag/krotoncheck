@@ -1,14 +1,16 @@
-var mustache = require('mustache');
-var fs = require('fs');
-var path = require('path');
-var escape_html = require('escape-html');
+const mustache = require('mustache');
+const fs = require('fs');
+const path = require('path');
+const escape_html = require('escape-html');
+
+const utils = require('./utils');
 
 function _read_template(template_id, callback) {
 	fs.readFile(path.dirname(__dirname) + '/templates/' + template_id + '.mustache', function (err, template_bytes) {
 		if (err) {
 			return callback(err, null);
 		}
-		var template = template_bytes.toString();
+		const template = template_bytes.toString();
 		callback(null, template);
 	});
 }
@@ -46,8 +48,8 @@ function _find_partials(template_id, callback, found, outstanding) {
 
 		found[template_id] = template;
 
-		var parsed = mustache.parse(template);
-		var referenced = _find_partial_references(parsed);
+		const parsed = mustache.parse(template);
+		const referenced = _find_partial_references(parsed);
 
 		outstanding.push.apply(outstanding, referenced);
 		outstanding = outstanding.filter(function (o) {
@@ -56,7 +58,7 @@ function _find_partials(template_id, callback, found, outstanding) {
 		if (outstanding.length === 0) {
 			callback(null, found);
 		} else {
-			var next_id = outstanding.pop();
+			const next_id = outstanding.pop();
 			_find_partials(next_id, callback, found, outstanding);
 		}
 	});
@@ -79,7 +81,7 @@ function mustache_format_timestamp() {
 		if (!ts) {
 			return '(Ungültiger Zeitstempel)';
 		}
-		return new Date(ts).toISOString();
+		return utils.ts2destr(ts);
 	};
 }
 

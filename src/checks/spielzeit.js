@@ -10,6 +10,29 @@ function* check_tm(data, now, tm) {
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
 	const REPORT_TEAM_RLOL = 6 * 60 * 60000;
 
+	const league_type = data.league_type(tm.staffelcode);
+	const original_ts = utils.parse_date(tm.datum_verbandsansetzung);
+	const original_weekday = utils.weekday(original_ts);
+	const original_timestr = utils.ts2timestr(original_ts);
+	const is_olrl = /^01-00[123]$/.test(tm.staffelcode);
+	if (!is_olrl && (league_type === 'O19') && ((original_weekday !== 6) || (original_timestr !== '18:00:00'))) {
+		const message = (
+			'Verbandsansetzung nicht Samstag 18:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2destr(original_ts)
+		);
+		yield {
+			teammatch_id: tm.matchid,
+			message,
+		};
+	} else if (((league_type === 'Mini') || (league_type === 'U19')) && ((original_weekday != 6) || (original_timestr != '16:00:00'))) {
+		const message = (
+			'Verbandsansetzung nicht Samstag 16:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2destr(original_ts)
+		);
+		yield {
+			teammatch_id: tm.matchid,
+			message,
+		};
+	}
+
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all
 	}
@@ -28,7 +51,7 @@ function* check_tm(data, now, tm) {
 				' - nicht eingetragene Vorverlegung?');
 			yield {
 				teammatch_id: tm.matchid,
-				message: message,
+				message,
 			};
 		}
 	}
@@ -41,7 +64,7 @@ function* check_tm(data, now, tm) {
 				' - nicht eingetragene Vorverlegung?');
 			yield {
 				teammatch_id: tm.matchid,
-				message: message,
+				message,
 			};
 		}
 	}
@@ -61,7 +84,6 @@ function* check_tm(data, now, tm) {
 		return;
 	}
 
-	const is_olrl = /^01-00[123]$/.test(tm.staffelcode);
 	if (is_olrl) {
 		if (first_entered) {
 			if (played + REPORT_TEAM_RLOL < team_entered) {
@@ -72,7 +94,7 @@ function* check_tm(data, now, tm) {
 					' (vgl. §4.1 Anlage 6 SpO)');
 				yield {
 					teammatch_id: tm.matchid,
-					message: message,
+					message,
 				};
 			}
 		} else {
@@ -84,7 +106,7 @@ function* check_tm(data, now, tm) {
 					' (vgl. §4.1 Anlage 6 SpO)');
 				yield {
 					teammatch_id: tm.matchid,
-					message: message,
+					message,
 				};
 			}
 		}
@@ -102,7 +124,7 @@ function* check_tm(data, now, tm) {
 				'aber erst eingetragen am ' + utils.weekday_destr(first_entered) + ', ' + utils.ts2destr(first_entered));
 			yield {
 				teammatch_id: tm.matchid,
-				message: message,
+				message,
 			};
 		}
 	} else {
@@ -114,7 +136,7 @@ function* check_tm(data, now, tm) {
 				' (Nachverlegung vergessen oder Spiel ausgefallen?)');
 			yield {
 				teammatch_id: tm.matchid,
-				message: message,
+				message,
 			};
 		}
 	}

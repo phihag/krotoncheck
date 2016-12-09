@@ -1,11 +1,11 @@
 add more tests
+	Letzter Spieltag darf nicht überschritten werden (unterschiedlich O19 | OL/RL | U19)
 	festgespielt aber kein fixed_in
 
 	Spielstand = Sieger
+	Satzsumme korrekt
 	Nur 2. Doppel / nur 2./3. Einzel etc.
-	Verbandsansetzung nicht Samstag 18:00 (O19) / Samstag 16:00 (Jugend)
 	Mannschaft zum 3. Mal nicht angetreten
-	Letzter Spieltag darf nicht überschritten werden (unterschiedlich O19 | OL/RL | U19)
 	Mannschaften eines Vereins in einer Staffel sollen immer am Anfang der Saison gegeneinander spielen
 	wenn Mannschaftsergebnis o.k. dann gar kein Detailergebnis (keine Spiele usw.)
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836

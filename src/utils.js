@@ -216,6 +216,10 @@ function ts2destr(ts) {
     return german_tz(ts, TZ_ID, '%d.%m.%Y %H:%M:%S');
 }
 
+function ts2timestr(ts) {
+    return german_tz(ts, TZ_ID, '%H:%M:%S');
+}
+
 function ts2dstr(ts) {
     return german_tz(ts, TZ_ID, '%d.%m.%Y');
 }
@@ -259,6 +263,7 @@ module.exports = {
     ts2destr,
     ts2dstr,
     ts2str,
+    ts2timestr,
     uniq,
     update,
     values,

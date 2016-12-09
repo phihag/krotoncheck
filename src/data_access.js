@@ -142,6 +142,7 @@ function enrich(season, data) {
 		_add_player(pm.team2spieler1spielerid, pm);
 		_add_player(pm.team2spieler2spielerid, pm);
 	}
+	data.matches_by_player = matches_by_player;
 
 	const stbs_by_league_code = new Map();
 	for (const line of data.users) {

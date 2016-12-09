@@ -81,7 +81,35 @@ function is_doubles(discipline) {
 	}
 }
 
+function get_vrl_type(league_type, tm, sex) {
+	if (! /^[HR]$/.test(tm.runde)) {
+		throw new Error('Ungültige Runde ' + tm.runde);
+	}
+	const is_hr = (tm.runde === 'H');
+	assert(['M', 'F'].includes(sex));
+	const is_m = (sex === 'M');
+
+	if (league_type === 'O19') {
+		if (is_m) {
+			return is_hr ? 9 : 11;
+		} else {
+			return is_hr ? 10 : 12;
+		}
+	} else if (league_type == 'Mini') {
+		return is_hr ? 17 : 18;
+	} else if (league_type == 'U19') {
+		if (is_m) {
+			return is_hr ? 17 : 18;
+		} else {
+			return is_hr ? 14 : 16;
+		}
+	} else {
+		throw new Error('Unsupported league type ' + league_type);
+	}
+}
+
 module.exports = {
+	get_vrl_type,
 	is_backup,
 	is_doubles,
 };

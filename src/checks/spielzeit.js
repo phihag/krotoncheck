@@ -6,7 +6,8 @@ function has_late_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, ntext => /.*F04-[0-9]{1,5}-/.test(ntext));
 }
 
-function* check_tm(data, now, tm) {
+function* check_tm(season, data, tm) {
+	const now = season.check_now;
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
 	const REPORT_TEAM_RLOL = 6 * 60 * 60000;
 
@@ -17,7 +18,7 @@ function* check_tm(data, now, tm) {
 	const is_olrl = /^01-00[123]$/.test(tm.staffelcode);
 	if (!is_olrl && (league_type === 'O19') && ((original_weekday !== 6) || (original_timestr !== '18:00:00'))) {
 		const message = (
-			'Verbandsansetzung nicht Samstag 18:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2destr(original_ts) + ' (§45.2a SpO)'
+			'Verbandsansetzung nicht Samstag 18:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2dstr(original_ts) + ' (§45.2a SpO)'
 		);
 		yield {
 			teammatch_id: tm.matchid,
@@ -25,7 +26,7 @@ function* check_tm(data, now, tm) {
 		};
 	} else if (((league_type === 'Mini') || (league_type === 'U19')) && ((original_weekday != 6) || (original_timestr != '16:00:00'))) {
 		const message = (
-			'Verbandsansetzung nicht Samstag 16:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2destr(original_ts) + ' (§45.2b SpO)'
+			'Verbandsansetzung nicht Samstag 16:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2dstr(original_ts) + ' (§45.2b SpO)'
 		);
 		yield {
 			teammatch_id: tm.matchid,
@@ -33,11 +34,30 @@ function* check_tm(data, now, tm) {
 		};
 	}
 
+	// After last possible day?
+	const played = utils.parse_date(tm.spieldatum);
+	const lastdate_str = season['lastdate_' + (is_olrl ? 'olrl' : ((league_type === 'O19') ? 'o19' : 'u19'))];
+	if (lastdate_str) {
+		let last_ts = utils.parse_date(lastdate_str);
+		if (utils.ts2timestr(last_ts) === '00:00:00') {
+			// Entered the day, let's take nearly one day more
+			last_ts += 24 * 60 * 60 * 1000 - 1;
+		}
+		if (played > last_ts) {
+			const message = (
+				'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(last_ts) +
+				' (§46.1e SpO)'
+			);
+			yield {
+				teammatch_id: tm.matchid,
+				message,
+			};
+		}
+	}
+
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all
 	}
-
-	const played = utils.parse_date(tm.spieldatum);
 
 	const team_entered = tm.mannschaftsergebnis_eintragedatum ? utils.parse_date(tm.mannschaftsergebnis_eintragedatum) : null;
 	const entered = tm.detailergebnis_eintragedatum ? utils.parse_date(tm.detailergebnis_eintragedatum) : null;
@@ -144,6 +164,6 @@ function* check_tm(data, now, tm) {
 
 module.exports = function*(season, data) {
 	for (const tm of data.teammatches) {
-		yield* check_tm(data, season.check_now, tm);
+		yield* check_tm(season, data, tm);
 	}
 };

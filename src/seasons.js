@@ -93,7 +93,7 @@ function unignore_handler(req, res, next) {
 
 function change_handler(req, res, next) {
 	const fields = {};
-	for (const field_name of ['vrldate_o19_hr', 'vrldate_u19_hr', 'vrldate_o19_rr', 'vrldate_u19_rr']) {
+	for (const field_name of ['vrldate_o19_hr', 'vrldate_u19_hr', 'vrldate_o19_rr', 'vrldate_u19_rr', 'lastdate_olrl', 'lastdate_o19', 'lastdate_u19']) {
 		fields[field_name] = req.body[field_name];
 	}
 

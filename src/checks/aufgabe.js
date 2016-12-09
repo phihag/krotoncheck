@@ -64,7 +64,7 @@ function* check_comment(data, pm) {
 	yield {
 		teammatch_id: pm.teammatchid,
 		match_id: pm.matchid,
-		message: 'Spielaufgabe im ' + data.match_name(pm) + ', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1)',
+		message: 'Spielaufgabe im ' + data.match_name(pm) + ', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1 SpO)',
 	};
 }
 

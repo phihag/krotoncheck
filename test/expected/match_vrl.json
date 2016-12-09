@@ -14,6 +14,7 @@
 {
 	"match_id": "82",
 	"teammatch_id": "11",
+	"player_id": "01-bcf-inactive",
 	"message": "Kein O19-VRL-Eintrag für Nichtaktive BCFl13 (01-bcf-inactive) bei BC Feder 1."
 },
 {
@@ -31,8 +32,45 @@
 
 {
 	"match_id": "97",
-	"message": "01-tt-m4 vor 01-tt-m4 nach (01-tt-m4) ist Spieler von (01-1009-2) TopTeam 2, hat aber für die tiefere Mannschaft (01-1009-3) TopTeam 3 gespielt",
-	"teammatch_id": "13"
+	"player_id": "01-tt-m4",
+	"teammatch_id": "13",
+	"message": "01-tt-m4 vor 01-tt-m4 nach (01-tt-m4) ist Spieler von (01-1009-2) TopTeam 2, hat aber für die tiefere Mannschaft (01-1009-3) TopTeam 3 gespielt"
+},
+
+{
+	"teammatch_id": "15",
+	"message": "Keine spielberechtigte Dame von TopTeam 3 aufgestellt (§57.5 SpO)"
+},
+{
+	"teammatch_id": "16",
+	"match_id": "121",
+	"player_id": "01-tt-m15",
+	"message": "Kein O19-VRL-Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) bei TopTeam 3."
+},
+
+
+{
+	"match_id": "121",
+	"message": "Kein O19-VRL-Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) bei TopTeam 3.",
+	"player_id": "01-tt-m15",
+	"teammatch_id": "17"
+},
+{
+	"match_id": "124",
+	"message": "Kein O19-VRL-Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) bei TopTeam 3.",
+	"player_id": "01-tt-m15",
+	"teammatch_id": "17"
+},
+{
+	"match_id": "125",
+	"message": "Kein O19-VRL-Eintrag für 01-tt-m14 vor 01-tt-m14 nach (01-tt-m14) bei TopTeam 3.",
+	"player_id": "01-tt-m14",
+	"teammatch_id": "17"
+},
+{
+	"message": "Nicht genügend spielberechtigte Spieler von TopTeam 3 aufgestellt (§57.4 SpO)",
+	"teammatch_id": "17"
 }
+
 
 ]

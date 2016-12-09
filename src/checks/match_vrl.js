@@ -1,5 +1,8 @@
 'use strict';
 
+const assert = require('assert');
+
+
 const laws = require('../laws');
 
 
@@ -32,10 +35,6 @@ function get_vrl_type(league_type, tm, pm, player_idx) {
 	throw new Error('Unsupported discipline ' + JSON.stringify(pm.disziplin) + ' in match ' + pm.matchid);
 }
 
-function is_doubles(discipline) {
-	return ((discipline === 'HD') || (discipline === 'GD') || (discipline === 'DD'));
-}
-
 function contains_backup_player(data, tm, players) {
 	const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
 	if (!backup_players) {
@@ -58,151 +57,211 @@ function contains_backup_player(data, tm, players) {
 	return false;
 }
 
+function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx) {
+	const pm_is_doubles = laws.is_doubles(pm.disziplin);
+
+	if (!pm_ratings_by_discipline[pm.disziplin]) {
+		pm_ratings_by_discipline[pm.disziplin] = [];
+	}
+	const match_ratings = {
+		pm: pm,
+		ratings: [],
+		player_ids: [],
+	};
+
+	for (let player_idx = 1;player_idx <= 2;player_idx++) {
+		let player_id = pm['team' + team_idx + 'spieler' + player_idx + 'spielerid'];
+		if (!player_id) {
+			continue;
+		}
+		let vrl_type = get_vrl_type(league_type, tm, pm, player_idx);
+
+		let ve = data.get_vrl_entry(team.clubcode, vrl_type, player_id);
+		if (!ve) {
+			let player = data.get_player(player_id);
+			if ((pm.disziplin === 'GD') && (
+				((player_idx === 1) && (player.sex === 'F')) ||
+				((player_idx === 2) && (player.sex === 'M')))) {
+				// Incorrect gender, handled in mixed_geschlecht check
+				continue;
+			}
+			if (league_type === 'U19') {
+				// Look up in Mini database
+				const mini_vrl_type = get_vrl_type('Mini', tm, pm, player_idx);
+				const mini_ve = data.get_vrl_entry(team.clubcode, mini_vrl_type, player_id);
+				if (mini_ve) {
+					continue;
+				}
+			} else if (league_type === 'Mini') {
+				// Look up in U19 database
+				const vpm = {disziplin: ((player.sex === 'F') ? 'DE' : 'HE')};
+				const u19_vrl_type = get_vrl_type('U19', tm, vpm, player_idx);
+				const u19_ve = data.get_vrl_entry(team.clubcode, u19_vrl_type, player_id);
+				if (u19_ve) {
+					continue;
+				}
+			}
+
+			const message = (
+				'Kein ' + league_type + '-VRL-Eintrag für ' + data.player_str(player) +
+				' bei ' + team.name + '.'); // Spalte vrl_type
+			yield {
+				player_id: player.spielerid,
+				teammatch_id: pm.teammatchid,
+				match_id: pm.matchid,
+				message,
+			};
+			continue;
+		}
+
+		if (ve.startdate) {
+			if (tm.ts < ve.parsed_startdate) {
+				const message = (
+					ve.firstname + ' ' + ve.lastname + '(' + ve.memberid + ') ' +
+					' ist erst ab ' + ve.startdate +
+					' für (' + ve.clubcode + ') ' + ve.clubname +
+					' spielberechtigt, hat aber vorher am ' +
+					tm.spieldatum + ' gespielt'
+				);
+				yield {
+					player_id: ve.memberid,
+					teammatch_id: pm.teammatchid,
+					match_id: pm.matchid,
+					message,
+				};
+			}
+		}
+		if (ve.enddate) {
+			if (tm.ts > ve.parsed_enddate) {
+				const message = (
+					'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
+					' ist nur bis zum ' + ve.startdate +
+					' für (' + ve.clubcode + ') ' + ve.clubname +
+					' spielberechtigt, hat aber danach am ' +
+					tm.spieldatum + ' gespielt'
+				);
+				yield {
+					player_id: ve.memberid,
+					teammatch_id: pm.teammatchid,
+					match_id: pm.matchid,
+					message,
+				};
+			}
+		}
+
+		// Check that player is allowed to play for the team
+		if (ve.fixed_in && (!ve.fixed_from || (ve.parsed_fixed_from <= tm.ts))) {
+			if (ve.fixed_in !== team.number) {
+				const message = (
+					ve.firstname + ' ' + ve.lastname + ' (' + ve.memberid + ')' +
+					' ist in ' + ve.clubname + ' ' + ve.fixed_in +
+					(ve.fixed_from ? (' (ab ' + ve.fixed_from + ')') : '') +
+					' festgeschrieben, hat aber am ' + tm.spieldatum +
+					' für (' + team.code + ') ' + team.name +
+					' gespielt.'
+				);
+				yield {
+					player_id: ve.memberid,
+					teammatch_id: pm.teammatchid,
+					match_id: pm.matchid,
+					message,
+				};
+			}
+		} else if (ve.teamcode !== team.code) {
+			// Playing as backup player - verify that that's allowed
+			const registered_in = data.get_team(ve.teamcode);
+
+			if (! laws.is_backup(registered_in, team)) {
+				const message = (
+					ve.firstname + ' ' + ve.lastname + ' (' + ve.memberid + ')' +
+					' ist Spieler von (' + registered_in.code + ') ' + registered_in.name +
+					', hat aber für die tiefere Mannschaft (' + team.code + ') ' + team.name + ' gespielt'
+				);
+				yield {
+					player_id: ve.memberid,
+					teammatch_id: pm.teammatchid,
+					match_id: pm.matchid,
+					message,
+				};
+			}
+		}
+
+		let pos = parseInt(ve.teamposition);
+		if (pm_is_doubles && ve.teampositiondouble) {
+			pos = parseInt(ve.teampositiondouble);
+		}
+		match_ratings.ratings.push(pos);
+		match_ratings.player_ids.push(player_id);
+	}
+
+	const expected_players = pm_is_doubles ? 2 : 1;
+	if (match_ratings.ratings.length === expected_players) {
+		pm_ratings_by_discipline[pm.disziplin].push(match_ratings);
+	}
+}
+
 function* check_all(data, tm, pms, team_idx) {
 	const team = data.get_team(tm['team' + team_idx + 'id']);
 	const league_type = data.league_type(tm.staffelcode);
 	const pm_ratings_by_discipline = {};
 
+	const valid_players_by_gender = {
+		M: new Set(),
+		F: new Set(),
+	};
+
 	// Check if everyone present in VRL
 	for (let pm of pms) {
-		if (pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler) {
-			continue; // Already handled
+		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx));
+
+		const flagged = pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler;
+		let blacklisted = [];
+		if (! flagged) { // Not already handled
+			yield* problems;
 		}
 
-		const pm_is_doubles = is_doubles(pm.disziplin);
-
-		if (!pm_ratings_by_discipline[pm.disziplin]) {
-			pm_ratings_by_discipline[pm.disziplin] = [];
-		}
-		const match_ratings = {
-			pm: pm,
-			ratings: [],
-			player_ids: [],
-		};
-
+		// Take note of who is valid and who got blacklisted
+		blacklisted = problems.map(problem => problem.player_id);
 		for (let player_idx = 1;player_idx <= 2;player_idx++) {
 			let player_id = pm['team' + team_idx + 'spieler' + player_idx + 'spielerid'];
 			if (!player_id) {
 				continue;
 			}
-			let vrl_type = get_vrl_type(league_type, tm, pm, player_idx);
-
-			let ve = data.get_vrl_entry(team.clubcode, vrl_type, player_id);
-			if (!ve) {
-				let player = data.get_player(player_id);
-				if ((pm.disziplin === 'GD') && (
-					((player_idx === 1) && (player.sex === 'F')) ||
-					((player_idx === 2) && (player.sex === 'M')))) {
-					// Incorrect gender, handled in mixed_geschlecht check
-					continue;
-				}
-				if (league_type === 'U19') {
-					// Look up in Mini database
-					const mini_vrl_type = get_vrl_type('Mini', tm, pm, player_idx);
-					const mini_ve = data.get_vrl_entry(team.clubcode, mini_vrl_type, player_id);
-					if (mini_ve) {
-						continue;
-					}
-				} else if (league_type === 'Mini') {
-					// Look up in U19 database
-					const vpm = {disziplin: ((player.sex === 'F') ? 'DE' : 'HE')};
-					const u19_vrl_type = get_vrl_type('U19', tm, vpm, player_idx);
-					const u19_ve = data.get_vrl_entry(team.clubcode, u19_vrl_type, player_id);
-					if (u19_ve) {
-						continue;
-					}
-				}
-
-				const message = (
-					'Kein ' + league_type + '-VRL-Eintrag für ' + data.player_str(player) +
-					' bei ' + team.name + '.'); // Spalte vrl_type
-				yield {
-					teammatch_id: pm.teammatchid,
-					match_id: pm.matchid,
-					message,
-				};
+			if (blacklisted.includes(player_id)) {
 				continue;
 			}
 
-			if (ve.startdate) {
-				if (tm.ts < ve.parsed_startdate) {
-					const message = (
-						'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
-						' ist erst ab ' + ve.startdate +
-						' für (' + ve.clubcode + ') ' + ve.clubname +
-						' spielberechtigt, hat aber vorher am ' +
-						tm.spieldatum + ' gespielt'
-					);
-					yield {
-						teammatch_id: pm.teammatchid,
-						match_id: pm.matchid,
-						message,
-					};
-				}
-			}
-			if (ve.enddate) {
-				if (tm.ts > ve.parsed_enddate) {
-					const message = (
-						'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
-						' ist nur bis zum ' + ve.startdate +
-						' für (' + ve.clubcode + ') ' + ve.clubname +
-						' spielberechtigt, hat aber danach am ' +
-						tm.spieldatum + ' gespielt'
-					);
-					yield {
-						teammatch_id: pm.teammatchid,
-						match_id: pm.matchid,
-						message,
-					};
-				}
-			}
-
-			// Check that player is allowed to play for the team
-			if (ve.fixed_in && (!ve.fixed_from || (ve.parsed_fixed_from <= tm.ts))) {
-				if (ve.fixed_in !== team.number) {
-					const message = (
-						'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
-						' ist in ' + ve.clubname + ' ' + ve.fixed_in +
-						(ve.fixed_from ? (' (ab ' + ve.fixed_from + ')') : '') +
-						' festgeschrieben, hat aber am ' + tm.spieldatum +
-						' für (' + team.code + ') ' + team.name +
-						' gespielt.'
-					);
-					yield {
-						teammatch_id: pm.teammatchid,
-						match_id: pm.matchid,
-						message,
-					};
-				}
-			} else if (ve.teamcode !== team.code) {
-				// Playing as backup player - verify that that's allowed
-				const registered_in = data.get_team(ve.teamcode);
-
-				if (! laws.is_backup(registered_in, team)) {
-					const message = (
-						ve.firstname + ' ' + ve.lastname + ' (' + ve.memberid + ')' +
-						' ist Spieler von (' + registered_in.code + ') ' + registered_in.name +
-						', hat aber für die tiefere Mannschaft (' + team.code + ') ' + team.name + ' gespielt'
-					);
-					yield {
-						teammatch_id: pm.teammatchid,
-						match_id: pm.matchid,
-						message,
-					};
-				}
-			}
-
-			let pos = parseInt(ve.teamposition);
-			if (pm_is_doubles && ve.teampositiondouble) {
-				pos = parseInt(ve.teampositiondouble);
-			}
-			match_ratings.ratings.push(pos);
-			match_ratings.player_ids.push(player_id);
+			const player = data.get_player(player_id);
+			assert(['M', 'F'].includes(player.sex));
+			valid_players_by_gender[player.sex].add(player.spielerid);
 		}
+	}
 
-		const expected_players = pm_is_doubles ? 2 : 1;
-		if (match_ratings.ratings.length === expected_players) {
-			pm_ratings_by_discipline[pm.disziplin].push(match_ratings);
+	// Check that enough non-blacklisted players
+	const f_count = valid_players_by_gender.F.size;
+	const m_count = valid_players_by_gender.M.size;
+	if (!data.get_stb_note(tm.matchid, text => /F(01|14|18)/.test(text))) {
+		if (/^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname)) {
+			if ((m_count < 4) || (f_count < 2)) {
+				yield {
+					teammatch_id: tm.matchid,
+					message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§58.1 SpO)',
+				};
+			}
+		} else if (league_type !== 'Mini') {
+			if (f_count === 0) {
+				yield {
+					teammatch_id: tm.matchid,
+					message: 'Keine spielberechtigte Dame von ' + team.name + ' aufgestellt (§57.5 SpO)',
+				};
+			}
+
+			if ((m_count < 2) || ((m_count === 2) && (f_count < 2)) || ((m_count === 3) && (f_count < 1))) {
+				yield {
+					teammatch_id: tm.matchid,
+					message: 'Nicht genügend spielberechtigte Spieler von ' + team.name + ' aufgestellt (§57.4 SpO)',
+				};
+			}
 		}
 	}
 
@@ -217,7 +276,7 @@ function* check_all(data, tm, pms, team_idx) {
 			let mr1 = match_ratings[i];
 			let mr2 = match_ratings[i + 1];
 
-			if (is_doubles(discipline)) {
+			if (laws.is_doubles(discipline)) {
 				const sum1 = mr1.ratings[0] + mr1.ratings[1];
 				const min1 = Math.min(mr1.ratings[0], mr1.ratings[1]);
 				const sum2 = mr2.ratings[0] + mr2.ratings[1];
@@ -284,6 +343,10 @@ function* check_all(data, tm, pms, team_idx) {
 }
 
 function* check(data, tm) {
+	if (!tm.detailergebnis_eintragedatum) {
+		return; // Not yet played
+	}
+
 	let pms = data.get_playermatches_by_teammatch_id(tm.matchid);
 
 	yield* check_all(data, tm, pms, 1);

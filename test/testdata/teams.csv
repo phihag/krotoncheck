@@ -10,3 +10,5 @@ tournamentid,teamid,code,number,name,contact,address,address2,address3,postalcod
 1,9,01-1009-2,2,TopTeam 2,,,,,,,,,,,,,,,,,01-1009,Top Team,O19-RL,01-001,(001) Regionalliga West,,,
 1,10,01-1009-3,3,TopTeam 3,,,,,,,,,,,,,,,,,01-1009,Top Team,O19-S2-BL,01-024,,,,
 1,11,01-1009-J1,J1,TopTeam J1,,,,,,,,,,,,,,,,,01-1009,Top Team,U19-S1-BL,01-900,,,,
+1,12,01-1010-1,1,AlsoGood 1,,,,,,,,,,,,,,,,,01-1010,AlsoGood,O19-RL,01-001,,,,
+1,13,01-1010-2,2,AlsoGood 2,,,,,,,,,,,,,,,,,01-1010,AlsoGood,O19-RL,01-001,,,,

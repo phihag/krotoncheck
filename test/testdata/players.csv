@@ -85,6 +85,7 @@ spielerid;clubid;clubname;name;vorname;gebdatum;sex;nat;akl;jkz1;kz;privacystatu
 01-tt-m10;01-1009;Top Team;01-tt-m10 nach;01-tt-m10 vor;;M;;;;;
 01-tt-m11;01-1009;Top Team;01-tt-m11 nach;01-tt-m11 vor;;M;;;;;
 01-tt-m12;01-1009;Top Team;01-tt-m12 nach;01-tt-m12 vor;;M;;;;;
+01-tt-m20;01-1009;Top Team;01-tt-m20 nach;01-tt-m20 vor;;M;;;;;
 01-tt-f1;01-1009;Top Team;01-tt-f1 nach;01-tt-f1 vor;;F;;;;;
 01-tt-f2;01-1009;Top Team;01-tt-f2 nach;01-tt-f2 vor;;F;;;;;
 01-tt-f3;01-1009;Top Team;01-tt-f3 nach;01-tt-f3 vor;;F;;;;;
@@ -94,3 +95,20 @@ spielerid;clubid;clubname;name;vorname;gebdatum;sex;nat;akl;jkz1;kz;privacystatu
 01-tt-yf-3;01-1009;Top Team;01-tt-yf-3 nach;01-tt-yf-3 vor;;F;;;;;
 01-tt-m15;01-1009;Top Team;01-tt-m15 nach;01-tt-m15 vor;;M;;;;;
 01-tt-m14;01-1009;Top Team;01-tt-m14 nach;01-tt-m14 vor;;M;;;;;
+01-ag-m1;01-1010;AlsoGood;01-ag-m1_nach;01-ag-m1_vor;;M;;;;;
+01-ag-m2;01-1010;AlsoGood;01-ag-m2_nach;01-ag-m2_vor;;M;;;;;
+01-ag-m3;01-1010;AlsoGood;01-ag-m3_nach;01-ag-m3_vor;;M;;;;;
+01-ag-m4;01-1010;AlsoGood;01-ag-m4_nach;01-ag-m4_vor;;M;;;;;
+01-ag-m5;01-1010;AlsoGood;01-ag-m5_nach;01-ag-m5_vor;;M;;;;;
+01-ag-m6;01-1010;AlsoGood;01-ag-m6_nach;01-ag-m6_vor;;M;;;;;
+01-ag-m7;01-1010;AlsoGood;01-ag-m7_nach;01-ag-m7_vor;;M;;;;;
+01-ag-m8;01-1010;AlsoGood;01-ag-m8_nach;01-ag-m8_vor;;M;;;;;
+01-ag-m9;01-1010;AlsoGood;01-ag-m9_nach;01-ag-m9_vor;;M;;;;;
+01-ag-m10;01-1010;AlsoGood;01-ag-m10_nach;01-ag-m10_vor;;M;;;;;
+01-ag-m11;01-1010;AlsoGood;01-ag-m11_nach;01-ag-m11_vor;;M;;;;;
+01-ag-f1;01-1010;AlsoGood;01-ag-f1_nach;01-ag-f1_vor;;F;;;;;
+01-ag-f2;01-1010;AlsoGood;01-ag-f2_nach;01-ag-f2_vor;;F;;;;;
+01-ag-f3;01-1010;AlsoGood;01-ag-f3_nach;01-ag-f3_vor;;F;;;;;
+01-ag-f4;01-1010;AlsoGood;01-ag-f4_nach;01-ag-f4_vor;;F;;;;;
+01-ag-f5;01-1010;AlsoGood;01-ag-f5_nach;01-ag-f5_vor;;F;;;;;
+01-ag-f6;01-1010;AlsoGood;01-ag-f6_nach;01-ag-f6_vor;;F;;;;;

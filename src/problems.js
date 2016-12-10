@@ -1,11 +1,29 @@
 'use strict';
 
-var utils = require('./utils.js');
+const assert = require('assert');
+
+const utils = require('./utils.js');
 
 
 function enrich(data, season, found) {
 	found.forEach(function(p) {
-		if (p.teammatch_id) {
+		if ((p.type === 'vrl') || (p.type === 'fixed')) {
+			const club = data.get_club(p.clubcode);
+			p.club_name = club.name;
+			if (p.vrl_typeid) {
+				p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
+			}
+			if (p.type === 'fixed') {
+				p.turnier_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
+				p.turnier_vrl_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
+				p.teammatch = data.get_teammatch(p.teammatch_id);
+				p.region = 'Festgespielt';
+			} else {
+				assert(p.type === 'vrl');
+				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
+				p.region = data.get_club_region(p.clubcode);
+			}
+		} else if (p.teammatch_id) {
 			p.teammatch = data.get_teammatch(p.teammatch_id);
 			p.teammatch_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
 			p.turnier_url = p.teammatch_url;
@@ -14,14 +32,6 @@ function enrich(data, season, found) {
 			}
 			p.stb = data.get_stb(p.teammatch);
 			p.region = data.get_region(p.teammatch.eventname);
-		} else if (p.type === 'vrl') {
-			const club = data.get_club(p.clubcode);
-			p.club_name = club.name;
-			if (p.vrl_typeid) {
-				p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
-			}
-			p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
-			p.region = data.get_club_region(p.clubcode);
 		}
 		if (p.match_id) {
 			p.match = data.get_match(p.match_id);
@@ -65,11 +75,13 @@ function prepare_render(season, problems) {
 			return 0;
 		}
 
-		if (f1.teammatch.ergebnisbestaetigt_datum && !f2.teammatch.ergebnisbestaetigt_datum) {
-			return -1;
-		}
-		if (!f1.teammatch.ergebnisbestaetigt_datum && f2.teammatch.ergebnisbestaetigt_datum) {
-			return 1;
+		if (f1.teammatch && f2.teammatch) {
+			if (f1.teammatch.ergebnisbestaetigt_datum && !f2.teammatch.ergebnisbestaetigt_datum) {
+				return -1;
+			}
+			if (!f1.teammatch.ergebnisbestaetigt_datum && f2.teammatch.ergebnisbestaetigt_datum) {
+				return 1;
+			}
 		}
 
 		if (f1.turnier_url && !f2.turnier_url) {
@@ -93,6 +105,8 @@ function prepare_render(season, problems) {
 function colorize_problem(problem) {
 	if (problem.type === 'vrl') {
 		problem.color = 'lightgray';
+	} else if (problem.type === 'fixed') {
+		problem.color = 'lightblue';
 	} else {
 		const tm = problem.teammatch;
 		if (tm) {
@@ -143,6 +157,16 @@ function color_render(problems_struct) {
 					problems: [],
 				};
 				reg.groups_map[problem.turnier_url] = by_group;
+			}
+		} else if (problem.type === 'fixed') {
+			by_group = reg.groups_map[problem.clubcode];
+			if (! by_group) {
+				by_group = {
+					header: ('(' + problem.clubcode + ') ' + problem.club_name),
+					turnier_url: problem.turnier_vrl_url,
+					problems: [],
+				};
+				reg.groups_map[problem.clubcode] = by_group;
 			}
 		} else if (problem.type === 'internal-error') {
 			const key = 'Interne Fehler';

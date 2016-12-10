@@ -1,0 +1,12 @@
+[
+
+{
+	"clubcode": "01-1010",
+	"message": "01-ag-m5_vor 01-ag-m5_nach (01-ag-m5) hat sich am 21.08.2016 18:00:00 in (01-1010-1) AlsoGood 1 festgespielt, aber im Eintrag in VRL 9 von (01-1010) AlsoGood steht kein F-Kennzeichen",
+	"player_id": "01-ag-m5",
+	"teammatch_id": "21",
+	"type": "fixed",
+	"vrl_typeid": 9
+}
+
+]

@@ -133,11 +133,11 @@ function* check_tm(season, data, tm) {
 	}
 
 	const report_until = (
-		[5, 6].includes(utils.weekday(played)) ?
+		[6, 0].includes(utils.weekday(played)) ?
 		utils.monday_1200(played)
 		: (played + 48 * 3600000));
 	if (entered) {
-		if (report_until < team_entered) {
+		if (report_until < entered) {
 			const message = (
 				'Detailergebnis zu spät eingetragen: ' +
 				'Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +

@@ -9,6 +9,11 @@
 },
 
 {
+	"teammatch_id": "12",
+	"message": "Detailergebnis zu spät eingetragen: Spiel am Fr, 12.08.2016 18:00:00, aber erst eingetragen am Mo, 15.08.2016 11:00:00"
+},
+
+{
 	"message": "Verbandsansetzung nicht Samstag 18:00, sondern Sa 06.08.2016 12:00:00 (§45.2a SpO)",
 	"teammatch_id": "17"
 },

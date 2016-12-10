@@ -211,7 +211,15 @@ function* check_all(data, tm, pms, team_idx) {
 					message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§58.1 SpO)',
 				};
 			}
-		} else if (league_type !== 'Mini') {
+		} else if (league_type === 'Mini') {
+			if (f_count + m_count < 3) {
+				yield {
+					teammatch_id: tm.matchid,
+					message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§15.4 JSpO)',
+				};
+			}
+		} else {
+			// O19 or J or S
 			if (f_count === 0) {
 				yield {
 					teammatch_id: tm.matchid,

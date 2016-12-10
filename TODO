@@ -1,5 +1,4 @@
 add more tests
-	add BuLi reference
 	festgespielt BuLi
 	festgespielt aber kein fixed_in
 		look at startdate
@@ -16,7 +15,7 @@ add more tests
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
 	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD
 
-update buli and league, and check after both
+button to update buli and league, and check after both
 fail download if any file 0B
 (fix) recheck automatically after download
 missing flags (but no players) at http://www.turnier.de/sport/teammatch.aspx?id=41E9BCF7-0D36-4313-903D-54DDFD361D05&match=9962

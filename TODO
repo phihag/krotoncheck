@@ -1,9 +1,8 @@
-http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=10792
-http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=829
-http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=9493
-
 add more tests
+	Aufstellung Mini mindestens 3 Spieler
 	see mails
+	add BuLi
+	festgespielt BuLi
 	festgespielt aber kein fixed_in
 		look at startdate
 		look at matches after festgespielt

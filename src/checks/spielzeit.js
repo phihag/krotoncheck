@@ -142,7 +142,7 @@ function* check_tm(season, tm) {
 			const message = (
 				'Detailergebnis zu spät eingetragen: ' +
 				'Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
-				'aber erst eingetragen am ' + utils.weekday_destr(first_entered) + ', ' + utils.ts2destr(first_entered));
+				'aber erst eingetragen am ' + utils.weekday_destr(entered) + ', ' + utils.ts2destr(entered));
 			yield {
 				teammatch_id: tm.matchid,
 				message,

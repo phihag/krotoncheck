@@ -268,7 +268,12 @@ function* check_in_youth_team(data, is_hr, line) {
 }
 
 function* check_startend(season, is_hr, vrl_date, line) {
-	if (!line.kz || line.enddate) {
+	// Special excemption for club move
+	if ((season.key === 'nrw2016') && ['01-0955', '01-0971'].includes(line.clubcode)) {
+		return;
+	}
+
+	if (!line.kz) {
 		return;
 	}
 
@@ -278,8 +283,25 @@ function* check_startend(season, is_hr, vrl_date, line) {
 	}
 
 	// Enddate required?
-	if (line.clubcode !== line.playerclubcode) {
-		// TODO check whether in SG
+	if (season.data.spielgemeinschaften && (line.clubcode !== line.playerclubcode) && (!season.data.in_sg(line.clubcode, line.playerclubcode))) {
+		if (line.enddate) {
+			return;
+		}
+
+		const message = (
+			line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+			' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
+			' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',' +
+			' aber Enddatum fehlt' +
+			' in der VRL ' + line.typeid
+		);
+		yield {
+			type: 'vrl',
+			vrl_typeid: line.typeid,
+			clubcode: line.clubcode,
+			message,
+		};
+		return;
 	}
 
 	// Startdate required, check that it's present
@@ -294,11 +316,6 @@ function* check_startend(season, is_hr, vrl_date, line) {
 
 	const HR_GRACE_TIME = 11 * 24 * 60 * 60 * 1000;
 	if (is_hr && startdate <= vrl_date + HR_GRACE_TIME) {
-		return;
-	}
-
-	// Special excemption for club move
-	if ((season.key === 'nrw2016') && ['01-0955', '01-0971'].includes(line.clubcode)) {
 		return;
 	}
 

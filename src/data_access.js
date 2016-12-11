@@ -238,6 +238,16 @@ function enrich(season) {
 		}
 	}
 
+	if (data.spielgemeinschaften) {
+		const sg_pairs = new Set();
+		for (const sg_line of data.spielgemeinschaften) {
+			sg_pairs.add(sg_line.TVnr + '_' + sg_line.NTVnr);
+		}
+		data.in_sg = function(clubcode1, clubcode2) {
+			return sg_pairs.has(clubcode1 + '_' + clubcode2) || sg_pairs.has(clubcode2 + '_' + clubcode1);
+		};
+	}
+
 	data.get_player = function(player_id) {
 		var res = player_by_id.get(player_id);
 		if (!res) {

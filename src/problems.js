@@ -5,7 +5,9 @@ const assert = require('assert');
 const utils = require('./utils.js');
 
 
-function enrich(data, season, found) {
+function enrich(season, found) {
+	const data = season.data;
+
 	found.forEach(function(p) {
 		if ((p.type === 'vrl') || (p.type === 'fixed')) {
 			const club = data.get_club(p.clubcode);
@@ -62,6 +64,13 @@ function prepare_render(season, problems) {
 			return -1;
 		}
 		if (f1.ignored && !f2.ignored) {
+			return 1;
+		}
+
+		if ((f1.type === 'fixed') && (f2.type !== 'fixed')) {
+			return -1;
+		}
+		if ((f1.type !== 'fixed') && (f2.type === 'fixed')) {
 			return 1;
 		}
 

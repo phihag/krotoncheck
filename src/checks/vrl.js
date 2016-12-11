@@ -267,13 +267,23 @@ function* check_in_youth_team(data, is_hr, line) {
 	}
 }
 
-function* check_start(season, is_hr, vrl_date, line) {
-	if (!vrl_date || !line.kz || line.startdate || line.enddate) {
+function* check_startend(season, is_hr, vrl_date, line) {
+	if (!line.kz || line.enddate) {
 		return;
 	}
 
 	const m = /^[Aa]b\s+([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4})\s*$/.exec(line.kz);
 	if (!m) {
+		return;
+	}
+
+	// Enddate required?
+	if (line.clubcode !== line.playerclubcode) {
+		// TODO check whether in SG
+	}
+
+	// Startdate required, check that it's present
+	if (!vrl_date || line.startdate) {
 		return;
 	}
 
@@ -306,7 +316,8 @@ function* check_start(season, is_hr, vrl_date, line) {
 	};
 }
 
-function* check_vrl(season, data, vrl) {
+function* check_vrl(season, vrl) {
+	const data = season.data;
 	const is_o19 = [9, 11, 10, 12].includes(vrl.typeid);
 	const is_hr = [9, 10, 14, 17].includes(vrl.typeid);
 	const date_key = 'vrldate_' + (is_o19 ? 'o19' : 'u19') + '_' + (is_hr ? 'hr' : 'rr');
@@ -444,7 +455,7 @@ function* check_vrl(season, data, vrl) {
 		}
 
 		// Incorrectly noted start
-		yield* check_start(season, is_hr, vrl_date, line);
+		yield* check_startend(season, is_hr, vrl_date, line);
 
 		// Ascending team numbers
 		if (line.teamcode) {
@@ -511,8 +522,8 @@ function* check_vrl(season, data, vrl) {
 }
 
 
-module.exports = function*(season, data) {
-	for (const vrl of data.all_vrlinfos()) {
-		yield* check_vrl(season, data, vrl);
+module.exports = function*(season) {
+	for (const vrl of season.data.all_vrlinfos()) {
+		yield* check_vrl(season, vrl);
 	}
 };

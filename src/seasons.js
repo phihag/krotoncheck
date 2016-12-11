@@ -102,6 +102,7 @@ function change_handler(req, res, next) {
 			'lastdate_olrl',
 			'lastdate_o19',
 			'lastdate_u19',
+			'sg_csv',
 			]) {
 		fields[field_name] = req.body[field_name];
 	}

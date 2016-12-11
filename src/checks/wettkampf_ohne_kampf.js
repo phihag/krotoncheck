@@ -22,7 +22,8 @@ function* check_teammatch(data, tm) {
 }
 
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
 	for (let tm of data.teammatches) {
 		yield* check_teammatch(data, tm);
 	}

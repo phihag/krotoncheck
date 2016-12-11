@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
+
 	for (const tm of data.teammatches) {
 		if (tm.eventname !== 'O19-RL') {
 			continue;

@@ -220,18 +220,9 @@ function inprogress_by_season(season_key) {
         current_downloads.values());
 }
 
-function load_season_data(season, callback) {
-    var dl = season.newest_download;
-    if (!dl) {
-        return callback(new Error('No downloads available'));
-    }
-
-    var dirname = path.join(DATA_ROOT, dl.id);
-    data_access.load_data_cached(dirname, dl.tasks, callback);
-}
 
 module.exports = {
+    DATA_ROOT,
     start_handler,
     inprogress_by_season,
-    load_season_data,
 };

@@ -61,7 +61,8 @@ function calc_multclubs(data) {
 }
 
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
 	const multis = calc_multclubs(data);
 
 	for (const [round_idx, m] of multis.entries()) {

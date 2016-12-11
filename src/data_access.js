@@ -1,11 +1,6 @@
 'use strict';
 
 var assert = require('assert');
-var async = require('async');
-var atomic_write = require('atomic-write');
-var Baby = require('babyparse');
-var fs = require('fs');
-var path = require('path');
 
 var utils = require('./utils');
 
@@ -35,7 +30,12 @@ function parse_bool(val) {
 	}
 }
 
-function enrich(season, data) {
+function enrich(season) {
+	const data = season.data;
+	if (season.buli_season) {
+		enrich(season.buli_season);
+	}
+
 	const vrls_by_clubs = new Map();
 	for (let cr of data.clubranking) {
 		cr.typeid = parse_int(cr.typeid);
@@ -469,58 +469,6 @@ function teamid2clubid(team_id) {
 	return m[1];
 }
 
-function load_data(dirname, tasks, callback) {
-	let data = {};
-	async.each(tasks, function(task_name, cb) {
-		var csv_fn = path.join(dirname, task_name + '.csv');
-		parse_csv(csv_fn, function(err, lines) {
-			if (err) return cb(err);
-
-			data[task_name] = lines;
-			cb(err);
-		});
-	}, err => callback(err, data));
-}
-
-function load_data_cached(dirname, tasks, callback) {
-	var json_fn = path.join(dirname, 'cachev1.json');
-	fs.readFile(json_fn, {encoding: 'utf8'}, function(err, fcontents) {
-		if (err) {
-			load_data(dirname, tasks, function(err, data) {
-				if (err) return callback(err);
-
-				atomic_write.writeFile(json_fn, JSON.stringify(data), {encoding: 'utf8'}, function(err) {
-					callback(err, data);
-				});
-			});
-		} else {
-			let data = JSON.parse(fcontents);
-			callback(null, data);
-		}
-	});
-}
-
-function parse_csv(fn, cb) {
-    // It seems crazily inefficient to read the file into memory,
-    // but that seems to be the fastest way
-    // See https://github.com/phihag/csv-speedtest for speed test
-    fs.readFile(fn, {encoding: 'binary'}, function(err, fcontents) {
-        if (err) return cb(err);
-        fcontents = fcontents.trim();
-
-        Baby.parse(fcontents, {
-            header: true,
-            complete: function(res) {
-                if (res.errors.length > 0) {
-                    return cb(new Error('Failed to parse ' + fn + ': ' + JSON.stringify(res.errors)));
-                }
-                var lines = res.data;
-                cb(null, lines);
-            },
-        });
-    });
-}
-
 function parse_int(s) {
 	let res = parseInt(s, 10);
 	if (isNaN(s)) {
@@ -543,8 +491,6 @@ function o19_is_regular(p) {
 
 module.exports = {
 	enrich,
-	load_data_cached,
-	load_data,
 	ALL_TASKS,
 	parse_bool,
 	parse_int,

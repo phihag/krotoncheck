@@ -67,7 +67,8 @@ function* check(data, pm, team_idx) {
 }
 
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
 	for (let pm of data.active_playermatches) {
 		yield* check_both(data, pm);
 		yield* check(data, pm, 1);

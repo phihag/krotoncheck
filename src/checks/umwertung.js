@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function*(season, data) {
-	for (const pm of data.playermatches) {
+module.exports = function*(season) {
+	for (const pm of season.data.playermatches) {
 		if (pm.flag_umwertung_gegen_team1 && (pm.setcount === 2) &&
 				(pm.set1team1 === 0) && (pm.set1team2 === 21) &&
 				(pm.set2team1 === 0) && (pm.set2team2 === 21)) {

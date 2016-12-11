@@ -325,8 +325,8 @@ function* check(data, tm) {
 }
 
 
-module.exports = function*(season, data) {
-	for (var tm of data.active_teammatches) {
-		yield* check(data, tm);
+module.exports = function*(season) {
+	for (var tm of season.data.active_teammatches) {
+		yield* check(season.data, tm);
 	}
 };

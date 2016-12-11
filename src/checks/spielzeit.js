@@ -6,7 +6,8 @@ function has_late_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, ntext => /.*F04-[0-9]{1,5}-/.test(ntext));
 }
 
-function* check_tm(season, data, tm) {
+function* check_tm(season, tm) {
+	const data = season.data;
 	const now = season.check_now;
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
 	const REPORT_TEAM_RLOL = 6 * 60 * 60000;
@@ -162,8 +163,8 @@ function* check_tm(season, data, tm) {
 	}
 }
 
-module.exports = function*(season, data) {
-	for (const tm of data.teammatches) {
-		yield* check_tm(season, data, tm);
+module.exports = function*(season) {
+	for (const tm of season.data.teammatches) {
+		yield* check_tm(season, tm);
 	}
 };

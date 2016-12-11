@@ -104,9 +104,9 @@ function* check_match(data, pm, team_idx) {
 }
 
 
-module.exports = function*(season, data) {
-	for (var pm of data.played_playermatches) {
-		yield* check_match(data, pm, 1);
-		yield* check_match(data, pm, 2);
+module.exports = function*(season) {
+	for (var pm of season.data.played_playermatches) {
+		yield* check_match(season.data, pm, 1);
+		yield* check_match(season.data, pm, 2);
 	}
 };

@@ -27,7 +27,8 @@ function all_players(data, tm, team_idx) {
 	return res;
 }
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
 	const players_by_date = new Map();
 
 	for (const tm of data.teammatches) {

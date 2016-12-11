@@ -7,21 +7,25 @@ var path = require('path');
 
 var check = require('../src/check');
 var data_access = require('../src/data_access');
+var loader = require('../src/loader');
 
 
 const CHECKS_DIR = path.join(__dirname, 'expected');
-const TEST_SEASON = {};
 
 
 function setup_test(callback) {
-	data_access.load_data(path.join(__dirname, 'testdata'), data_access.ALL_TASKS, function(err, data) {
+	loader.load_data(path.join(__dirname, 'testdata'), data_access.ALL_TASKS, function(err, data) {
 		if (err) return callback(err);
-		data_access.enrich(TEST_SEASON, data);
-		callback(err, data);
+		const season = {
+			key: 'testseason',
+			data,
+		};
+		data_access.enrich(season);
+		callback(err, season);
 	});
 }
 
-setup_test(function(err, data) {
+setup_test(function(err, season) {
 	if (err) throw err;
 
 	describe('checks', function() {
@@ -33,7 +37,7 @@ setup_test(function(err, data) {
 
 				it(check_name, function(done) {
 					var check_func = check.CHECKS_BY_NAME[check_name];
-					var results = Array.from(check_func(TEST_SEASON, data));
+					var results = Array.from(check_func(season));
 					assert.deepStrictEqual(results, expected);
 					done();
 				});

@@ -23,3 +23,7 @@
 	min-width: 14em;
 	margin-right: 0.5em;
 }
+textarea[name="sg_csv"] {
+	font-size: 8px;
+	width: 30em;
+}

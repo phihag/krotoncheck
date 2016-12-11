@@ -76,7 +76,9 @@ function* check_enough_players(data, team, vrl_typeid, gender) {
 	}
 }
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
+
 	for (const team of data.teams) {
 		if (! /^O19-(RL|OL)$/.test(team.eventname)) {
 			continue;

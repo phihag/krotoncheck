@@ -16,7 +16,9 @@ function all_players(data, tm) {
 	return res;
 }
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
+
 	for (const tm of data.teammatches) {
 		const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
 

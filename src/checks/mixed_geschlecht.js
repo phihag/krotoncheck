@@ -24,7 +24,9 @@ function* check_gender(data, pm, team_idx, player_idx, expected) {
 }
 
 
-module.exports = function*(season, data) {
+module.exports = function*(season) {
+	const data = season.data;
+
 	for (const pm of data.active_playermatches) {
 		if (pm.disziplin !== 'GD') continue;
 

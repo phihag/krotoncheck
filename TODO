@@ -1,9 +1,14 @@
 add more tests
+	re-enable cache, make everything working again
+	lade SG-Liste
+	bei ab... mit playerclubcode nicht in der SG
+
+	add buli matches to normal matches with buli marker
 	festgespielt BuLi
 	festgespielt aber kein fixed_in
 		look at startdate
 		look at matches after festgespielt
-	falsches festgespielt (siehe Mail Bernd)
+	falsches festgespielt (wenn vkz3 != FIX aber trotzdem fest ab)
 	see red mails
 
 	Spielstand = Sieger

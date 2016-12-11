@@ -108,8 +108,8 @@ function* check_player(data, player_id, matches_struct) {
 	yield* check_round(data, player, matches_struct.rr);
 }
 
-module.exports = function*(season, data) {
-	for (const [pid, matches_struct] of data.matches_by_player.entries()) {
-		yield* check_player(data, pid, matches_struct);
+module.exports = function*(season) {
+	for (const [pid, matches_struct] of season.data.matches_by_player.entries()) {
+		yield* check_player(season.data, pid, matches_struct);
 	}
 };

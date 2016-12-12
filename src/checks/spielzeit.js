@@ -9,8 +9,9 @@ function has_late_note(data, tm) {
 function* check_tm(season, tm) {
 	const data = season.data;
 	const now = season.check_now;
+	const HOUR = 3600000;
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
-	const REPORT_TEAM_RLOL = 6 * 60 * 60000;
+	const REPORT_TEAM_RLOL = 6 * HOUR;
 
 	const league_type = data.league_type(tm.staffelcode);
 	const original_ts = utils.parse_date(tm.datum_verbandsansetzung);
@@ -133,10 +134,11 @@ function* check_tm(season, tm) {
 		}
 	}
 
+	const GRACE_MINUTE = 60 * 1000 - 1; // The regulations just say 12:00, not 12:00:00
 	const report_until = (
 		[6, 0].includes(utils.weekday(played)) ?
-		utils.monday_1200(played)
-		: (played + 48 * 3600000));
+		(utils.monday_1200(played) + GRACE_MINUTE)
+		: (played + 48 * HOUR));
 	if (entered) {
 		if (report_until < entered) {
 			const message = (

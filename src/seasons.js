@@ -67,8 +67,15 @@ function show_problems_handler(req, res, next) {
 		query: {key: req.params.season_key},
 	}], function(season, problems_struct) {
 		if (problems_struct) {
+			if (req.query.stb) {
+				problems_struct.found = problems_struct.found.filter(
+					p => p.stb && (p.stb.login === req.query.stb)
+				);
+			}
+
 			problems.prepare_render(season, problems_struct.found);
 		}
+
 		const colors = problems.color_render(problems_struct);
 		render(req, res, next, 'season_problems_show', {
 			season: season,

@@ -1,4 +1,9 @@
+remove buli_code
+add buli_turnier_url
+allow display/change turnier_url
+download buli (as buli_*) instead of separate season
 add more tests
+	add tests for buli festgespielt
 	add buli matches to normal matches with buli marker
 	festgespielt BuLi
 	festgespielt aber kein fixed_in

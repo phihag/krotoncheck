@@ -69,7 +69,7 @@ function show_problems_handler(req, res, next) {
 		if (problems_struct) {
 			if (req.query.stb) {
 				problems_struct.found = problems_struct.found.filter(
-					p => p.stb && (p.stb.login === req.query.stb)
+					p => p.stb && (p.stb.login.includes(req.query.stb))
 				);
 			}
 

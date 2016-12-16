@@ -4,10 +4,11 @@ var express = require('express');
 var favicon = require('serve-favicon');
 var path = require('path');
 
+var downloads = require('./downloads');
 var root = require('./root');
 var seasons = require('./seasons');
+var show = require('./show');
 var users = require('./users');
-var downloads = require('./downloads');
 
 function setup(app) {
 	app.use('/static', express.static('static'));
@@ -29,6 +30,9 @@ function setup(app) {
 	app.get('/s/:season_key/problems', seasons.show_problems_handler);
 	app.post('/s/:season_key/ignore', seasons.ignore_handler);
 	app.post('/s/:season_key/unignore', seasons.unignore_handler);
+
+	app.get('/s/:season_key/show/', show.season_handler);
+	app.get('/s/:season_key/show/player/:player_id', show.player_handler);
 
 	app.post('/s/:season_key/download-start', downloads.start_handler);
 }

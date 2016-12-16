@@ -1,3 +1,7 @@
+render VRL (Nils Falkenrich)
+render player (include all VRL entries)
+link to render
+
 remove buli_code
 add buli_turnier_url
 allow display/change turnier_url
@@ -20,6 +24,7 @@ add more tests
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
 	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD
 
+test festgespielt von U19E-Spieler
 button to update buli and league, and check after both
 fail download if any file 0B
 (fix) recheck automatically after download

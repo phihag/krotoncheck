@@ -3,29 +3,28 @@
 const laws = require('../laws');
 
 
-function* check_round(data, player, matches) {
+function* check_round(data, player, matches, o19) {
 	let vrl_entry;
-	let league_type;
 	const handled_tms = new Set();
 	const played_else = [];
 
 	for (const pm of matches) {
+		const tm = pm.tm;
+		const match_league_type = data.league_type(tm.staffelcode);
+		if ((match_league_type === 'O19') !== (!!o19)) {
+			continue; // Check later
+		}
+
 		if (handled_tms.has(pm.teammatchid)) {
 			continue;
 		}
 		handled_tms.add(pm.teammatchid);
 
-		const tm = pm.tm;
 		const is_team1 = (pm.team1spieler1spielerid === player.spielerid) || (pm.team1spieler2spielerid === player.spielerid);
 		const team_id = tm[`team${is_team1 ? 1 : 2}id`];
-		const match_league_type = data.league_type(tm.staffelcode);
 		const team = data.get_team(team_id);
 
-		if (vrl_entry) {
-			if ((match_league_type === 'O19') && (league_type !== 'O19')) {
-				continue; // Youth in O19, handled in vrl check
-			}
-		} else {
+		if (!vrl_entry) {
 			const club_id = team.clubcode;
 			const vrl_type = laws.get_vrl_type(match_league_type, tm, player.sex);
 
@@ -33,12 +32,11 @@ function* check_round(data, player, matches) {
 			if (! ve) {
 				continue; // Handled otherwise
 			}
-			const youth_in_o19 = (match_league_type === 'O19') && (ve.jkz1 || ve.vkz1);
+			const youth_in_o19 = (match_league_type === 'O19') && ((ve.vkz1 === 'J1') || (ve.vkz1 === 'S1') || (ve.vkz1 === 'M1'));
 			if (youth_in_o19) {
-				continue; // Handled in vrl check
+				return; // Handled in vrl check
 			}
 			vrl_entry = ve;
-			league_type = match_league_type;
 		}
 
 		if (team_id !== vrl_entry.teamcode) {
@@ -104,8 +102,10 @@ function* check_round(data, player, matches) {
 function* check_player(data, player_id, matches_struct) {
 	const player = data.get_player(player_id);
 	
-	yield* check_round(data, player, matches_struct.hr);
-	yield* check_round(data, player, matches_struct.rr);
+	yield* check_round(data, player, matches_struct.hr, true);
+	yield* check_round(data, player, matches_struct.hr, false);
+	yield* check_round(data, player, matches_struct.rr, true);
+	yield* check_round(data, player, matches_struct.rr, false);
 }
 
 module.exports = function*(season) {

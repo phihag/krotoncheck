@@ -119,7 +119,15 @@ module.exports = function*(season) {
 		}
 
 		const pms = data.get_playermatches_by_teammatch_id(tm.matchid);
-		if (! pms.some(pm => (pm.flag_aufgabe_team1 || pm.flag_aufgabe_team2))) {
+		if (! pms.some(pm => (
+				pm.flag_aufgabe_team1 ||
+				pm.flag_aufgabe_team2 ||
+				pm.flag_keinspiel_keinespieler ||
+				pm.flag_keinspiel_keinspieler_team1 ||
+				pm.flag_keinspiel_keinspieler_team2 ||
+				pm.flag_umwertung_gegen_team1 ||
+				pm.flag_umwertung_gegen_team2
+				))) {
 			yield {
 				teammatch_id: tm.matchid,
 				message: 'Eintrag im Textfeld Spielaufgabe, aber keine Spiele aufgegeben',

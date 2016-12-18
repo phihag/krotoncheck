@@ -130,7 +130,7 @@ module.exports = function*(season) {
 				))) {
 			yield {
 				teammatch_id: tm.matchid,
-				message: 'Eintrag im Textfeld Spielaufgabe, aber keine Spiele aufgegeben',
+				message: 'Eintrag im Textfeld Spielaufgabe, aber im Detailbericht keine Spiele als aufgegeben gekennzeichnet',
 			};
 		}
 	}

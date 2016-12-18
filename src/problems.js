@@ -202,11 +202,51 @@ function color_render(problems_struct) {
 					teammatch_id: problem.teammatch_id,
 					problems: [],
 				};
+				if (problem.stb) {
+					by_group.stb = problem.stb;
+				}
 				reg.groups_map[tm.matchid] = by_group;
 			}
 		}
 		
 		by_group.problems.push(problem);
+	}
+
+	// Craft email info
+	for (const region of utils.values(by_color)) {
+		for (const groups of utils.values(region.regions_map)) {
+			for (const g of utils.values(groups.groups_map)) {
+				if (!g.stb || !g.teammatch) {
+					continue;
+				}
+
+				const tm = g.teammatch;
+				const match_name = tm.hrt ? (tm.team2name + ' - ' + tm.team1name) : (tm.team1name + ' - ' + tm.team2name);
+				g.stb_mail_subject = encodeURIComponent(
+					match_name
+				);
+				g.stb_mail_body = encodeURIComponent(
+					'Hallo ' + g.stb.firstname + ',\n\n' +
+					'beim Spiel ' + match_name + ' ' +
+					((g.problems.length > 1) ? 'wurden ' + g.problems.length + ' mögliche' : 'wurde ein möglicher') +
+					' Fehler gefunden:\n\n' +
+					g.problems.map(p => {
+						let res = '';
+						if (p.match_name) {
+							res += p.match_name + ': ';
+						}
+						res += p.message;
+						if (p.turnier2_url) {
+							res += ' (siehe auch ' + p.turnier2_url + ' )';
+						}
+						return res;
+					}).join('\n') +
+					'\n\n' +
+					'Kannst Du unter\n' + g.turnier_url + '\nmal nachschauen?\n\n' +
+					'Viele Grüße\n'
+				);
+			}
+		}
 	}
 
 	const color_list = [];

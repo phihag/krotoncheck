@@ -5,3 +5,4 @@ TournamentID;MatchID;MatchField;ValueText;ValueInt
 1;19;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;Benjamin Beispiel, Emil Ernst;
 1;20;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;Benjamin Beispiel, Emil Ernst;
 1;21;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;Benjamin Beispiel, Emil Ernst;
+1;21;Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt;1. HE aufgegeben (aber nicht so eingetragen);

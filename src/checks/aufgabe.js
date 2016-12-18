@@ -105,8 +105,25 @@ function* check_match(data, pm, team_idx) {
 
 
 module.exports = function*(season) {
-	for (var pm of season.data.played_playermatches) {
-		yield* check_match(season.data, pm, 1);
-		yield* check_match(season.data, pm, 2);
+	const data = season.data;
+
+	for (const pm of season.data.played_playermatches) {
+		yield* check_match(data, pm, 1);
+		yield* check_match(data, pm, 2);
+	}
+
+	for (const tm of data.teammatches) {
+		const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
+		if (!resigned) {
+			continue;
+		}
+
+		const pms = data.get_playermatches_by_teammatch_id(tm.matchid);
+		if (! pms.some(pm => (pm.flag_aufgabe_team1 || pm.flag_aufgabe_team2))) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Eintrag im Textfeld Spielaufgabe, aber keine Spiele aufgegeben',
+			};
+		}
 	}
 };

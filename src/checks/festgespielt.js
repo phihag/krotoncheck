@@ -83,7 +83,7 @@ function* check_round(data, player, matches, o19) {
 							'kein F-Kennzeichen'
 						);
 						yield {
-							type: 'fixed',
+							type: 'vrl',
 							teammatch_id: pm.teammatchid,
 							player_id: player.spielerid,
 							clubcode: vrl_entry.clubcode,

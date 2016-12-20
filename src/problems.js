@@ -23,7 +23,7 @@ function enrich(season, found) {
 			} else {
 				assert(p.type === 'vrl');
 				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
-				p.region = data.get_club_region(p.clubcode);
+				p.region = 'VRL ' + data.get_club_region(p.clubcode);
 			}
 		} else if (p.teammatch_id) {
 			p.teammatch = data.get_teammatch(p.teammatch_id);
@@ -254,7 +254,7 @@ function color_render(problems_struct) {
 		const col = by_color[color_key];
 		let keys = Object.keys(col.regions_map);
 		keys.sort(function(k1, k2) {
-			const REGIONS_ORDER = ['NRW', 'N1', 'N2', 'S1', 'S2', 'Sonstiges'];
+			const REGIONS_ORDER = ['VRL N1', 'VRL N2', 'VRL S1', 'VRL S2', 'NRW', 'N1', 'N2', 'S1', 'S2', 'Sonstiges'];
 			const idx1 = REGIONS_ORDER.indexOf(k1);
 			const idx2 = REGIONS_ORDER.indexOf(k2);
 			return idx1 - idx2;

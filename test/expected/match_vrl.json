@@ -15,7 +15,7 @@
 	"match_id": "82",
 	"teammatch_id": "11",
 	"player_id": "01-bcf-inactive",
-	"message": "Kein O19-VRL-Eintrag für Nichtaktive BCFl13 (01-bcf-inactive) bei BC Feder 1."
+	"message": "Kein Eintrag für Nichtaktive BCFl13 (01-bcf-inactive) in VRL 9[Hinrunde Herren O19] von BC Feder 1."
 },
 {
 	"message": "Einzel falsch aufgestellt: Daniel2 BCFl2 (01-bcf-male2) ist VRL #2 und hat 1. HE gespielt. Daniel1 BCFl1 (01-bcf-male1) ist VRL #1 und hat 2. HE gespielt.",
@@ -45,25 +45,25 @@
 	"teammatch_id": "16",
 	"match_id": "121",
 	"player_id": "01-tt-m15",
-	"message": "Kein O19-VRL-Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) bei TopTeam 3."
+	"message": "Kein Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) in VRL 9[Hinrunde Herren O19] von TopTeam 3."
 },
 
 
 {
 	"match_id": "129",
-	"message": "Kein O19-VRL-Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) bei TopTeam 3.",
+	"message": "Kein Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) in VRL 9[Hinrunde Herren O19] von TopTeam 3.",
 	"player_id": "01-tt-m15",
 	"teammatch_id": "17"
 },
 {
 	"match_id": "132",
-	"message": "Kein O19-VRL-Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) bei TopTeam 3.",
+	"message": "Kein Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) in VRL 9[Hinrunde Herren O19] von TopTeam 3.",
 	"player_id": "01-tt-m15",
 	"teammatch_id": "17"
 },
 {
 	"match_id": "133",
-	"message": "Kein O19-VRL-Eintrag für 01-tt-m14 vor 01-tt-m14 nach (01-tt-m14) bei TopTeam 3.",
+	"message": "Kein Eintrag für 01-tt-m14 vor 01-tt-m14 nach (01-tt-m14) in VRL 9[Hinrunde Herren O19] von TopTeam 3.",
 	"player_id": "01-tt-m14",
 	"teammatch_id": "17"
 },

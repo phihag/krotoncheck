@@ -456,6 +456,22 @@ function enrich(season) {
 
 		return null;
 	};
+	data.vrl_name = function(vrl_id) {
+		const name = {
+			9: 'Hinrunde Herren O19',
+			10: 'Hinrunde Damen O19',
+			11: 'Rückrunde Herren O19',
+			12: 'Rückrunde Damen O19',
+			14: 'Hinrunde Mädchen U19',
+			16: 'Rückrunde Mädchen U19',
+			17: 'Hinrunde Jungen+Mini U19',
+			18: 'Rückrunde Jungen+Mini U19',
+		}[vrl_id];
+		if (!name) {
+			throw new Error('Unknown VRL ' + JSON.stringify(vrl_id));
+		}
+		return `VRL ${vrl_id}[${name}]`;
+	};
 }
 
 function team2num(team) {

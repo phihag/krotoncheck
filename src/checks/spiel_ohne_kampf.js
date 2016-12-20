@@ -43,11 +43,22 @@ function* check(data, pm, team_idx) {
 		return;
 	}
 
-	if (pm['team' + team_idx + 'spieler1spielerid']) {
+	if (pm[`team${team_idx}spieler1spielerid`]) {
+		const player1 = data.get_player(pm[`team${team_idx}spieler1spielerid`]);
+		let player_str = data.player_str(player1);
+		if (pm[`team${team_idx}spieler2spielerid`]) {
+			const player2 = data.get_player(pm[`team${team_idx}spieler2spielerid`]);
+			player_str += ' / ' + data.player_str(player2);
+		}
+
+		const message = (
+			'"' + tm['team' + team_idx + 'name'] + ' hatte keine Spieler" angegeben, ' +
+			'aber Spieler ' + player_str + ' eingetragen'
+		);
 		yield {
 			match_id: pm.matchid,
 			teammatch_id: pm.teammatchid,
-			message: '"' + tm['team' + team_idx + 'name'] + ' hatte keine Spieler" angegeben, aber Spieler ' + pm.team1spieler1spielerid + ' eingetragen',
+			message,
 		};
 	}
 	let other_team = 3 - team_idx;

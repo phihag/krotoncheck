@@ -67,8 +67,9 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 			}
 
 			const message = (
-				'Kein ' + league_type + '-VRL-Eintrag für ' + data.player_str(player) +
-				' bei ' + team.name + '.'); // Spalte vrl_type
+				'Kein Eintrag für ' + data.player_str(player) +
+				' in ' + data.vrl_name(vrl_type) +
+				' von ' + team.name + '.');
 			yield {
 				player_id: player.spielerid,
 				teammatch_id: pm.teammatchid,

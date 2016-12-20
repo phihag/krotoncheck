@@ -15,16 +15,20 @@ function count_o19_players(players) {
 	return res;
 }
 
-function* check_team(vrl, team_id, players) {
+function* check_team(data, vrl, team_id, players) {
 	if ((vrl.typeid == 9) || (vrl.typeid == 11)) {
 		// Men O19
 		let pcount = count_o19_players(players);
 		if (pcount < 4) {
+			const message = (
+				'Zu wenig (' + pcount + ') Stammspieler im Team ' + team_id +
+				' (' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname + ')'
+			);
 			yield {
 				type: 'vrl',
 				clubcode: vrl.clubcode,
 				vrl_typeid: vrl.typeid,
-				message: 'Zu wenig (' + pcount + ') Stammspieler im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+				message,
 			};
 		}
 	} else if ((vrl.typeid == 10) || (vrl.typeid == 12)) {
@@ -35,7 +39,7 @@ function* check_team(vrl, team_id, players) {
 				type: 'vrl',
 				clubcode: vrl.clubcode,
 				vrl_typeid: vrl.typeid,
-				message: 'Zu wenig (' + pcount + ') Stammspielerinnen im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+				message: 'Zu wenig (' + pcount + ') Stammspielerinnen im Team ' + team_id + ' (' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname + ')',
 			};
 		}
 	} else if ((vrl.typeid == 17) || (vrl.typeid == 18)) {
@@ -46,7 +50,7 @@ function* check_team(vrl, team_id, players) {
 				type: 'vrl',
 				clubcode: vrl.clubcode,
 				vrl_typeid: vrl.typeid,
-				message: 'Zu wenig (' + pcount + ') Spieler im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+				message: 'Zu wenig (' + pcount + ') Spieler im Team ' + team_id + ' (' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname + ')',
 			};
 		}
 	} else if ((vrl.typeid == 14) || (vrl.typeid == 16)) {
@@ -57,7 +61,7 @@ function* check_team(vrl, team_id, players) {
 				type: 'vrl',
 				clubcode: vrl.clubcode,
 				vrl_typeid: vrl.typeid,
-				message: 'Zu wenig (' + pcount + ') Spielerinnen im Team ' + team_id + ' (VRL ' + vrl.typeid + ' von ' + vrl.clubname + ')',
+				message: 'Zu wenig (' + pcount + ') Spielerinnen im Team ' + team_id + ' (' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname + ')',
 			};
 		}
 	} else {
@@ -94,7 +98,7 @@ function* check_u19e(data, vrl, line) {
 		const message = (
 			'Keine Schüler/Jugend/Mini-Teams, aber U19E-Spieler ' +
 			'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' (in AK U19-1) in VRL ' + vrl.typeid + ' von ' + vrl.clubname
+			' (in AK U19-1) in ' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname
 		);
 		yield {
 			type: 'vrl',
@@ -106,7 +110,7 @@ function* check_u19e(data, vrl, line) {
 		const message = (
 			'Alle Schüler/Jugend/Mini-Teams zurückgezogen, aber U19E-Spieler ' +
 			'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' (in AK U19-1) in VRL ' + vrl.typeid + ' von ' + vrl.clubname
+			' (in AK U19-1) in ' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname
 		);
 		yield {
 			type: 'vrl',
@@ -143,8 +147,8 @@ function* check_in_youth_team(data, is_hr, line) {
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 			' steht mit Kennzeichen ' + expect_team + ' in der ' +
-			'O19-VRL(' + line.typeid + ') von ' +
-			'(' + clubcode + ') ' + line.clubname + ', fehlt aber in der U19-VRL (' + vrl_type + ')'
+			data.vrl_name(line.typeid) + ' von ' +
+			'(' + clubcode + ') ' + line.clubname + ', fehlt aber in der ' + data.vrl_name(vrl_type)
 		);
 		yield {
 			type: 'vrl',
@@ -158,7 +162,7 @@ function* check_in_youth_team(data, is_hr, line) {
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 			' steht mit Kennzeichen ' + expect_team + ' in der ' +
-			line.typeid + '-VRL von ' +
+			data.vrl_name(line.typeid) + ' von ' +
 			'(' + clubcode + ') ' + line.clubname + ', spielt aber für ' +
 			ve.teamcode + ' statt ' + clubcode + '-' + expect_team
 		);
@@ -180,10 +184,10 @@ function* check_in_youth_team(data, is_hr, line) {
 				'Spieler' + (line.sex === 'F' ? 'in' : '') +
 				' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 				' steht mit Kennzeichen ' + expect_team + ' in der ' +
-				'O19-VRL(' + line.typeid + ') von ' +
+				data.vrl_name(line.typeid) + ' von ' +
 				'(' + clubcode + ') ' + line.clubname + ', ' +
 				'gehört aber nicht zu den Top ' + top + ' in ' + expect_team +
-				', sondern ist Nr. ' + pos + ' in ' + ve.teamname + ' (VRL ' + ve.typeid + ')'
+				', sondern ist Nr. ' + pos + ' in ' + ve.teamname + ' (' + data.vrl_name(ve.typeid) + ')'
 			);
 			yield {
 				type: 'vrl',
@@ -205,7 +209,7 @@ function* check_in_youth_team(data, is_hr, line) {
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 			' steht mit Kennzeichen ' + expect_team + ' in der ' +
-			'O19-VRL(' + line.typeid + ') von ' +
+			data.vrl_name(line.typeid) + ' von ' +
 			'(' + clubcode + ') ' + line.clubname + ', ' +
 			'aber die Mannschaft ' + ve.teamcode + ' kann nicht gefunden werden'
 		);
@@ -223,7 +227,7 @@ function* check_in_youth_team(data, is_hr, line) {
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 			' steht mit Kennzeichen ' + expect_team + ' (ohne Enddatum) in der ' +
-			'O19-VRL(' + line.typeid + ') von ' +
+			data.vrl_name(line.typeid) + ' von ' +
 			'(' + clubcode + ') ' + line.clubname + ', ' +
 			'aber die Mannschaft ' + ve.teamcode + ' hat Status ' + JSON.stringify(team.Status)
 		);
@@ -293,7 +297,7 @@ function* check_startend(season, is_hr, vrl_date, line) {
 			' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
 			' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',' +
 			' aber Enddatum fehlt' +
-			' in der VRL ' + line.typeid
+			' in der ' + season.data.vrl_name(line.typeid)
 		);
 		yield {
 			type: 'vrl',
@@ -323,7 +327,8 @@ function* check_startend(season, is_hr, vrl_date, line) {
 		line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
 		' nachgemeldet (' + m[1] + ', VRL-Abgabe ' + utils.ts2dstr(vrl_date) + '),' +
 		' aber Startdatum fehlt' +
-		' in der VRL ' + line.typeid + ' von (' + line.clubcode + ') ' + line.clubname
+		' in der ' + season.data.vrl_name(line.typeid) +
+		' von (' + line.clubcode + ') ' + line.clubname
 	);
 	yield {
 		type: 'vrl',
@@ -356,7 +361,7 @@ function* check_vrl(season, vrl) {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
 				clubcode: vrl.clubcode,
-				message: 'Ungültige VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': position (' + line.position + ') != teamposition (' + line.teamposition + ') bei Spieler (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
+				message: 'Ungültige ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': position (' + line.position + ') != teamposition (' + line.teamposition + ') bei Spieler (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
 			};
 		}
 
@@ -366,7 +371,7 @@ function* check_vrl(season, vrl) {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
 				clubcode: vrl.clubcode,
-				message: 'teamposition-Feld fehlt in VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
+				message: 'teamposition-Feld fehlt in ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
 			};
 			last_id = '[keine Position angegeben]';
 			continue;
@@ -379,7 +384,7 @@ function* check_vrl(season, vrl) {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
 				clubcode: vrl.clubcode,
-				message: 'Lücke in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': Auf ' + last_id + ' folgt ' + position,
+				message: 'Lücke in der ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': Auf ' + last_id + ' folgt ' + position,
 			};
 		}
 		last_id = position;
@@ -389,7 +394,7 @@ function* check_vrl(season, vrl) {
 			const old = by_doubles_pos.get(position_doubles);
 
 			const message = (
-				'Doppelter Eintrag in der Doppel-VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
+				'Doppelter Eintrag in der Doppel-' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
 				'(' + old.memberid + ') ' + old.firstname + ' ' + old.lastname + ' und ' +
 				'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname + ' ' +
 				'sind beide an an Position ' + position_doubles
@@ -409,7 +414,7 @@ function* check_vrl(season, vrl) {
 				const message = (
 					'FIX-Kennzeichen ohne ' +
 					(!line.fixed_from ? (line.fixed_in ? '"Fest ab"-Wert' : '"Fest in"- und ohne "Fest ab"-Wert') : '"Fest in"-Wert') +
-					' in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' ' +
+					' in der ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' ' +
 					' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
 				);
 
@@ -434,7 +439,9 @@ function* check_vrl(season, vrl) {
 					// Special excemption by federation
 				} else if(line.jkz1) {
 					const message = (
-						'Falsches Jugendkennzeichen ' + JSON.stringify(line.jkz1) + ' in VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
+						'Falsches Jugendkennzeichen ' + JSON.stringify(line.jkz1) +
+						' in ' + data.vrl_name(vrl.typeid) +
+						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
 						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname + ' (AKL ' + line.akl + ')'
 					);
 					yield {
@@ -445,7 +452,8 @@ function* check_vrl(season, vrl) {
 					};
 				} else {
 					const message = (
-						'Jugendkennzeichen fehlt in VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
+						'Jugendkennzeichen fehlt in ' + data.vrl_name(vrl.typeid) +
+						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
 						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
 					);
 					yield {
@@ -460,7 +468,7 @@ function* check_vrl(season, vrl) {
 					line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
 					' hat Kennzeichen ' + (line.jkz1 || line.vkz1) + ',' +
 					' aber Altersklasse ' + JSON.stringify(line.akl) +
-					' in der VRL ' + vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname
+					' in der ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname
 				);
 				yield {
 					type: 'vrl',
@@ -483,8 +491,9 @@ function* check_vrl(season, vrl) {
 
 				if ((team_char === last_team_char) && (last_team_num > team_num) && (last_team_num !== 0)) {
 					const message = (
-						'Mannschaftsnummer nicht aufsteigend in VRL ' +
-						vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
+						'Mannschaftsnummer nicht aufsteigend in ' +
+						data.vrl_name(vrl.typeid) +
+						' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
 						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 						' hat Mannschaftsnummer ' + team_char + team_num + ', aber vorherige Zeile war ' + last_team_char + last_team_num
 					);
@@ -500,8 +509,9 @@ function* check_vrl(season, vrl) {
 				last_team_num = team_num;
 			} else {
 				const message = (
-					'Ungültiger Team-Code in VRL ' +
-					vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
+					'Ungültiger Team-Code in ' +
+					data.vrl_name(vrl.typeid) +
+					' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
 					JSON.stringify(line.teamcode)
 				);
 				yield {
@@ -514,8 +524,9 @@ function* check_vrl(season, vrl) {
 		} else {
 			if (last_team_num) { // If not, this may be a Bundesliga entry
 				const message = (
-					'VRL-Zeile ohne Mannschaftszuordnung: VRL ' +
-					vrl.typeid + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ', ' +
+					'VRL-Zeile ohne Mannschaftszuordnung: ' +
+					data.vrl_name(vrl.typeid) +
+					' von (' + vrl.clubcode + ') ' + vrl.clubname + ', ' +
 					'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
 				);
 				yield {
@@ -534,7 +545,7 @@ function* check_vrl(season, vrl) {
 			// Bundesliga
 			continue;
 		}
-		yield* check_team(vrl, team_id, players);
+		yield* check_team(data, vrl, team_id, players);
 	}
 }
 

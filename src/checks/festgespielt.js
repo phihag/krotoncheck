@@ -79,7 +79,7 @@ function* check_round(data, player, matches, o19) {
 						const message = (
 							data.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
 							'(' + team.code + ') ' + team.name + ' festgespielt, ' +
-							'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
+							'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
 							'kein F-Kennzeichen'
 						);
 						yield {

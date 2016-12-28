@@ -101,7 +101,6 @@ function unignore_handler(req, res, next) {
 function change_handler(req, res, next) {
 	const fields = {};
 	for (const field_name of [
-			'buli_code',
 			'vrldate_o19_hr',
 			'vrldate_u19_hr',
 			'vrldate_o19_rr',
@@ -110,6 +109,9 @@ function change_handler(req, res, next) {
 			'lastdate_o19',
 			'lastdate_u19',
 			'sg_csv',
+			'lastdate_hr',
+			'tournament_id',
+			'buli_tournament_id',
 			]) {
 		fields[field_name] = req.body[field_name];
 	}

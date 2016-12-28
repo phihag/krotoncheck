@@ -3,14 +3,16 @@
 
 <form method="post" action="{{root_path}}s/{{key}}/change" class="season_info">
 {{{csrf_field}}}
+<label><span>Turnier-ID</span><input name="tournament_id" value="{{tournament_id}}" /></label>
+<label><span>Turnier-ID BuLi</span><input name="buli_tournament_id" value="{{buli_tournament_id}}" /></label>
 <label><span>VRL-Abgabefrist Hinrunde O19</span><input name="vrldate_o19_hr" value="{{vrldate_o19_hr}}" /></label>
 <label><span>VRL-Abgabefrist Hinrunde U19</span><input name="vrldate_u19_hr" value="{{vrldate_u19_hr}}" /></label>
 <label><span>VRL-Abgabefrist Rückrunde O19</span><input name="vrldate_o19_rr" value="{{vrldate_o19_rr}}" /></label>
 <label><span>VRL-Abgabefrist Rückrunde U19</span><input name="vrldate_u19_rr" value="{{vrldate_u19_rr}}" /></label>
+<label><span>Ende Hinrunde</span><input name="lastdate_hr" value="{{lastdate_hr}}" /></label>
 <label><span>Letzter Spieltag OL/RL</span><input name="lastdate_olrl" value="{{lastdate_olrl}}" /></label>
 <label><span>Letzter Spieltag bis VL</span><input name="lastdate_o19" value="{{lastdate_o19}}" /></label>
 <label><span>Letzter Spieltag U19</span><input name="lastdate_u19" value="{{lastdate_u19}}" /></label>
-<label><span>Bundesliga-Code</span><input name="buli_code" value="{{buli_code}}" /></label>
 <label><span>Spielgemeinschaften (CSV)</span><textarea name="sg_csv" rows="2" >{{sg_csv}}</textarea></label>
 <button role="submit">Ändern</button>
 </form>

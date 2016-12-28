@@ -42,4 +42,10 @@ describe('utils', function() {
 			[1, 2, 3, 4, 5, 6, '1']
 		);
 	});
+
+	it('cmp', function() {
+		assert(utils.cmp('Horst Rosenstock', 'Anja Pliester') > 0);
+		assert(utils.cmp('Horst Rosenstock', 'Horst Rosenstock') === 0);
+		assert(utils.cmp('Anja Pliester', 'Horst Rosenstock') < 0);
+	});
 });

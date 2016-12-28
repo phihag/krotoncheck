@@ -13,7 +13,7 @@ function enrich(season, found) {
 			const club = data.get_club(p.clubcode);
 			p.club_name = club.name;
 			if (p.vrl_typeid) {
-				p.header = 'VRL ' + p.vrl_typeid + ' von (' + club.code + ') ' + club.name;
+				p.header = '(' + club.code + ') ' + club.name + ' ' + data.vrl_name(p.vrl_typeid);
 			}
 			if (p.type === 'fixed') {
 				p.turnier_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
@@ -22,7 +22,8 @@ function enrich(season, found) {
 				p.region = 'Festgespielt';
 			} else {
 				assert(p.type === 'vrl');
-				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
+				assert(p.vrl_typeid);
+				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID + '&rid=' + p.vrl_typeid;
 				p.region = 'VRL ' + data.get_club_region(p.clubcode);
 			}
 		} else if (p.teammatch_id) {
@@ -74,22 +75,27 @@ function prepare_render(season, problems) {
 			return 1;
 		}
 
-		if (!f1.teammatch_id && f2.teammatch_id) {
-			return -1;
-		}
-		if (f1.teammatch_id && !f2.teammatch_id) {
-			return 1;
-		}
-		if (!f1.teammatch_id && !f2.teammatch_id) {
-			return 0;
-		}
-
 		if (f1.teammatch && f2.teammatch) {
 			if (f1.teammatch.ergebnisbestaetigt_datum && !f2.teammatch.ergebnisbestaetigt_datum) {
 				return -1;
 			}
 			if (!f1.teammatch.ergebnisbestaetigt_datum && f2.teammatch.ergebnisbestaetigt_datum) {
 				return 1;
+			}
+
+			if (f1.stb && f2.stb) {
+				const stb1_name = f1.stb.firstname + ' ' + f1.stb.lastname;
+				const stb2_name = f2.stb.firstname + ' ' + f2.stb.lastname;
+				const stb_cmp = utils.cmp(stb1_name, stb2_name);
+				if (stb_cmp !== 0) {
+					return stb_cmp;
+				}
+			}
+			if (!f1.stb && f2.stb) {
+				return 1;
+			}
+			if (f1.stb && !f2.stb) {
+				return -1;
 			}
 		}
 
@@ -152,6 +158,7 @@ function color_render(problems_struct) {
 			reg = {
 				name: problem.region,
 				groups_map: {},
+				groups: [],
 			};
 			col.regions_map[problem.region] = reg;
 		}
@@ -161,11 +168,12 @@ function color_render(problems_struct) {
 			by_group = reg.groups_map[problem.turnier_url];
 			if (! by_group) {
 				by_group = {
-					header: ('(' + problem.clubcode + ') ' + problem.club_name),
+					header: problem.header,
 					turnier_url: problem.turnier_url,
 					problems: [],
 				};
 				reg.groups_map[problem.turnier_url] = by_group;
+				reg.groups.push(by_group);
 			}
 		} else if (problem.type === 'fixed') {
 			by_group = reg.groups_map[problem.clubcode];
@@ -176,6 +184,7 @@ function color_render(problems_struct) {
 					problems: [],
 				};
 				reg.groups_map[problem.clubcode] = by_group;
+				reg.groups.push(by_group);
 			}
 		} else if (problem.type === 'internal-error') {
 			const key = 'Interne Fehler';
@@ -186,6 +195,7 @@ function color_render(problems_struct) {
 					problems: [],
 				};
 				reg.groups_map[key] = by_group;
+				reg.groups.push(by_group);
 			}
 		} else {
 			const tm = problem.teammatch;
@@ -206,6 +216,7 @@ function color_render(problems_struct) {
 					by_group.stb = problem.stb;
 				}
 				reg.groups_map[tm.matchid] = by_group;
+				reg.groups.push(by_group);
 			}
 		}
 		
@@ -262,15 +273,6 @@ function color_render(problems_struct) {
 		col.regions = [];
 		for (const k of keys) {
 			const region = col.regions_map[k];
-			region.groups = [];
-
-			let tm_keys = Object.keys(region.groups_map);
-			tm_keys.sort();
-			for (const tmk of tm_keys) {
-				const tm = region.groups_map[tmk];
-				region.groups.push(tm);
-			}
-
 			col.regions.push(region);
 		}
 

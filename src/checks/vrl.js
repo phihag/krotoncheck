@@ -292,6 +292,14 @@ function* check_startend(season, is_hr, vrl_date, line) {
 			return;
 		}
 
+		if (is_hr && season.lastdate_hr) {
+			const left_date = utils.parse_date(m[1]);
+			const l_hr = utils.parse_date(season.lastdate_hr);
+			if (left_date > l_hr) {
+				return;
+			}
+		}
+
 		const message = (
 			line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
 			' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +

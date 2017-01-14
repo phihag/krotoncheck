@@ -40,19 +40,6 @@ function _load_single_season(db, season_key, callback) {
 function load_season(db, season_key, callback) {
 	async.waterfall([function(cb) {
 		_load_single_season(db, season_key, cb);
-	}, function(season, cb) {
-		if (! season.buli_tournament_id) {
-			return cb(null, season);
-		}
-
-		_load_single_season(db, season.buli_tournament_id, function(err, buli_season) {
-			if (err) {
-				return cb(err);
-			}
-
-			season.buli_season = buli_season;
-			cb(null, season);
-		});
 	}], function(err, season) {
 		if (err) return callback(err);
 		data_access.enrich(season);

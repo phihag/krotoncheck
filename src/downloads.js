@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const async = require('async');
 const fs = require('fs');
 const path = require('path');
@@ -21,7 +22,14 @@ var dl_counter = 0;
 var current_downloads = new Map();
 
 
-function calc_url(task_name, tournament_id) {
+function calc_url(task_name, season) {
+    let tournament_id = season.tournament_id;
+    const m = /^buli_(.*)$/.exec(task_name);
+    if (m) {
+        tournament_id = season.buli_tournament_id;
+        task_name = m[1];
+    }
+
     switch(task_name) {
     case 'playermatches':
     case 'teammatches':
@@ -99,11 +107,17 @@ function download_season(config, season, started_cb, done_cb) {
         dl_counter++;
         var download_dir = path.join(INPROGRESS_ROOT, download_id);
         utils.ensure_dir(download_dir, function(err) {
+            const tasks = data_access.ALL_TASKS.slice();
+            if (season.buli_tournament_id) {
+                const buli_tasks = data_access.ALL_TASKS.map(t => 'buli_' + t);
+                Array.prototype.push.apply(tasks, buli_tasks);
+            }
+
             const dl = {
                 id: download_id,
                 status: 'started',
                 started_timestamp: Date.now(),
-                tasks: data_access.ALL_TASKS,
+                tasks: tasks,
                 season_key: season.key,
             };
             cb(err, dl);
@@ -120,7 +134,7 @@ function download_season(config, season, started_cb, done_cb) {
             var download_dir = path.join(INPROGRESS_ROOT, dl.id);
             async.each(dl.tasks, function(task_name, cb) {
                 var req = request({
-                    url: calc_url(task_name, tournament_id),
+                    url: calc_url(task_name, season),
                     jar: jar,
                     headers: HTTP_HEADERS,
                 });

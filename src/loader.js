@@ -41,11 +41,11 @@ function load_season(db, season_key, callback) {
 	async.waterfall([function(cb) {
 		_load_single_season(db, season_key, cb);
 	}, function(season, cb) {
-		if (! season.buli_code) {
+		if (! season.buli_tournament_id) {
 			return cb(null, season);
 		}
 
-		_load_single_season(db, season.buli_code, function(err, buli_season) {
+		_load_single_season(db, season.buli_tournament_id, function(err, buli_season) {
 			if (err) {
 				return cb(err);
 			}

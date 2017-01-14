@@ -9,7 +9,7 @@ function enrich(season, found) {
 	const data = season.data;
 
 	found.forEach(function(p) {
-		if ((p.type === 'vrl') || (p.type === 'fixed')) {
+		if ((p.type === 'vrl') || (p.type === 'fixed') || (p.type === 'vrl_generic')) {
 			const club = data.get_club(p.clubcode);
 			p.club_name = club.name;
 			if (p.vrl_typeid) {
@@ -20,6 +20,13 @@ function enrich(season, found) {
 				p.turnier_vrl_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
 				p.teammatch = data.get_teammatch(p.teammatch_id);
 				p.region = 'Festgespielt';
+			} else if (p.type === 'vrl_generic') {
+				assert(club);
+				assert(p.player_id);
+				const player = data.get_player(p.player_id);
+				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID
+				p.region = 'VRL ' + data.get_club_region(p.clubcode);
+				p.header = data.player_str(player);
 			} else {
 				assert(p.type === 'vrl');
 				assert(p.vrl_typeid);
@@ -118,7 +125,7 @@ function prepare_render(season, problems) {
 }
 
 function colorize_problem(problem) {
-	if (problem.type === 'vrl') {
+	if ((problem.type === 'vrl') || (problem.type === 'vrl_generic')) {
 		problem.color = 'lightgray';
 	} else if (problem.type === 'fixed') {
 		problem.color = 'lightblue';
@@ -164,7 +171,7 @@ function color_render(problems_struct) {
 		}
 
 		let by_group;
-		if (problem.type === 'vrl') {
+		if ((problem.type === 'vrl') || (problem.type === 'vrl_generic')) {
 			by_group = reg.groups_map[problem.turnier_url];
 			if (! by_group) {
 				by_group = {

@@ -2,7 +2,8 @@
 {
 	"clubcode": "01-1008",
 	"message": "Spielerin 01-ry-f1 first 01-ry-f1 last (01-ry-f1) spielt in der Hinrunde für mehr als einen Verein: (01-1008) RetractYouth, (01-1009) Top Team",
-	"type": "vrl"
+	"player_id": "01-ry-f1",
+	"type": "vrl_generic"
 }
 
 ]

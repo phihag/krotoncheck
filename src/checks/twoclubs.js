@@ -60,7 +60,6 @@ function calc_multclubs(data) {
 	return multis;
 }
 
-
 module.exports = function*(season) {
 	const data = season.data;
 	const multis = calc_multclubs(data);
@@ -80,8 +79,9 @@ module.exports = function*(season) {
 				clubs_str
 			);
 			yield {
-				type: 'vrl',
+				type: 'vrl_generic',
 				clubcode: player.clubid,
+				player_id: pcode,
 				message,
 			};
 		}

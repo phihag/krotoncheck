@@ -1,11 +1,5 @@
-render VRL (Nils Falkenrich)
-render player (include all VRL entries)
-link to render
+download buli stuff as well
 
-remove buli_code
-add buli_turnier_url
-allow display/change turnier_url
-download buli (as buli_*) instead of separate season
 add more tests
 	add tests for buli festgespielt
 	add buli matches to normal matches with buli marker
@@ -27,6 +21,12 @@ add more tests
 	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD
 	Hallenänderung (siehe E-Mail Bernd)
 
+fine-grained sending facilities
+	only to Bezirk
+	only to StB
+render VRL (Nils Falkenrich)
+render player (include all VRL entries)
+link to render
  --max_old_space_size=4096
 test festgespielt von U19E-Spieler
 button to update buli and league, and check after both

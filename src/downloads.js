@@ -26,6 +26,7 @@ function calc_url(task_name, season) {
     let tournament_id = season.tournament_id;
     const m = /^buli_(.*)$/.exec(task_name);
     if (m) {
+        assert(season.buli_tournament_id);
         tournament_id = season.buli_tournament_id;
         task_name = m[1];
     }
@@ -96,8 +97,6 @@ function run_login(config, jar, cb) {
 // started_cb gets called once the download job, with (err, download) as an argument
 // done_cb gets called once the download is finished, again with (err, download)
 function download_season(config, season, started_cb, done_cb) {
-    var tournament_id = season.tournament_id;
-
     async.waterfall([function(cb) {
         utils.ensure_dir(INPROGRESS_ROOT, cb);
     }, function(cb) {

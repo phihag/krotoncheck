@@ -100,7 +100,7 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 			if (tm.ts > ve.parsed_enddate) {
 				const message = (
 					'(' + ve.memberid + ') ' + ve.firstname + ' ' + ve.lastname +
-					' ist nur bis zum ' + ve.startdate +
+					' ist nur bis zum ' + ve.enddate +
 					' für (' + ve.clubcode + ') ' + ve.clubname +
 					' spielberechtigt, hat aber danach am ' +
 					tm.spieldatum + ' gespielt'

@@ -1,5 +1,3 @@
-download buli stuff as well
-
 add more tests
 	add tests for buli festgespielt
 	add buli matches to normal matches with buli marker
@@ -20,10 +18,13 @@ add more tests
 		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
 	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD
 	Hallenänderung (siehe E-Mail Bernd)
+	keine SR in der RL nur wenn Detailergebnis vorliegt
+		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=60
 
 fine-grained sending facilities
 	only to Bezirk
 	only to StB
+
 render VRL (Nils Falkenrich)
 render player (include all VRL entries)
 link to render

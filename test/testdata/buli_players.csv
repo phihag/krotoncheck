@@ -1,0 +1,16 @@
+spielerid;clubid;clubname;name;vorname;gebdatum;sex;nat;akl;jkz1;kz;privacystatus
+01-tt-buli-m1;01-tt;TopTeam;01-tt-buli-m1 nname;01-tt-buli-m1 vname;;M;;;;;
+01-tt-buli-m2;01-tt;TopTeam;01-tt-buli-m2 nname;01-tt-buli-m2 vname;;M;;;;;
+01-tt-buli-m3;01-tt;TopTeam;01-tt-buli-m3 nname;01-tt-buli-m3 vname;;M;;;;;
+01-tt-buli-m4;01-tt;TopTeam;01-tt-buli-m4 nname;01-tt-buli-m4 vname;;M;;;;;
+01-tt-buli-m5;01-tt;TopTeam;01-tt-buli-m5 nname;01-tt-buli-m5 vname;;M;;;;;
+01-tt-buli-m6;01-tt;TopTeam;01-tt-buli-m6 nname;01-tt-buli-m6 vname;;M;;;;;
+01-tt-buli-f1;01-tt;TopTeam;01-tt-buli-f1 nname;01-tt-buli-f1 vname;;F;;;;;
+01-tt-buli-f2;01-tt;TopTeam;01-tt-buli-f2 nname;01-tt-buli-f2 vname;;F;;;;;
+09-somewhere-m1;09-somewhere;SomeWhere;09-somewhere-m1 nname;09-somewhere-m1 vname;;M;;;;;
+09-somewhere-m2;09-somewhere;SomeWhere;09-somewhere-m2 nname;09-somewhere-m2 vname;;M;;;;;
+09-somewhere-m3;09-somewhere;SomeWhere;09-somewhere-m3 nname;09-somewhere-m3 vname;;M;;;;;
+09-somewhere-m4;09-somewhere;SomeWhere;09-somewhere-m4 nname;09-somewhere-m4 vname;;M;;;;;
+09-somewhere-m5;09-somewhere;SomeWhere;09-somewhere-m5 nname;09-somewhere-m5 vname;;M;;;;;
+09-somewhere-f1;09-somewhere;SomeWhere;09-somewhere-f1 nname;09-somewhere-f1 vname;;F;;;;;
+09-somewhere-f2;09-somewhere;SomeWhere;09-somewhere-f2 nname;09-somewhere-f2 vname;;F;;;;;

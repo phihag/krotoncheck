@@ -1,5 +1,8 @@
 add more tests
 	add tests for buli festgespielt
+		test fixed in lower league before bundesliga
+		test fixed at wrong date
+	festgespielt: need to dedup buli <-> nonbuli?
 	add buli matches to normal matches with buli marker
 	festgespielt BuLi
 	festgespielt aber kein fixed_in
@@ -25,6 +28,7 @@ fine-grained sending facilities
 	only to Bezirk
 	only to StB
 
+test that it still works without buli
 render VRL (Nils Falkenrich)
 render player (include all VRL entries)
 link to render

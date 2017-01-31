@@ -14,7 +14,10 @@ const CHECKS_DIR = path.join(__dirname, 'expected');
 
 
 function setup_test(callback) {
-	loader.load_data(path.join(__dirname, 'testdata'), data_access.ALL_TASKS, function(err, data) {
+	const test_tasks = data_access.ALL_TASKS.slice();
+	test_tasks.push.apply(test_tasks, ['buli_playermatches', 'buli_teammatches', 'buli_players', 'buli_teams']);
+
+	loader.load_data(path.join(__dirname, 'testdata'), test_tasks, function(err, data) {
 		if (err) return callback(err);
 		const season = {
 			key: 'testseason',

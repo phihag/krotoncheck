@@ -32,9 +32,6 @@ function parse_bool(val) {
 
 function enrich(season) {
 	const data = season.data;
-	if (season.buli_season) {
-		enrich(season.buli_season);
-	}
 
 	const vrls_by_clubs = new Map();
 	for (let cr of data.clubranking) {
@@ -64,19 +61,37 @@ function enrich(season) {
 		line_vrl.entries.push(cr);
 	}
 
+	for (const p of data.buli_players) {
+		p.is_buli = true;
+	}
+	for (const tm of data.buli_teammatches) {
+		tm.is_buli = true;
+	}
+	for (const t of data.buli_teams) {
+		t.is_buli = true;
+	}
+
 	const club_by_id = new Map();
 	for (let c of data.clubs) {
 		club_by_id.set(c.code, c);
 	}
 
 	const player_by_id = new Map();
-	for (let p of data.players) {
+	for (const p of data.players) {
 		player_by_id.set(p.spielerid, p);
+	}
+	const buli_player_by_id = new Map();
+	for (const p of data.buli_players) {
+		buli_player_by_id.set(p.spielerid, p);
 	}
 
 	const team_by_id = new Map();
-	for (let t of data.teams) {
+	for (const t of data.teams) {
 		team_by_id.set(t.code, t);
+	}
+	const buli_team_by_id = new Map();
+	for (const t of data.buli_teams) {
+		buli_team_by_id.set(t.code, t);
 	}
 
 	const teams_by_club = new Map();
@@ -91,8 +106,12 @@ function enrich(season) {
 	}
 
 	const teammatch_by_id = new Map();
-	for (let tm of data.teammatches) {
+	for (const tm of data.teammatches) {
 		teammatch_by_id.set(tm.matchid, tm);
+	}
+	const buli_teammatch_by_id = new Map();
+	for (const tm of data.buli_teammatches) {
+		buli_teammatch_by_id.set(tm.matchid, tm);
 	}
 
 	for (const tm of data.teammatches) {
@@ -100,7 +119,7 @@ function enrich(season) {
 	}
 
 	const playermatches_by_teammatchid = new Map();
-	for (let pm of data.playermatches) {
+	for (const pm of data.playermatches) {
 		let pms = playermatches_by_teammatchid.get(pm.teammatchid);
 		if (! pms) {
 			pms = [];
@@ -133,6 +152,17 @@ function enrich(season) {
 		pm.is_hr = (tm.runde === 'H');
 		all_pms.push(pm);
 	}
+	for (const pm of data.buli_playermatches) {
+		const tm = buli_teammatch_by_id.get(pm.teammatchid);
+		if (!tm) {
+			continue; // Cancelled team and therefore teammatch
+		}
+		pm.is_buli = true;
+		pm.tm = tm;
+		pm.is_hr = (tm.runde === 'H');
+		all_pms.push(pm);
+	}
+
 	all_pms.sort(function(pm1, pm2) {
 		return pm1.tm.ts - pm2.tm.ts;
 	});
@@ -248,8 +278,11 @@ function enrich(season) {
 		};
 	}
 
-	data.get_player = function(player_id) {
-		var res = player_by_id.get(player_id);
+	data.get_player = function(player_id, include_buli) {
+		let res = player_by_id.get(player_id);
+		if (!res && include_buli) {
+			res = buli_player_by_id.get(player_id);
+		}
 		if (!res) {
 			throw new Error('Konnte Spieler ' + JSON.stringify(player_id) + ' nicht finden');
 		}
@@ -279,8 +312,11 @@ function enrich(season) {
 	data.try_get_team = function(team_id) {
 		return team_by_id.get(team_id);
 	};
-	data.get_team = function(team_id) {
+	data.get_team = function(team_id, include_buli) {
 		let res = team_by_id.get(team_id);
+		if (!res && include_buli) {
+			res = buli_team_by_id.get(team_id);
+		}
 		if (!res) {
 			throw new Error('Kann Team ' + team_id + ' nicht finden');
 		}
@@ -304,9 +340,12 @@ function enrich(season) {
 		}
 		return res.get(player_id);
 	};
-	data.try_get_vrl_entry = function(club_id, vrl_type, player_id) {
+	data.try_get_vrl_entry = function(club_id, vrl_type, player_id, allow_no_club) {
 		let club_vrls = vrls_by_clubs.get(club_id);
 		if (!club_vrls) {
+			if (allow_no_club) {
+				return null;
+			}
 			throw new Error('Kann VRLs von Verein ' + club_id + ' nicht finden');
 		}
 		let res = club_vrls.get(vrl_type);
@@ -337,6 +376,9 @@ function enrich(season) {
 		}
 		if (/^01-M[0-9]+$/.test(staffelcode)) {
 			return 'Mini';
+		}
+		if (/^00-BL1|00-B2N|00-B2S$/.test(staffelcode)) {
+			return 'Bundesliga';
 		}
 		throw new Error('Unknown league code ' + JSON.stringify(staffelcode));
 	};

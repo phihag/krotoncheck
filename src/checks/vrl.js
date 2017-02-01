@@ -1,9 +1,10 @@
 'use strict';
 // Check the VRLs themselves
 
-var data_access = require('../data_access');
-var utils = require('../utils');
+const data_access = require('../data_access');
+const utils = require('../utils');
 
+const laws = require('../laws');
 
 function count_o19_players(players) {
 	let res = 0;
@@ -15,7 +16,9 @@ function count_o19_players(players) {
 	return res;
 }
 
-function* check_team(data, vrl, team_id, players) {
+function* check_team(season, vrl, team_id, players) {
+	const data = season.data;
+
 	if ((vrl.typeid == 9) || (vrl.typeid == 11)) {
 		// Men O19
 		let pcount = count_o19_players(players);
@@ -121,7 +124,8 @@ function* check_u19e(data, vrl, line) {
 	}
 }
 
-function* check_in_youth_team(data, is_hr, line) {
+function* check_in_youth_team(season, is_hr, line) {
+	const data = season.data;
 	let vrl_type;
 	let top = 4;
 	const expect_team = line.vkz1;
@@ -223,6 +227,18 @@ function* check_in_youth_team(data, is_hr, line) {
 	}
 
 	if (team.Status === 'Mannschaftsrückzug') {
+		// Retreated in RR?
+		if (is_hr) {
+			const forced = laws.forced_retreat_date(data, team.code);
+			if (forced && season.lastdate_hr) {
+				const l_hr = utils.parse_date(season.lastdate_hr);
+				if (l_hr < forced.ts) {
+					// Irrelevant
+					return;
+				}
+			}
+		}
+
 		const message = (
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
@@ -442,7 +458,7 @@ function* check_vrl(season, vrl) {
 				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
 					yield* check_u19e(data, vrl, line);
 				} else if ((line.vkz1 === 'J1') || (line.vkz1 === 'M1')) {
-					yield* check_in_youth_team(data, is_hr, line);
+					yield* check_in_youth_team(season, is_hr, line);
 				} else if (line.jkz1 === 'SE') {
 					// Special excemption by federation
 				} else if(line.jkz1) {
@@ -553,7 +569,7 @@ function* check_vrl(season, vrl) {
 			// Bundesliga
 			continue;
 		}
-		yield* check_team(data, vrl, team_id, players);
+		yield* check_team(season, vrl, team_id, players);
 	}
 }
 

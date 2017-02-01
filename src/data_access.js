@@ -234,9 +234,27 @@ function enrich(season) {
 		}
 	}
 
+	const teammatch_by_team_id = new Map();
+	for (const tm of data.teammatches) {
+		for (let i = 1;i <= 2; i++) {
+			const team_id = tm[`team${i}id`];
+			if (team_id) {
+				let tms = teammatch_by_team_id.get(team_id);
+				if (!tms) {
+					tms = [];
+					teammatch_by_team_id.set(team_id, tms);
+				}
+				tms.push(tm);
+			}
+		}
+	}
+	for (const tms of teammatch_by_team_id.values()) {
+		tms.sort((tm1, tm2) => tm1.ts - tm2.ts);
+	}
+
 	data.active_playermatches = [];
 	data.played_playermatches = [];
-	var playermatch_by_id = new Map();
+	const playermatch_by_id = new Map();
 	for (let pm of data.playermatches) {
 		for (let int_key of [
 				'matchtypeno',
@@ -289,14 +307,21 @@ function enrich(season) {
 		return res;
 	};
 	data.get_teammatch = function(teammatch_id) {
-		var res = teammatch_by_id.get(teammatch_id);
+		const res = teammatch_by_id.get(teammatch_id);
 		if (!res) {
 			throw new Error('Konnte Wettkampf ' + JSON.stringify(teammatch_id) + ' nicht finden');
 		}
 		return res;
 	};
+	data.get_teammatches_by_team_id = function(team_id) {
+		const res = teammatch_by_team_id.get(team_id);
+		if (!res) {
+			return null;
+		}
+		return res;
+	};
 	data.get_match = function(match_id) {
-		var res = playermatch_by_id.get(match_id);
+		const res = playermatch_by_id.get(match_id);
 		if (!res) {
 			throw new Error('Konnte Spiel ' + JSON.stringify(match_id) + ' nicht finden');
 		}

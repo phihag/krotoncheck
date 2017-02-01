@@ -108,7 +108,25 @@ function get_vrl_type(league_type, tm, sex) {
 	}
 }
 
+function forced_retreat(data, team_id) {
+	const tms = data.get_teammatches_by_team_id(team_id);
+	if (!tms) {
+		return null; // No matches, so we don't know, but likely very early!?
+	}
+	let strikes = 0;
+	for (const tm of tms) {
+		if ((tm.flag_ok_gegen_team1 && (tm.team1id === team_id)) || (tm.flag_ok_gegen_team2 && (tm.team2id === team_id))) {
+			strikes++;
+			if (strikes === 3) {
+				return tm;
+			}
+		}
+	}
+	return null;
+}
+
 module.exports = {
+	forced_retreat,
 	get_vrl_type,
 	is_backup,
 	is_doubles,

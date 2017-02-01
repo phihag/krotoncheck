@@ -1,10 +1,9 @@
+Adler Weseke: Datum des 3. Nichtantritts bei Mannschaftrückzug
 add more tests
 	add tests for buli festgespielt
 		test fixed in lower league before bundesliga
 		test fixed at wrong date
-	festgespielt: need to dedup buli <-> nonbuli?
-	add buli matches to normal matches with buli marker
-	festgespielt BuLi
+		test fixed in multiple Bundesliga teams (first 2. then 1. or so)
 	festgespielt aber kein fixed_in
 		look at startdate
 		look at matches after festgespielt
@@ -28,6 +27,7 @@ fine-grained sending facilities
 	only to Bezirk
 	only to StB
 
+recognize empty files and retry
 test that it still works without buli
 render VRL (Nils Falkenrich)
 render player (include all VRL entries)

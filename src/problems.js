@@ -3,6 +3,7 @@
 const assert = require('assert');
 
 const utils = require('./utils.js');
+const data_utils = require('./data_utils.js');
 
 
 function enrich(season, found) {
@@ -239,7 +240,7 @@ function color_render(problems_struct) {
 				}
 
 				const tm = g.teammatch;
-				const match_name = tm.hrt ? (tm.team2name + ' - ' + tm.team1name) : (tm.team1name + ' - ' + tm.team2name);
+				const match_name = data_utils.tm_str(tm);
 				g.stb_mail_subject = encodeURIComponent(
 					match_name
 				);

@@ -1,7 +1,7 @@
 'use strict';
 // Check the VRLs themselves
 
-const data_access = require('../data_access');
+const data_utils = require('../data_utils');
 const utils = require('../utils');
 
 const laws = require('../laws');
@@ -9,7 +9,7 @@ const laws = require('../laws');
 function count_o19_players(players) {
 	let res = 0;
 	for (const p of players) {
-		if (data_access.o19_is_regular(p)) {
+		if (data_utils.o19_is_regular(p)) {
 			res++;
 		}
 	}
@@ -83,7 +83,7 @@ function* check_u19e(data, vrl, line) {
 	const teams = data.get_teams_by_club(line.playerclubcode);
 	let withdrawn_all = undefined;
 	for (const t of teams) {
-		const lid = data.league_type(t.DrawID);
+		const lid = data_utils.league_type(t.DrawID);
 		if ((lid !== 'Mini') && (lid !== 'U19')) {
 			continue;
 		}
@@ -182,7 +182,7 @@ function* check_in_youth_team(season, is_hr, line) {
 			return;
 		}
 
-		var pos = data_access.parse_int(ve.position);
+		var pos = data_utils.parse_int(ve.position);
 		if (pos > top) {
 			const message = (
 				'Spieler' + (line.sex === 'F' ? 'in' : '') +
@@ -271,7 +271,7 @@ function* check_in_youth_team(season, is_hr, line) {
 		return true;
 	}).map(pm => pm.tm));
 	const o19_tms = tms.filter(tm =>
-		data.league_type(tm.staffelcode) === 'O19'
+		data_utils.league_type(tm.staffelcode) === 'O19'
 	);
 	for (let i = 2;i < o19_tms.length;i++) {
 		const o19tm = o19_tms[i];

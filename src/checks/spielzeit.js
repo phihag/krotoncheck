@@ -1,6 +1,8 @@
 'use strict';
 
-var utils = require('../utils');
+const utils = require('../utils');
+const data_utils = require('../data_utils');
+
 
 function has_late_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, ntext => /.*F04-[0-9]{1,5}-/.test(ntext));
@@ -13,7 +15,7 @@ function* check_tm(season, tm) {
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
 	const REPORT_TEAM_RLOL = 6 * HOUR;
 
-	const league_type = data.league_type(tm.staffelcode);
+	const league_type = data_utils.league_type(tm.staffelcode);
 	const original_ts = utils.parse_date(tm.datum_verbandsansetzung);
 	const original_weekday = utils.weekday(original_ts);
 	const original_timestr = utils.ts2timestr(original_ts);

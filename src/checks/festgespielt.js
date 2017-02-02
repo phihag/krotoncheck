@@ -1,6 +1,7 @@
 'use strict';
 
 const laws = require('../laws');
+const data_utils = require('../data_utils');
 
 
 function* check_round(data, player, matches, o19) {
@@ -10,7 +11,7 @@ function* check_round(data, player, matches, o19) {
 
 	for (const pm of matches) {
 		const tm = pm.tm;
-		const match_league_type = data.league_type(tm.staffelcode);
+		const match_league_type = data_utils.league_type(tm.staffelcode);
 		if (((match_league_type === 'O19') || (match_league_type === 'Bundesliga')) !== (!!o19)) {
 			continue; // Check later
 		}

@@ -1,8 +1,9 @@
 'use strict';
 
-var assert = require('assert');
+const assert = require('assert');
 
-var utils = require('./utils');
+const utils = require('./utils');
+const data_utils = require('./data_utils');
 
 
 const ALL_TASKS = [
@@ -20,22 +21,12 @@ const ALL_TASKS = [
 ];
 
 
-function parse_bool(val) {
-	if ((val === 'true') || (val === 'True')) {
-		return true;
-	} else if ((val === 'false') || (val === 'False')) {
-		return false;
-	} else {
-		throw new Error('Invalid boolean value ' + JSON.stringify(val));
-	}
-}
-
 function enrich(season) {
 	const data = season.data;
 
 	const vrls_by_clubs = new Map();
 	for (let cr of data.clubranking) {
-		cr.typeid = parse_int(cr.typeid);
+		cr.typeid = data_utils.parse_int(cr.typeid);
 		for (const date_key of ['fixed_from', 'startdate', 'enddate']) {
 			if (cr[date_key]) {
 				const ts = utils.parse_date(cr[date_key]);
@@ -215,7 +206,7 @@ function enrich(season) {
 				'flag_umwertung_gegen_beide',
 				'hrt',
 				]) {
-			tm[bool_key] = parse_bool(tm[bool_key]);
+			tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
 		}
 
 		let t1 = team_by_id.get(tm.team1id);
@@ -266,10 +257,10 @@ function enrich(season) {
 				'set2team2',
 				'set3team1',
 				'set3team2']) {
-			pm[int_key] = parse_int(pm[int_key]);
+			pm[int_key] = data_utils.parse_int(pm[int_key]);
 		}
 		for (let bool_key of ['flag_keinspiel_keinespieler', 'flag_keinspiel_keinspieler_team1', 'flag_keinspiel_keinspieler_team2', 'flag_aufgabe_team1', 'flag_aufgabe_team2', 'flag_umwertung_gegen_team1', 'flag_umwertung_gegen_team2']) {
-			pm[bool_key] = parse_bool(pm[bool_key]);
+			pm[bool_key] = data_utils.parse_bool(pm[bool_key]);
 		}
 
 		playermatch_by_id.set(pm.matchid, pm);
@@ -392,21 +383,6 @@ function enrich(season) {
 		}
 		return res;
 	};
-	data.league_type = function(staffelcode) {
-		if (/^01-[0-9]+$/.test(staffelcode)) {
-			return 'O19';
-		}
-		if (/^01-[JS][0-9]+$/.test(staffelcode)) {
-			return 'U19';
-		}
-		if (/^01-M[0-9]+$/.test(staffelcode)) {
-			return 'Mini';
-		}
-		if (/^00-BL1|00-B2N|00-B2S$/.test(staffelcode)) {
-			return 'Bundesliga';
-		}
-		throw new Error('Unknown league code ' + JSON.stringify(staffelcode));
-	};
 	data.get_stb = function(tm) {
 		// Careful: May not be present for old leagues
 		const res = stbs_by_league_code.get(tm.staffelcode);
@@ -456,7 +432,7 @@ function enrich(season) {
 		let max_team = null;
 		let max_num = Number.POSITIVE_INFINITY;
 		for (const t of teams) {
-			let team_score = team2num(t);
+			let team_score = data_utils.team2num(t);
 
 			if (data.get_region(t.eventname) === 'NRW') {
 				team_score += 100000;
@@ -541,52 +517,7 @@ function enrich(season) {
 	};
 }
 
-function team2num(team) {
-	const m = /^([JSM]?)([0-9]+)$/.exec(team.number);
-	if (!m) {
-		throw new Error('Cannot parse number ' + team.number);
-	}
-	return ({
-		'': 0,
-		'J': 1000,
-		'S': 2000,
-		'M': 3000,
-	}[m[1]] + parseInt(m[2]));
-}
-
-function teamid2clubid(team_id) {
-	const m = /^(01-[0-9]+)-[MSJ]?[0-9]+$/.exec(team_id);
-	if (!m) {
-		throw new Error('Cannot parse team id ' + team_id);
-	}
-	return m[1];
-}
-
-function parse_int(s) {
-	let res = parseInt(s, 10);
-	if (isNaN(s)) {
-		throw new Error('Failed to parse integer from ' + JSON.stringify(s));
-	}
-	return res;
-}
-
-function o19_is_regular(p) {
-	// Nichtstammspieler
-	if (p.vkz1 === 'N') {
-		return false;
-	}
-	// Jugendspieler
-	if ((p.vkz1 === 'J1') || (p.vkz1 === 'S1') || (p.vkz1 === 'M1')) {
-		return false;
-	}
-	return true;
-}
-
 module.exports = {
 	enrich,
 	ALL_TASKS,
-	parse_bool,
-	parse_int,
-	o19_is_regular,
-	teamid2clubid,
 };

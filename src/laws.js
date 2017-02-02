@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-const data_access = require('./data_access');
+const data_utils = require('./data_utils');
 
 
 const EVENT_RE = /^(O19|U(?:09|11|13|15|17|19))-(?:RL|OL|(?:S1|S2|N1|N2)-(KK|KL|BK|BL|LL|VL|Mini))$/;
@@ -12,7 +12,7 @@ const EVENT_RE = /^(O19|U(?:09|11|13|15|17|19))-(?:RL|OL|(?:S1|S2|N1|N2)-(KK|KL|
 function _parse_youth_team(team, event_m) {
 	const m = /^([SJM])([0-9]+)$/.exec(team.number);
 	assert(m);
-	const team_num = data_access.parse_int(m[2]);
+	const team_num = data_utils.parse_int(m[2]);
 	if (m[1] === 'J') {
 		assert(event_m[1] === 'U19');
 		return [1, team_num];
@@ -54,7 +54,7 @@ function is_backup(registered_in, played_in) {
 
 	if (played_m[1] === 'O19') {
 		assert(registered_m[1] === 'O19');
-		return (data_access.parse_int(registered_in.number) > data_access.parse_int(played_in.number));
+		return (data_utils.parse_int(registered_in.number) > data_utils.parse_int(played_in.number));
 	}
 
 	const [played_age_idx, played_team_idx] = _parse_youth_team(played_in, played_m);

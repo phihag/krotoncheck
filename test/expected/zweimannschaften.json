@@ -1,8 +1,9 @@
 [
 
 {
-	"message": "Zwei Mannschaften eines Vereins sollten immer zuerst gegeneinander spielen (§35.5 SpO). TVR 4 - TVR 5 wurde erst 18.11.2016 18:00:00 gespielt, nach TVR 5 - NeverPlay 1 am 18.08.2016 18:00:00.",
-	"teammatch_id": "25"
+	"message": "Zwei Mannschaften eines Vereins sollten immer zuerst gegeneinander spielen (§35.5 SpO). TVR 4 - TVR 5 wurde erst am 18.11.2016 18:00:00 gespielt, nach TVR 5 - NeverPlay 1 am 18.08.2016 18:00:00.",
+	"teammatch_id": "25",
+	"teammatch2_id": "22"
 }
 
 ]

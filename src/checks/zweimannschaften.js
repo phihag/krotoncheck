@@ -25,13 +25,15 @@ function* get_double_teams(data) {
 
 	for (const [gid, g] of groups.entries()) {
 		for (const teams of g.values()) {
+			if (teams.length === 1) {
+				continue;
+			}
+
 			if (['U19', 'Mini'].includes(data_utils.league_type(gid)) && (teams.length > 2)) {
 				continue; // Do not check youth teams when >= 3 teams of the same club are in one group
 			}
 
-			if (teams.length > 1) {
-				yield* teams;
-			}
+			yield* teams;
 		}
 	}
 }
@@ -53,11 +55,12 @@ function* check_team(data, team) {
 				if (played_other) {
 					const message = (
 						'Zwei Mannschaften eines Vereins sollten immer zuerst gegeneinander spielen (§35.5 SpO). ' +
-						data_utils.tm_str(tm) + ' wurde erst ' + utils.ts2destr(tm.ts) + ' gespielt, nach ' +
+						data_utils.tm_str(tm) + ' wurde erst am ' + utils.ts2destr(tm.ts) + ' gespielt, nach ' +
 						data_utils.tm_str(played_other) + ' am ' + utils.ts2destr(played_other.ts) + '.'
 					);
 					yield {
 						teammatch_id: tm.matchid,
+						teammatch2_id: played_other.matchid,
 						message,
 					};
 					continue; // Do not report any more for this round

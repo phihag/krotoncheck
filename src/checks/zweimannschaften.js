@@ -5,13 +5,28 @@ const data_utils = require('../data_utils');
 const utils = require('../utils');
 
 
-function* get_double_teams(data) {
+function* get_double_teams(season) {
+	const eligible_youth_teams = (
+		season.qualifying_youth_groups ?
+		season.qualifying_youth_groups.split(',').map(s => s.trim()) :
+		[]);
+
 	const groups = new Map(); // Contents: Map clubCode -> array of teams
-	for (const team of data.teams) {
-		let g = groups.get(team.DrawID);
+	for (const team of season.data.teams) {
+		const gid = team.DrawID;
+		const short_gid = /^01-([JSM](?:[0-9]+))$/.exec(gid)[1];
+		const ltype = data_utils.league_type(gid);
+		if (
+				(!eligible_youth_teams.includes(gid)) &&
+				(!eligible_youth_teams.includes(short_gid)) &&
+				['U19', 'Mini'].includes(ltype)) {
+			continue; // Do not check youth teams (§35.6)
+		}
+
+		let g = groups.get(gid);
 		if (!g) {
 			g = new Map();
-			groups.set(team.DrawID, g);
+			groups.set(gid, g);
 		}
 
 		let by_club = g.get(team.clubcode);
@@ -27,10 +42,6 @@ function* get_double_teams(data) {
 		for (const teams of g.values()) {
 			if (teams.length === 1) {
 				continue;
-			}
-
-			if (['U19', 'Mini'].includes(data_utils.league_type(gid)) && (teams.length > 2)) {
-				continue; // Do not check youth teams when >= 3 teams of the same club are in one group
 			}
 
 			yield* teams;
@@ -73,7 +84,7 @@ function* check_team(data, team) {
 }
 
 module.exports = function*(season) {
-	const double_teams = get_double_teams(season.data);
+	const double_teams = get_double_teams(season);
 	for (const team of double_teams) {
 		yield* check_team(season.data, team);
 	}

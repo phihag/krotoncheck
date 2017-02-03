@@ -112,6 +112,7 @@ function change_handler(req, res, next) {
 			'lastdate_hr',
 			'tournament_id',
 			'buli_tournament_id',
+			'qualifying_youth_groups',
 			]) {
 		fields[field_name] = req.body[field_name];
 	}

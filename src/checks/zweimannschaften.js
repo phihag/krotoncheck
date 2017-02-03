@@ -6,7 +6,7 @@ const utils = require('../utils');
 
 
 function* get_double_teams(season) {
-	const eligible_youth_teams = (
+	const eligible_groups = (
 		season.qualifying_youth_groups ?
 		season.qualifying_youth_groups.split(',').map(s => s.trim()) :
 		[]);
@@ -14,13 +14,14 @@ function* get_double_teams(season) {
 	const groups = new Map(); // Contents: Map clubCode -> array of teams
 	for (const team of season.data.teams) {
 		const gid = team.DrawID;
-		const short_gid = /^01-([JSM](?:[0-9]+))$/.exec(gid)[1];
 		const ltype = data_utils.league_type(gid);
-		if (
-				(!eligible_youth_teams.includes(gid)) &&
-				(!eligible_youth_teams.includes(short_gid)) &&
-				['U19', 'Mini'].includes(ltype)) {
-			continue; // Do not check youth teams (§35.6)
+		if (['U19', 'Mini'].includes(ltype)) {
+			const short_gid_m = /^01-([JSM](?:[0-9]+))$/.exec(gid);
+			const short_gid = short_gid_m ? short_gid_m[1] : null;
+
+			if (!eligible_groups.includes(gid) && !eligible_groups.includes(short_gid)) {
+				continue; // Do not check youth teams unless they offer qualification for BMM/WDMM (§35.6)
+			}
 		}
 
 		let g = groups.get(gid);
@@ -38,7 +39,7 @@ function* get_double_teams(season) {
 		by_club.push(team);
 	}
 
-	for (const [gid, g] of groups.entries()) {
+	for (const g of groups.values()) {
 		for (const teams of g.values()) {
 			if (teams.length === 1) {
 				continue;

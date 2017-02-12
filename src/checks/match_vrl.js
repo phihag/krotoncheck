@@ -67,7 +67,7 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 			}
 
 			const message = (
-				'Kein Eintrag für ' + data.player_str(player) +
+				'Kein Eintrag für ' + data_utils.player_str(player) +
 				' in ' + data.vrl_name(vrl_type) +
 				' von ' + team.name + '.');
 			yield {
@@ -301,8 +301,8 @@ function* check_all(data, tm, pms, team_idx) {
 
 				const message = (
 						'Einzel falsch aufgestellt: ' +
-						data.player_str(p1) + ' ist VRL #' + mr1.ratings[0] + ' und hat ' + data.match_name(mr1.pm) + ' gespielt. ' +
-						data.player_str(p2) + ' ist VRL #' + mr2.ratings[0] + ' und hat ' + data.match_name(mr2.pm) + ' gespielt.');
+						data_utils.player_str(p1) + ' ist VRL #' + mr1.ratings[0] + ' und hat ' + data.match_name(mr1.pm) + ' gespielt. ' +
+						data_utils.player_str(p2) + ' ist VRL #' + mr2.ratings[0] + ' und hat ' + data.match_name(mr2.pm) + ' gespielt.');
 				yield {
 					teammatch_id: tm.matchid,
 					message: message,

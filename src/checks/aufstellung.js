@@ -1,6 +1,8 @@
 'use strict';
 
+const data_utils = require('../data_utils');
 const laws = require('../laws');
+
 
 function* check_tm(data, tm, pms, team_idx) {
 	const matches_by_player = new Map();
@@ -18,7 +20,7 @@ function* check_tm(data, tm, pms, team_idx) {
 					'Nur 1 Spieler im ' +
 					data.match_name(pm) + ' für ' +
 					tm[`team${team_idx}name`] + ' (' + tm[`team${team_idx}id`] + '): ' +
-					data.player_str(present_player)
+					data_utils.player_str(present_player)
 				);
 				yield {
 					teammatch_id: pm.teammatchid,
@@ -45,7 +47,7 @@ function* check_tm(data, tm, pms, team_idx) {
 		if ((pms.length >= 3) && (!pms.every(pm => pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler))) {
 			const player = data.get_player(pcode);
 			const message = (
-				data.player_str(player) + ' hat ' + pms.length + ' Spiele ' +
+				data_utils.player_str(player) + ' hat ' + pms.length + ' Spiele ' +
 				'(' + pms.map(data.match_name).join(', ') + ') ' +
 				'gespielt (§57.3a SpO)'
 			);
@@ -64,7 +66,7 @@ function* check_tm(data, tm, pms, team_idx) {
 			if (played.includes(pm.disziplin)) {
 				const player = data.get_player(pcode);
 				const message = (
-					data.player_str(player) + ' hat ' +
+					data_utils.player_str(player) + ' hat ' +
 					pms.map(data.match_name).join(' und ') +
 					' gespielt (Verstoß gegen §57.3b SpO)'
 				);

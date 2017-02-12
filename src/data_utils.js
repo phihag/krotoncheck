@@ -81,12 +81,17 @@ function league_type(staffelcode) {
 	throw new Error('Unknown league code ' + JSON.stringify(staffelcode));
 }
 
+function player_str(player) {
+	return player.vorname + ' ' + player.name + ' (' + player.spielerid + ')';
+}
+
 module.exports = {
 	league_type,
 	matches_by_round,
 	o19_is_regular,
 	parse_bool,
 	parse_int,
+	player_str,
 	team2num,
 	teamid2clubid,
 	tm_str,

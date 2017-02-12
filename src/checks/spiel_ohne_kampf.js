@@ -1,5 +1,8 @@
 'use strict';
 
+const data_utils = require('../data_utils');
+
+
 function* check_both(data, pm) {
 	if (! pm.flag_keinspiel_keinespieler) {
 		return;
@@ -45,10 +48,10 @@ function* check(data, pm, team_idx) {
 
 	if (pm[`team${team_idx}spieler1spielerid`]) {
 		const player1 = data.get_player(pm[`team${team_idx}spieler1spielerid`]);
-		let player_str = data.player_str(player1);
+		let player_str = data_utils.player_str(player1);
 		if (pm[`team${team_idx}spieler2spielerid`]) {
 			const player2 = data.get_player(pm[`team${team_idx}spieler2spielerid`]);
-			player_str += ' / ' + data.player_str(player2);
+			player_str += ' / ' + data_utils.player_str(player2);
 		}
 
 		const message = (

@@ -27,7 +27,7 @@ function enrich(season, found) {
 				const player = data.get_player(p.player_id);
 				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
 				p.region = 'VRL ' + data.get_club_region(p.clubcode);
-				p.header = data.player_str(player);
+				p.header = data_utils.player_str(player);
 			} else {
 				assert(p.type === 'vrl');
 				assert(p.vrl_typeid);

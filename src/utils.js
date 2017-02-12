@@ -224,6 +224,10 @@ function ts2dstr(ts) {
     return german_tz(ts, TZ_ID, '%d.%m.%Y');
 }
 
+function same_day(ts1, ts2) {
+    return ts2dstr(ts1) === ts2dstr(ts2);
+}
+
 function zip(...items) {
     return items[0].map((_, idx) => items.map(ar => ar[idx]));
 }
@@ -257,6 +261,7 @@ module.exports = {
     pad,
     parse_date,
     render_json,
+    same_day,
     sha512,
     sort_by,
     today_iso8601,

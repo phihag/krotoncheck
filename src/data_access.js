@@ -108,6 +108,9 @@ function enrich(season) {
 	for (const tm of data.teammatches) {
 		tm.ts = utils.parse_date(tm.spieldatum);
 	}
+	for (const tm of data.buli_teammatches) {
+		tm.ts = utils.parse_date(tm.spieldatum);
+	}
 
 	const playermatches_by_teammatchid = new Map();
 	for (const pm of data.playermatches) {
@@ -372,9 +375,6 @@ function enrich(season) {
 	};
 	data.player_name = function(p) {
 		return p.vorname + ' ' + p.name;
-	};
-	data.player_str = function(p) {
-		return p.vorname + ' ' + p.name + ' (' + p.spielerid + ')';
 	};
 	data.match_name = function(pm) {
 		var res = pm.disziplin;

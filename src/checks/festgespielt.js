@@ -1,7 +1,55 @@
 'use strict';
 
-const laws = require('../laws');
 const data_utils = require('../data_utils');
+const laws = require('../laws');
+const utils = require('../utils');
+
+
+function* check_fixed_date(player, team, vrl_entry, tm) {
+	if (!vrl_entry.fixed_from) {
+		const message = (
+			data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
+			'(' + team.code + ') ' + team.name + ' festgespielt, ' +
+			'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' fehlt das Startdatum.'
+		);
+		yield {
+			type: 'vrl',
+			teammatch_id: tm.matchid,
+			player_id: player.spielerid,
+			clubcode: vrl_entry.clubcode,
+			vrl_typeid: vrl_entry.typeid,
+			message,
+		};
+		return;
+	}
+
+	if (vrl_entry.comment) {
+		// May have filled up a team
+		return;
+	}
+
+	const expected = utils.next_day(tm.ts);
+	const fixed_from = utils.parse_date(vrl_entry.fixed_from);
+	if (!utils.same_day(fixed_from, expected) && !utils.same_day(fixed_from, tm.ts)) {
+		const message = (
+			'Falsches F-Startdatum im Eintrag von ' +
+			data_utils.player_str(player) + ' bei ' +
+			'(' + team.code + ') ' + team.name +
+			' in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ': ' +
+			JSON.stringify(vrl_entry.fixed_from) + ', ' +
+			'richtig wäre ' + JSON.stringify(utils.ts2dstr(expected))
+		);
+		yield {
+			type: 'vrl',
+			teammatch_id: tm.matchid,
+			player_id: player.spielerid,
+			clubcode: vrl_entry.clubcode,
+			vrl_typeid: vrl_entry.typeid,
+			message,
+		};
+	}
+
+}
 
 
 function* check_round(data, player, matches, o19) {
@@ -44,7 +92,7 @@ function* check_round(data, player, matches, o19) {
 			played_else.push(tm);
 			if (played_else.length === 3) {
 				if (vrl_entry.fixed_in === team.number) {
-					// TODO check fixed_at
+					yield* check_fixed_date(player, team, vrl_entry, tm);
 
 					// Correctly fixed here, we're done
 					continue;
@@ -52,7 +100,7 @@ function* check_round(data, player, matches, o19) {
 
 				if (vrl_entry.fixed_in) {
 					const message = (
-						data.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
+						data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
 						'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
 						'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
 						'Fest in ' + JSON.stringify(vrl_entry.fixed_in)
@@ -67,7 +115,7 @@ function* check_round(data, player, matches, o19) {
 					};
 				} else {
 					const message = (
-						data.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
+						data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
 						'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
 						'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
 						'kein F-Kennzeichen'
@@ -105,7 +153,7 @@ function* check_round(data, player, matches, o19) {
 			played_else.push(tm);
 			if (played_else.length === 3) {
 				if (vrl_entry.fixed_in === team.number) {
-					// TODO check fixed_at
+					yield* check_fixed_date(player, team, vrl_entry, tm);
 
 					// Correctly fixed here, we're done
 					continue;
@@ -124,7 +172,7 @@ function* check_round(data, player, matches, o19) {
 				if (incorrect_fix) {
 					if (vrl_entry.fixed_in) {
 						const message = (
-							data.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
+							data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
 							'(' + team.code + ') ' + team.name + ' festgespielt, ' +
 							'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
 							'Fest in ' + JSON.stringify(vrl_entry.fixed_in)
@@ -139,7 +187,7 @@ function* check_round(data, player, matches, o19) {
 						};
 					} else {
 						const message = (
-							data.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
+							data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
 							'(' + team.code + ') ' + team.name + ' festgespielt, ' +
 							'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
 							'kein F-Kennzeichen'

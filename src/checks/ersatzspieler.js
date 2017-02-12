@@ -1,5 +1,8 @@
 'use strict';
 
+const data_utils = require('../data_utils');
+
+
 function all_players(data, tm) {
 	let res = new Set();
 	const pms = data.get_playermatches_by_teammatch_id(tm.matchid);
@@ -61,7 +64,7 @@ module.exports = function*(season) {
 			}
 
 			const message = (
-				'Vorgesehener Ersatzspieler ' + data.player_str(player) + ' eingetzt, aber ' +
+				'Vorgesehener Ersatzspieler ' + data_utils.player_str(player) + ' eingetzt, aber ' +
 				(notes ?
 					'Einsatz nicht in "Besondere Vorkommnisse" erwähnt' :
 					'kein Eintrag "Besondere Vorkommnisse"'));

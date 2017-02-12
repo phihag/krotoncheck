@@ -1,6 +1,8 @@
 'use strict';
-
 // Did a player play multiple times at a day?
+
+const data_utils = require('../data_utils');
+
 
 function extract_date(tm) {
 	const m = /^([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}) [0-9]{2}:[0-9]{2}:[0-9]{2}$/.exec(tm.spieldatum);
@@ -49,7 +51,7 @@ module.exports = function*(season) {
 					if (already_played.team_id !== team_id) {
 						const p = data.get_player(player_id);
 						const message = (
-							data.player_str(p) + ' hat am ' + date + ' für zwei verschiedene Mannschaften gespielt: ' +
+							data_utils.player_str(p) + ' hat am ' + date + ' für zwei verschiedene Mannschaften gespielt: ' +
 							already_played.tm.team1name + ' - ' + already_played.tm.team2name + ' (' + already_played.tm.spieldatum + ')' + ' und ' +
 							tm.team1name + ' - ' + tm.team2name + ' (' + tm.spieldatum + ')'
 						);

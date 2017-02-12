@@ -1,6 +1,7 @@
 'use strict';
 
-var utils = require('../utils');
+const utils = require('../utils');
+const data_utils = require('../data_utils');
 
 
 function round_index(vrl_code) {
@@ -73,7 +74,7 @@ module.exports = function*(season) {
 			}).join(', ');
 			const message = (
 				((player.sex === 'M') ? 'Spieler' : 'Spielerin') + ' ' +
-				data.player_str(player) + ' ' +
+				data_utils.player_str(player) + ' ' +
 				'spielt in der ' + ((round_idx === 0) ? 'Hinrunde' : 'Rückrunde') + ' ' +
 				'für mehr als einen Verein: ' +
 				clubs_str

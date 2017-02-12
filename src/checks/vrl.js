@@ -228,10 +228,10 @@ function* check_in_youth_team(season, is_hr, line) {
 
 	if (team.Status === 'Mannschaftsrückzug') {
 		// Retreated in RR?
-		if (is_hr) {
+		if (is_hr && season.lastdate_hr) {
+			const l_hr = utils.parse_date(season.lastdate_hr);
 			const forced = laws.forced_retreat(data, team.code);
-			if (forced && season.lastdate_hr) {
-				const l_hr = utils.parse_date(season.lastdate_hr);
+			if (forced) {
 				if (l_hr < forced.ts) {
 					// Irrelevant
 					return;

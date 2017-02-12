@@ -57,7 +57,7 @@ function* check_comment(data, pm) {
 	}
 
 	// Already handled?
-	if (data.get_stb_note(pm.teammatchid, text => text.includes('F20-'))) {
+	if (data.get_stb_note(pm.teammatchid, text => /F(?:20|28)-/.test(text))) {
 		return;
 	}
 

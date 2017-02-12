@@ -10,7 +10,7 @@ function* check_fixed_date(player, team, vrl_entry, tm) {
 		const message = (
 			data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
 			'(' + team.code + ') ' + team.name + ' festgespielt, ' +
-			'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' fehlt das Startdatum.'
+			'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' fehlt das "Fest ab"-Datum.'
 		);
 		yield {
 			type: 'vrl',
@@ -32,7 +32,7 @@ function* check_fixed_date(player, team, vrl_entry, tm) {
 	const fixed_from = utils.parse_date(vrl_entry.fixed_from);
 	if (!utils.same_day(fixed_from, expected) && !utils.same_day(fixed_from, tm.ts)) {
 		const message = (
-			'Falsches F-Startdatum im Eintrag von ' +
+			'Falsche "Fest ab"-Angabe im Eintrag von ' +
 			data_utils.player_str(player) + ' bei ' +
 			'(' + team.code + ') ' + team.name +
 			' in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ': ' +

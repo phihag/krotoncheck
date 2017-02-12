@@ -30,6 +30,19 @@ function* check_tm(data, tm, pms, team_idx) {
 			}
 		}
 
+		if (!p1id && !p2id && !pm.flag_keinspiel_keinespieler && !pm[`flag_keinspiel_keinspieler_team${team_idx}`] && (pm.winner != 0)) {
+			const message = (
+				'Spieler von ' + tm[`team${team_idx}name`] + ' (' + tm[`team${team_idx}id`] + ') ' +
+				'fehlen im ' + data.match_name(pm) +
+				' ("Keine Spieler" falsch eingetragen?)'
+			);
+			yield {
+				teammatch_id: pm.teammatchid,
+				match_id: pm.matchid,
+				message: message,
+			};
+		}
+
 		for (const player_id of [p1id, p2id]) {
 			if (! player_id) {
 				continue;

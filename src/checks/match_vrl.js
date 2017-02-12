@@ -5,6 +5,51 @@ const assert = require('assert');
 const data_utils = require('../data_utils');
 const laws = require('../laws');
 
+function* check_min_count(league_type, tm, team, valid_players_by_gender) {
+	const f_count = valid_players_by_gender.F.size;
+	const m_count = valid_players_by_gender.M.size;
+
+
+	if ((m_count + f_count) === 0) {
+		yield {
+			teammatch_id: tm.matchid,
+			message: 'Keine spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (Kampflos falsch eingetragen? Sollte kein Detailergebnis haben)',
+		};
+		return;
+	}
+
+	if (/^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname)) {
+		if ((m_count < 4) || (f_count < 2)) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§58.1 SpO)',
+			};
+		}
+	} else if (league_type === 'Mini') {
+		if (f_count + m_count < 3) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§15.4 JSpO)',
+			};
+		}
+	} else {
+		// O19 or J or S
+		if (f_count === 0) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Keine spielberechtigte Dame von ' + team.name + ' aufgestellt (§57.5 SpO)',
+			};
+		}
+
+		if ((m_count < 2) || ((m_count === 2) && (f_count < 2)) || ((m_count === 3) && (f_count < 1))) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Nicht genügend spielberechtigte Spieler von ' + team.name + ' aufgestellt (§57.4 SpO)',
+			};
+		}
+	}
+}
+
 
 function contains_backup_player(data, tm, players) {
 	const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
@@ -202,38 +247,7 @@ function* check_all(data, tm, pms, team_idx) {
 	}
 
 	// Check that enough non-blacklisted players
-	const f_count = valid_players_by_gender.F.size;
-	const m_count = valid_players_by_gender.M.size;
-	if (/^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname)) {
-		if ((m_count < 4) || (f_count < 2)) {
-			yield {
-				teammatch_id: tm.matchid,
-				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§58.1 SpO)',
-			};
-		}
-	} else if (league_type === 'Mini') {
-		if (f_count + m_count < 3) {
-			yield {
-				teammatch_id: tm.matchid,
-				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§15.4 JSpO)',
-			};
-		}
-	} else {
-		// O19 or J or S
-		if (f_count === 0) {
-			yield {
-				teammatch_id: tm.matchid,
-				message: 'Keine spielberechtigte Dame von ' + team.name + ' aufgestellt (§57.5 SpO)',
-			};
-		}
-
-		if ((m_count < 2) || ((m_count === 2) && (f_count < 2)) || ((m_count === 3) && (f_count < 1))) {
-			yield {
-				teammatch_id: tm.matchid,
-				message: 'Nicht genügend spielberechtigte Spieler von ' + team.name + ' aufgestellt (§57.4 SpO)',
-			};
-		}
-	}
+	yield* check_min_count(league_type, tm, team, valid_players_by_gender);
 
 	// Check that all ratings match
 	for (const discipline in pm_ratings_by_discipline) {

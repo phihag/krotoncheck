@@ -8,7 +8,7 @@ module.exports = function*(season) {
 			continue;
 		}
 
-		if (tm.winner == 0) {
+		if ((tm.winner == 0) || !tm.detailergebnis_eintragedatum) {
 			// Match not played / entered yet
 			continue;
 		}

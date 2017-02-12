@@ -2,18 +2,19 @@
 
 {
 	"clubcode": "01-1009",
-	"message": "01-tt-m5 vor 01-tt-m5 nach (01-tt-m5) hat sich am 24.08.2016 15:00:00 in (01-tt-01) TopTeam 1 festgespielt (Bundesliga!), aber im Eintrag in VRL 9[Hinrunde Herren O19] von (01-1009) Top Team steht kein F-Kennzeichen",
-	"player_id": "01-tt-m5",
-	"teammatch_id": "3",
+	"message": "01-tt-m20 vor 01-tt-m20 nach (01-tt-m20) hat sich am 30.08.2016 18:00:00 in (01-1009-2) TopTeam 2 festgespielt, aber im Eintrag in VRL 9 von (01-1009) Top Team fehlt das Startdatum.",
+	"player_id": "01-tt-m20",
+	"teammatch_id": "21",
 	"type": "vrl",
 	"vrl_typeid": 9
 },
 
+
 {
 	"clubcode": "01-1009",
-	"message": "01-tt-m20 vor 01-tt-m20 nach (01-tt-m20) hat sich am 30.08.2016 18:00:00 in (01-1009-2) TopTeam 2 festgespielt, aber im Eintrag in VRL 9 von (01-1009) Top Team fehlt das Startdatum.",
-	"player_id": "01-tt-m20",
-	"teammatch_id": "21",
+	"message": "01-tt-m5 vor 01-tt-m5 nach (01-tt-m5) hat sich am 24.08.2016 15:00:00 in (01-tt-01) TopTeam 1 festgespielt (Bundesliga!), aber im Eintrag in VRL 9[Hinrunde Herren O19] von (01-1009) Top Team steht kein F-Kennzeichen",
+	"player_id": "01-tt-m5",
+	"teammatch_id": "3",
 	"type": "vrl",
 	"vrl_typeid": 9
 },

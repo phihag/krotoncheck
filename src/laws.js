@@ -86,9 +86,12 @@ function get_vrl_type(league_type, tm, sex) {
 		throw new Error('Ungültige Runde ' + tm.runde);
 	}
 	const is_hr = (tm.runde === 'H');
+	return get_round_vrl_type(league_type, is_hr, sex);
+}
+
+function get_round_vrl_type(league_type, is_hr, sex) {
 	assert(['M', 'F'].includes(sex));
 	const is_m = (sex === 'M');
-
 	if (league_type === 'O19') {
 		if (is_m) {
 			return is_hr ? 9 : 11;
@@ -128,6 +131,7 @@ function forced_retreat(data, team_id) {
 module.exports = {
 	forced_retreat,
 	get_vrl_type,
+	get_round_vrl_type,
 	is_backup,
 	is_doubles,
 };

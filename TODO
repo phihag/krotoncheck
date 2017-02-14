@@ -1,20 +1,12 @@
 add more tests
-	add tests for buli festgespielt
-		test fixed in lower league before bundesliga
-		test fixed at wrong date
-		test fixed in multiple Bundesliga teams (first 2. then 1. or so)
-	festgespielt aber kein fixed_in
-		look at startdate
-		look at matches after festgespielt
-	falsches festgespielt (wenn vkz3 != FIX aber trotzdem fest ab)
+	test fixed in lower league before bundesliga
+	test fixed in multiple Bundesliga teams (first 2. then 1. or so)
+	current fixed-check only for people with vkz3 = FIX
 
-	0 Spieler aber trotzdem gespielt
-		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=7604
+	look at matches after festgespielt
 	Spielstand = Sieger
 	Satzsumme korrekt
 	Nur 2. Doppel / nur 2./3. Einzel etc.
-	wenn Mannschaftsergebnis o.k. dann gar kein Detailergebnis (keine Spiele usw.)
-		http://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=6836
 	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD
 	Hallenänderung (siehe E-Mail Bernd)
 

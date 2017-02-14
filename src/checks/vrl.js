@@ -287,6 +287,31 @@ function* check_in_youth_team(season, is_hr, line) {
 	}
 }
 
+function* check_invalid_date(season, is_o19, line) {
+	if (!line.startdate) {
+		return;
+	}
+
+	const max_date_str = season['lastdate_' + (is_o19 ? 'o19' : 'u19')];
+	if (max_date_str) {
+		const actual_startdate = utils.parse_date(line.startdate);
+		const max_date = utils.parse_date(max_date_str);
+		if (actual_startdate > max_date) {
+			const message = (
+				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+				' in ' + season.data.vrl_name(line.typeid) +
+				' ist ab ' + line.startdate + ' spielberechtigt, aber dieses Datum ist nach Saisonende'
+			);
+			yield {
+				type: 'vrl',
+				vrl_typeid: line.typeid,
+				clubcode: line.clubcode,
+				message,
+			};
+		}
+	}
+}
+
 function* check_startend(season, is_hr, vrl_date, line) {
 	// Special excemption for club move
 	if ((season.key === 'nrw2016') && ['01-0955', '01-0971'].includes(line.clubcode)) {
@@ -502,6 +527,9 @@ function* check_vrl(season, vrl) {
 				};
 			}
 		}
+
+		// Invalid start dates
+		yield* check_invalid_date(season, is_o19, line);
 
 		// Incorrectly noted start
 		yield* check_startend(season, is_hr, vrl_date, line);

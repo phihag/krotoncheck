@@ -62,6 +62,21 @@ function enrich(season) {
 		t.is_buli = true;
 	}
 
+	for (const tm of data.teammatches) {
+		for (let bool_key of [
+				'flag_ok_gegen_team1',
+				'flag_ok_gegen_team2',
+				'flag_umwertung_gegen_team1',
+				'flag_umwertung_gegen_team2',
+				'flag_umwertung_gegen_team1_beide',
+				'flag_umwertung_gegen_team2_beide',
+				'flag_umwertung_gegen_beide',
+				'hrt',
+				]) {
+			tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
+		}
+	}
+
 	const club_by_id = new Map();
 	for (let c of data.clubs) {
 		club_by_id.set(c.code, c);
@@ -199,19 +214,6 @@ function enrich(season) {
 	data.active_teammatches = [];
 	let active_teammatch_ids = new Set();
 	for (let tm of data.teammatches) {
-		for (let bool_key of [
-				'flag_ok_gegen_team1',
-				'flag_ok_gegen_team2',
-				'flag_umwertung_gegen_team1',
-				'flag_umwertung_gegen_team2',
-				'flag_umwertung_gegen_team1_beide',
-				'flag_umwertung_gegen_team2_beide',
-				'flag_umwertung_gegen_beide',
-				'hrt',
-				]) {
-			tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
-		}
-
 		let t1 = team_by_id.get(tm.team1id);
 		if (!t1) {
 			throw new Error('Team1 (ID: ' + tm.team1id + ')  in teammatch ' + tm.matchid + ' is missing');

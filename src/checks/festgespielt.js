@@ -51,11 +51,121 @@ function* check_fixed_date(player, team, vrl_entry, tm) {
 
 }
 
+function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
+	if (!should_fixed.team) {
+		if (vrl_entry.fixed_in) {
+			if (vrl_entry.vkz3 === 'FIX') {
+				return; // Manually fixed (usually by federation)
+			}
 
-function* check_round(data, player, matches, o19) {
+			if (vrl_entry.comment) {
+				return; // Special case, oftentimes moved up to fill team
+			}
+
+			const message = (
+				data_utils.player_str(player) +
+				' steht in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' als ' +
+				' Fest in ' + JSON.stringify(vrl_entry.fixed_in) +
+				(vrl_entry.fixed_from ? (' (ab ' + vrl_entry.fixed_from + ')') : '') +
+				', aber der Grund des Festspielens konnte nicht gefunden werden' +
+				(vrl_entry.teamcode ? '' : ' (Reiner Bundesliga-Spieler!)') +
+				'.'
+			);
+			yield {
+				type: 'vrl',
+				player_id: player.spielerid,
+				clubcode: vrl_entry.clubcode,
+				vrl_typeid: vrl_entry.typeid,
+				message,
+			};
+		}
+		return;
+	}
+
+	if (should_fixed.team.number === vrl_entry.fixed_in) {
+		// Correctly fixed, check date
+		yield* check_fixed_date(player, should_fixed.team, vrl_entry, should_fixed.tm);
+		return;
+	}
+	const team = should_fixed.team;
+	const tm = should_fixed.tm;
+
+	if (should_fixed.tm.is_buli) {
+		if (vrl_entry.fixed_in) {
+			const message = (
+				data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
+				'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
+				'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
+				'Fest in ' + JSON.stringify(vrl_entry.fixed_in)
+			);
+			yield {
+				type: 'vrl',
+				teammatch_id: should_fixed.tm.matchid,
+				player_id: player.spielerid,
+				clubcode: vrl_entry.clubcode,
+				vrl_typeid: vrl_entry.typeid,
+				message,
+			};
+		} else {
+			const message = (
+				data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
+				'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
+				'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
+				'kein F-Kennzeichen'
+			);
+			yield {
+				type: 'vrl',
+				teammatch_id: should_fixed.tm.matchid,
+				player_id: player.spielerid,
+				clubcode: vrl_entry.clubcode,
+				vrl_typeid: vrl_entry.typeid,
+				message,
+			};
+		}
+	} else { // Should be fixed in NRW
+		if (vrl_entry.fixed_in) {
+			const message = (
+				data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
+				'(' + team.code + ') ' + team.name + ' festgespielt, ' +
+				'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
+				'Fest in ' + JSON.stringify(vrl_entry.fixed_in) + (vrl_entry.fixed_from ? (' (ab ' + vrl_entry.fixed_from + ')') : '')
+			);
+			yield {
+				type: 'vrl',
+				teammatch_id: should_fixed.tm.matchid,
+				player_id: player.spielerid,
+				clubcode: vrl_entry.clubcode,
+				vrl_typeid: vrl_entry.typeid,
+				message,
+			};
+		} else {
+			const message = (
+				data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
+				'(' + team.code + ') ' + team.name + ' festgespielt, ' +
+				'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
+				'kein F-Kennzeichen'
+			);
+			yield {
+				type: 'vrl',
+				teammatch_id: should_fixed.tm.matchid,
+				player_id: player.spielerid,
+				clubcode: vrl_entry.clubcode,
+				vrl_typeid: vrl_entry.typeid,
+				message,
+			};
+		}
+	}
+}
+
+function* check_round(data, player, matches, is_hr, o19) {
 	let vrl_entry;
 	const handled_tms = new Set();
 	const played_else = [];
+
+	// object with the following keys:
+	// - team     Team object we're fixed in
+	// - tm       teammatch that caused the fixing
+	let should_fixed = {};
 
 	for (const pm of matches) {
 		const tm = pm.tm;
@@ -91,60 +201,30 @@ function* check_round(data, player, matches, o19) {
 
 			played_else.push(tm);
 			if (played_else.length === 3) {
-				if (vrl_entry.fixed_in === team.number) {
-					yield* check_fixed_date(player, team, vrl_entry, tm);
-
-					// Correctly fixed here, we're done
-					continue;
-				}
-
-				if (vrl_entry.fixed_in) {
-					const message = (
-						data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
-						'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
-						'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
-						'Fest in ' + JSON.stringify(vrl_entry.fixed_in)
-					);
-					yield {
-						type: 'vrl',
-						teammatch_id: pm.teammatchid,
-						player_id: player.spielerid,
-						clubcode: vrl_entry.clubcode,
-						vrl_typeid: vrl_entry.typeid,
-						message,
-					};
-				} else {
-					const message = (
-						data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
-						'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
-						'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
-						'kein F-Kennzeichen'
-					);
-					yield {
-						type: 'vrl',
-						teammatch_id: pm.teammatchid,
-						player_id: player.spielerid,
-						clubcode: vrl_entry.clubcode,
-						vrl_typeid: vrl_entry.typeid,
-						message,
-					};
-				}
+				should_fixed = {team, tm};
+			} else if ((played_else.length > 3) && !should_fixed.tm.is_buli) {
+				// §61.2.2 SpO final clause
+				should_fixed = {team, tm};
 			}
 
 			continue;
 		}
+		// Non-BuLi from here on
 
 		if (!vrl_entry) {
 			const club_id = team.clubcode;
 			const vrl_type = laws.get_vrl_type(match_league_type, tm, player.sex);
-
-			const ve = data.try_get_vrl_entry(club_id, vrl_type, player.spielerid);
+			let ve = data.try_get_vrl_entry(club_id, vrl_type, player.spielerid);
+			if ((! ve) && (! o19) && (match_league_type === 'U19')) {
+				const mini_vrl_type = laws.get_vrl_type('Mini', tm, player.sex);
+				ve = data.try_get_vrl_entry(club_id, mini_vrl_type, player.spielerid);
+			}
 			if (! ve) {
 				continue; // Handled otherwise
 			}
 			const youth_in_o19 = (match_league_type === 'O19') && ((ve.vkz1 === 'J1') || (ve.vkz1 === 'S1') || (ve.vkz1 === 'M1'));
 			if (youth_in_o19) {
-				return; // Handled in vrl check
+				continue; // Handled in vrl check
 			}
 			vrl_entry = ve;
 		}
@@ -152,59 +232,14 @@ function* check_round(data, player, matches, o19) {
 		if (team_id !== vrl_entry.teamcode) {
 			played_else.push(tm);
 			if (played_else.length === 3) {
-				if (vrl_entry.fixed_in === team.number) {
-					yield* check_fixed_date(player, team, vrl_entry, tm);
-
-					// Correctly fixed here, we're done
-					continue;
-				}
-
-				let incorrect_fix = true;
-
-				// Fixed in Bundesliga?
-				if ((vrl_entry.fixed_in === '1') || (vrl_entry.fixed_in === '2')) {
-					const fixed_in_team = vrl_entry.clubcode + '-' + vrl_entry.fixed_in;
-					if (! data.try_get_team(fixed_in_team)) {
-						incorrect_fix = false;
-					}
-				}
-
-				if (incorrect_fix) {
-					if (vrl_entry.fixed_in) {
-						const message = (
-							data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
-							'(' + team.code + ') ' + team.name + ' festgespielt, ' +
-							'aber im Eintrag in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
-							'Fest in ' + JSON.stringify(vrl_entry.fixed_in)
-						);
-						yield {
-							type: 'vrl',
-							teammatch_id: pm.teammatchid,
-							player_id: player.spielerid,
-							clubcode: vrl_entry.clubcode,
-							vrl_typeid: vrl_entry.typeid,
-							message,
-						};
-					} else {
-						const message = (
-							data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' + 
-							'(' + team.code + ') ' + team.name + ' festgespielt, ' +
-							'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
-							'kein F-Kennzeichen'
-						);
-						yield {
-							type: 'vrl',
-							teammatch_id: pm.teammatchid,
-							player_id: player.spielerid,
-							clubcode: vrl_entry.clubcode,
-							vrl_typeid: vrl_entry.typeid,
-							message,
-						};
-					}
-				}
+				should_fixed = {team, tm};
 			}
+			// TODO if >3: look at matches ahead
 		}
-		// TODO check after festgespielt without F
+	}
+
+	if (vrl_entry) {
+		yield* check_vrl_entry(data, should_fixed, vrl_entry, player);
 	}
 }
 
@@ -214,10 +249,10 @@ function* check_player(data, player_id, matches_struct) {
 		return; // We only check those if they occur in the non-buli database
 	}
 	
-	yield* check_round(data, player, matches_struct.hr, true);
-	yield* check_round(data, player, matches_struct.hr, false);
-	yield* check_round(data, player, matches_struct.rr, true);
-	yield* check_round(data, player, matches_struct.rr, false);
+	yield* check_round(data, player, matches_struct.hr, true, true);
+	yield* check_round(data, player, matches_struct.hr, true, false);
+	yield* check_round(data, player, matches_struct.rr, false, true);
+	yield* check_round(data, player, matches_struct.rr, false, false);
 }
 
 module.exports = function*(season) {

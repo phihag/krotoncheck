@@ -68,8 +68,7 @@ function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
 				' Fest in ' + JSON.stringify(vrl_entry.fixed_in) +
 				(vrl_entry.fixed_from ? (' (ab ' + vrl_entry.fixed_from + ')') : '') +
 				', aber der Grund des Festspielens konnte nicht gefunden werden' +
-				(vrl_entry.teamcode ? '' : ' (Reiner Bundesliga-Spieler!)') +
-				'.'
+				(vrl_entry.teamcode ? '' : ' (Reiner Bundesliga-Spieler!)')
 			);
 			yield {
 				type: 'vrl',

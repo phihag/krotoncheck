@@ -233,7 +233,24 @@ function* check_round(data, player, matches, is_hr, o19) {
 			if (played_else.length === 3) {
 				should_fixed = {team, tm};
 			}
-			// TODO if >3: look at matches ahead
+		}
+
+		if (should_fixed.team && (should_fixed.team.code !== team.code) && !vrl_entry.fixed_in) {
+			if (pm[`flag_umwertung_gegen_team${is_team1 ? 1 : 2}`] || pm.flag_keinspiel_keinespieler) {
+				continue;
+			}
+
+			const message = (
+				data_utils.player_str(player) +
+				' hat sich am ' + should_fixed.tm.spieldatum + ' in (' + should_fixed.team.code + ') ' + should_fixed.team.name + ' festgespielt, ' +
+				'hat aber danach am ' + tm.spieldatum +
+				' für (' + team.code + ') ' + team.name + ' gespielt.'
+			);
+			yield {
+				player_id: player.spielerid,
+				teammatch_id: pm.teammatchid,
+				message,
+			};
 		}
 	}
 

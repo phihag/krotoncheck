@@ -2,7 +2,7 @@
 
 {
 	"clubcode": "01-1009",
-	"message": "01-tt-m8 vor 01-tt-m8 nach (01-tt-m8) steht in VRL 9 von (01-1009) Top Team als  Fest in \"2\" (ab 22.10.2016), aber der Grund des Festspielens konnte nicht gefunden werden.",
+	"message": "01-tt-m8 vor 01-tt-m8 nach (01-tt-m8) steht in VRL 9 von (01-1009) Top Team als  Fest in \"2\" (ab 22.10.2016), aber der Grund des Festspielens konnte nicht gefunden werden",
 	"player_id": "01-tt-m8",
 	"type": "vrl",
 	"vrl_typeid": 9
@@ -16,6 +16,12 @@
 	"teammatch_id": "21",
 	"type": "vrl",
 	"vrl_typeid": 9
+},
+
+{
+	"message": "01-tt-m5 vor 01-tt-m5 nach (01-tt-m5) hat sich am 24.08.2016 15:00:00 in (01-tt-01) TopTeam 1 festgespielt, hat aber danach am 30.08.2016 18:00:00 für (01-1009-2) TopTeam 2 gespielt.",
+    "player_id": "01-tt-m5",
+	"teammatch_id": "21"
 },
 
 

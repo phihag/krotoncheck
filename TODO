@@ -1,7 +1,5 @@
-check Gewinner!!!!
-gewinner undefined?
-add more tests
-	Ungültiger Spieler im 1. HE oder 2.HE -> dann 2./3. Einzel auch falsch, genauso im 1. HD
+fix tests
+	expect one to hit!
 
 fine-grained sending facilities
 	only to Bezirk

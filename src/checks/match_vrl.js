@@ -343,7 +343,7 @@ function* check_all(data, tm, pms, team_idx) {
 				const message = (
 					tm[`team${team_idx}name`] + ' hat im ' +
 					data_utils.match_name(missing) + ' nicht korrekt aufgestellt; damit ' +
-					'muss auch das ' + data_utils.match_name(pm) + ' umgewertet werden'
+					'muss auch das ' + data_utils.match_name(pm) + ' umgewertet werden (§59.1d SpO)'
 				);
 				yield {
 					teammatch_id: tm.matchid,

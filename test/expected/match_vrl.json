@@ -38,6 +38,11 @@
 },
 
 {
+	"message": "Top Team 3 hat im 1. HD nicht korrekt aufgestellt; damit muss auch das 2. HD umgewertet werden (§59.1d SpO)",
+	"teammatch_id": "13"
+},
+
+{
 	"teammatch_id": "15",
 	"message": "Keine spielberechtigte Dame von TopTeam 3 aufgestellt (§57.5 SpO)"
 },
@@ -47,7 +52,10 @@
 	"player_id": "01-tt-m15",
 	"message": "Kein Eintrag für 01-tt-m15 vor 01-tt-m15 nach (01-tt-m15) in VRL 9[Hinrunde Herren O19] von TopTeam 3."
 },
-
+{
+	"message": "Top Team 3 hat im 1. HD nicht korrekt aufgestellt; damit muss auch das 2. HD umgewertet werden (§59.1d SpO)",
+	"teammatch_id": "16"
+},
 
 {
 	"match_id": "129",
@@ -70,7 +78,28 @@
 {
 	"message": "Nicht genügend spielberechtigte Spieler von TopTeam 3 aufgestellt (§57.4 SpO)",
 	"teammatch_id": "17"
-}
+},
 
+{
+	"message": "Top Team 3 hat im 1. HD nicht korrekt aufgestellt; damit muss auch das 2. HD umgewertet werden (§59.1d SpO)",
+	"teammatch_id": "17"
+},
+
+{
+	"message": "Top Team 3 hat im 2. HE nicht korrekt aufgestellt; damit muss auch das 3. HE umgewertet werden (§59.1d SpO)",
+	"teammatch_id": "17"
+},
+
+{
+	"match_id": "9",
+	"message": "Kein Eintrag für First-ym2 Last-ym2 (01-bcf-ym2) in VRL 9[Hinrunde Herren O19] von BC Feder 1.",
+	"player_id": "01-bcf-ym2",
+	"teammatch_id": "27"
+},
+
+{
+	"message": "BC Feder 1 hat im 1. HD nicht korrekt aufgestellt; damit muss auch das 2. HD umgewertet werden (§59.1d SpO)",
+	"teammatch_id": "27"
+}
 
 ]

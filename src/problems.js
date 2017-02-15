@@ -6,6 +6,9 @@ const utils = require('./utils.js');
 const data_utils = require('./data_utils.js');
 
 
+const URL_PREFIX = 'https://www.turnier.de';
+
+
 function enrich(season, found) {
 	const data = season.data;
 
@@ -17,29 +20,29 @@ function enrich(season, found) {
 				p.header = '(' + club.code + ') ' + club.name + ' ' + data.vrl_name(p.vrl_typeid);
 			}
 			if (p.type === 'fixed') {
-				p.turnier_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
-				p.turnier_vrl_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
+				p.turnier_url = URL_PREFIX + '/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
+				p.turnier_vrl_url = URL_PREFIX + '/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
 				p.teammatch = data.get_teammatch(p.teammatch_id);
 				p.region = 'Festgespielt';
 			} else if (p.type === 'vrl_generic') {
 				assert(club);
 				assert(p.player_id);
 				const player = data.get_player(p.player_id);
-				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
+				p.turnier_url = URL_PREFIX + '/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID;
 				p.region = 'VRL ' + data.get_club_region(p.clubcode);
 				p.header = data_utils.player_str(player);
 			} else {
 				assert(p.type === 'vrl');
 				assert(p.vrl_typeid);
-				p.turnier_url = 'http://www.turnier.de/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID + '&rid=' + p.vrl_typeid;
+				p.turnier_url = URL_PREFIX + '/sport/clubranking.aspx?id=' + season.tournament_id + '&cid=' + club.XTPID + '&rid=' + p.vrl_typeid;
 				p.region = 'VRL ' + data.get_club_region(p.clubcode);
 			}
 		} else if (p.teammatch_id) {
 			p.teammatch = data.get_teammatch(p.teammatch_id);
-			p.teammatch_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
+			p.teammatch_url = URL_PREFIX + '/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
 			p.turnier_url = p.teammatch_url;
 			if (p.teammatch2_id) {
-				p.turnier2_url = 'http://www.turnier.de/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch2_id;
+				p.turnier2_url = URL_PREFIX + '/sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch2_id;
 			}
 			p.stb = data.get_stb(p.teammatch);
 			p.region = data.get_region(p.teammatch.eventname);

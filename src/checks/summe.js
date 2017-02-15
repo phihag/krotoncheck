@@ -2,6 +2,9 @@
 
 const data_utils = require('../data_utils');
 
+const WINNER_DISABLED = true;
+
+
 module.exports = function*(season) {
 	const data = season.data;
 
@@ -62,25 +65,27 @@ module.exports = function*(season) {
 			}
 		}
 
-		const correct_winner = ((games[0] > games[1]) ? 1 : ((games[0] < games[1]) ? 2 : 0));
-		const table_winner = pm.winner;
-		if (correct_winner !== table_winner) {
-			const tm = data.try_get_teammatch(pm.teammatchid);
-			if (!tm) {
-				continue; // Match not played
-			}
-			const team_name = tm[`team${correct_winner}name`];
-			const lost_team_name = tm[`team${3 - correct_winner}name`];
+		if (!WINNER_DISABLED) {
+			const correct_winner = ((games[0] > games[1]) ? 1 : ((games[0] < games[1]) ? 2 : 0));
+			const table_winner = pm.winner;
+			if (correct_winner !== table_winner) {
+				const tm = data.try_get_teammatch(pm.teammatchid);
+				if (!tm) {
+					continue; // Match not played
+				}
+				const team_name = tm[`team${correct_winner}name`];
+				const lost_team_name = tm[`team${3 - correct_winner}name`];
 
-			const message = (
-				team_name + ' hat das ' + data_utils.match_name(pm) + ' ' +
-				'gewonnen, aber als Gewinner ist ' + lost_team_name + ' eingetragen'
-			);
-			yield {
-				teammatch_id: pm.teammatchid,
-				match_id: pm.matchid,
-				message,
-			};
+				const message = (
+					team_name + ' hat das ' + data_utils.match_name(pm) + ' ' +
+					'gewonnen, aber als Sieger ist ' + lost_team_name + ' eingetragen'
+				);
+				yield {
+					teammatch_id: pm.teammatchid,
+					match_id: pm.matchid,
+					message,
+				};
+			}
 		}
 	}
 };

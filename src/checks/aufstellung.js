@@ -2,16 +2,7 @@
 
 const data_utils = require('../data_utils');
 const laws = require('../laws');
-const utils = require('../utils');
 
-
-function matches_by_disciplines(pms) {
-	const res = utils.make_multi_index(pms, pm => pm.disziplin);
-	for (const dpms of res.values()) {
-		dpms.sort((pm1, pm2) => utils.cmp(pm1.matchtypeno, pm2.matchtypeno));
-	}
-	return res;
-}
 
 function* check_tm(data, tm, pms, team_idx) {
 	const matches_by_player = new Map();
@@ -108,14 +99,14 @@ function* check_tm(data, tm, pms, team_idx) {
 		}
 	}
 
-	for (const dpms of matches_by_disciplines(pms).values()) {
+	for (const dpms of data_utils.matches_by_disciplines(pms).values()) {
 		let missing;
 		for (const pm of dpms) {
 			const is_hole = holes.get(pm.matchid);
 			if (is_hole) {
 				missing = pm;
 			} else if (missing) {
-				if (pm[`flag_umwertung_gegen_team${team_idx}`]) { // Already handled
+				if (pm[`flag_umwertung_gegen_team${team_idx}`] || pm.flag_keinspiel_keinespieler) { // Already handled
 					continue;
 				}
 

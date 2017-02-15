@@ -219,12 +219,16 @@ function* check_all(data, tm, pms, team_idx) {
 		M: new Set(),
 		F: new Set(),
 	};
+	const problematic = new Set(); // contains pm.matchid
 
 	// Check if everyone present in VRL
 	for (let pm of pms) {
 		const flagged = pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler;
 		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx, flagged));
 
+		if (problems.length > 0)  {
+			problematic.add(pm.matchid);
+		}
 		if (! flagged) { // Not already handled
 			yield* problems;
 		}
@@ -320,6 +324,30 @@ function* check_all(data, tm, pms, team_idx) {
 				yield {
 					teammatch_id: tm.matchid,
 					message: message,
+				};
+			}
+		}
+	}
+
+	// Also blacklist follow-up matches
+	for (const dpms of data_utils.matches_by_disciplines(pms).values()) {
+		let missing;
+		for (const pm of dpms) {
+			if (problematic.has(pm.matchid)) {
+				missing = pm;
+			} else if (missing) {
+				if (pm[`flag_umwertung_gegen_team${team_idx}`]) { // Already handled
+					continue;
+				}
+
+				const message = (
+					tm[`team${team_idx}name`] + ' hat im ' +
+					data_utils.match_name(missing) + ' nicht korrekt aufgestellt; damit ' +
+					'muss auch das ' + data_utils.match_name(pm) + ' umgewertet werden'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
 				};
 			}
 		}

@@ -1,5 +1,7 @@
 'use strict';
 
+const utils = require('./utils');
+
 
 function parse_bool(val) {
 	if ((val === 'true') || (val === 'True')) {
@@ -93,10 +95,19 @@ function match_name(pm) {
 	return res;
 }
 
+function matches_by_disciplines(pms) {
+	const res = utils.make_multi_index(pms, pm => pm.disziplin);
+	for (const dpms of res.values()) {
+		dpms.sort((pm1, pm2) => utils.cmp(pm1.matchtypeno, pm2.matchtypeno));
+	}
+	return res;
+}
+
 module.exports = {
 	league_type,
-	matches_by_round,
 	match_name,
+	matches_by_disciplines,
+	matches_by_round,
 	o19_is_regular,
 	parse_bool,
 	parse_int,

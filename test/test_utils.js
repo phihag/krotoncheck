@@ -48,4 +48,9 @@ describe('utils', function() {
 		assert(utils.cmp('Horst Rosenstock', 'Horst Rosenstock') === 0);
 		assert(utils.cmp('Anja Pliester', 'Horst Rosenstock') < 0);
 	});
+
+	it('find_last', function() {
+		assert.deepStrictEqual(utils.find_last([1, 2, 4, -1, 4, 98, 77, 32], i => (i % 2) === 1), 77);
+		assert.deepStrictEqual(utils.find_last([14, 2, 4, 44, 4, 98, 772, 32], i => (i % 2) === 1), undefined);
+	});
 });

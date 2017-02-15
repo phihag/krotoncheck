@@ -7,24 +7,21 @@ const data_utils = require('./data_utils');
 
 
 const ALL_TASKS = [
-    'players',
-    'playermatches',
-    'teammatches',
-    'clubs',
-    'playerteam',
-    'locations',
     'clubranking',
+    'clubs',
+    'locations',
+    'matchcomments',
     'matchfields',
+    'matchlog',
+    'playermatches',
+    'players',
+    'playerteam',
+    'teammatches',
     'teams',
     'users',
-    'matchcomments',
 ];
 
-
-function enrich(season) {
-	const data = season.data;
-
-	const vrls_by_clubs = new Map();
+function annotate(data) {
 	for (let cr of data.clubranking) {
 		cr.typeid = data_utils.parse_int(cr.typeid);
 		for (const date_key of ['fixed_from', 'startdate', 'enddate']) {
@@ -34,7 +31,64 @@ function enrich(season) {
 				cr['parsed_' + date_key] = ts;
 			}
 		}
+	}
 
+	for (const p of data.buli_players) {
+		p.is_buli = true;
+	}
+	for (const tm of data.buli_teammatches) {
+		tm.is_buli = true;
+	}
+	for (const t of data.buli_teams) {
+		t.is_buli = true;
+	}
+
+	for (const tm of data.teammatches) {
+		for (const bool_key of [
+				'flag_ok_gegen_team1',
+				'flag_ok_gegen_team2',
+				'flag_umwertung_gegen_team1',
+				'flag_umwertung_gegen_team2',
+				'flag_umwertung_gegen_team1_beide',
+				'flag_umwertung_gegen_team2_beide',
+				'flag_umwertung_gegen_beide',
+				'hrt',
+				]) {
+			tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
+		}
+	}
+	for (const tm of data.teammatches) {
+		tm.ts = utils.parse_date(tm.spieldatum);
+	}
+	for (const tm of data.buli_teammatches) {
+		tm.ts = utils.parse_date(tm.spieldatum);
+	}
+	for (const pm of data.playermatches) {
+		for (const int_key of [
+				'matchtypeno',
+				'winner',
+				'setcount',
+				'set1team1',
+				'set1team2',
+				'set2team1',
+				'set2team2',
+				'set3team1',
+				'set3team2']) {
+			pm[int_key] = data_utils.parse_int(pm[int_key]);
+		}
+		for (const bool_key of ['flag_keinspiel_keinespieler', 'flag_keinspiel_keinspieler_team1', 'flag_keinspiel_keinspieler_team2', 'flag_aufgabe_team1', 'flag_aufgabe_team2', 'flag_umwertung_gegen_team1', 'flag_umwertung_gegen_team2']) {
+			pm[bool_key] = data_utils.parse_bool(pm[bool_key]);
+		}
+	}
+}
+
+function enrich(season) {
+	const data = season.data;
+
+	annotate(data);
+
+	const vrls_by_clubs = new Map();
+	for (let cr of data.clubranking) {
 		let club_vrls = vrls_by_clubs.get(cr.clubcode);
 		if (!club_vrls) {
 			club_vrls = new Map();
@@ -52,102 +106,24 @@ function enrich(season) {
 		line_vrl.entries.push(cr);
 	}
 
-	for (const p of data.buli_players) {
-		p.is_buli = true;
-	}
-	for (const tm of data.buli_teammatches) {
-		tm.is_buli = true;
-	}
-	for (const t of data.buli_teams) {
-		t.is_buli = true;
-	}
-
-	for (const tm of data.teammatches) {
-		for (let bool_key of [
-				'flag_ok_gegen_team1',
-				'flag_ok_gegen_team2',
-				'flag_umwertung_gegen_team1',
-				'flag_umwertung_gegen_team2',
-				'flag_umwertung_gegen_team1_beide',
-				'flag_umwertung_gegen_team2_beide',
-				'flag_umwertung_gegen_beide',
-				'hrt',
-				]) {
-			tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
-		}
-	}
-
-	const club_by_id = new Map();
-	for (let c of data.clubs) {
-		club_by_id.set(c.code, c);
-	}
-
-	const player_by_id = new Map();
-	for (const p of data.players) {
-		player_by_id.set(p.spielerid, p);
-	}
-	const buli_player_by_id = new Map();
-	for (const p of data.buli_players) {
-		buli_player_by_id.set(p.spielerid, p);
-	}
-
-	const team_by_id = new Map();
-	for (const t of data.teams) {
-		team_by_id.set(t.code, t);
-	}
-	const buli_team_by_id = new Map();
-	for (const t of data.buli_teams) {
-		buli_team_by_id.set(t.code, t);
-	}
-
-	const teams_by_club = new Map();
-	for (const t of data.teams) {
-		const club = t.clubcode;
-		let teams = teams_by_club.get(club);
-		if (!teams) {
-			teams = [];
-			teams_by_club.set(club, teams);
-		}
-		teams.push(t);
-	}
-
-	const teammatch_by_id = new Map();
-	for (const tm of data.teammatches) {
-		teammatch_by_id.set(tm.matchid, tm);
-	}
-	const buli_teammatch_by_id = new Map();
-	for (const tm of data.buli_teammatches) {
-		buli_teammatch_by_id.set(tm.matchid, tm);
-	}
-
-	for (const tm of data.teammatches) {
-		tm.ts = utils.parse_date(tm.spieldatum);
-	}
-	for (const tm of data.buli_teammatches) {
-		tm.ts = utils.parse_date(tm.spieldatum);
-	}
-
-	const playermatches_by_teammatchid = new Map();
-	for (const pm of data.playermatches) {
-		let pms = playermatches_by_teammatchid.get(pm.teammatchid);
-		if (! pms) {
-			pms = [];
-			playermatches_by_teammatchid.set(pm.teammatchid, pms);
-		}
-		pms.push(pm);
-	}
+	const club_by_id = utils.make_index(data.clubs, c => c.code);
+	const player_by_id = utils.make_index(data.players, p => p.spielerid);
+	const buli_player_by_id = utils.make_index(data.buli_players, p => p.spielerid);
+	const team_by_id = utils.make_index(data.teams, t => t.code);
+	const buli_team_by_id = utils.make_index(data.buli_teams, t => t.code);
+	const teams_by_club = utils.make_multi_index(data.teams, t => t.clubcode);
+	const teammatch_by_id = utils.make_index(data.teammatches, tm => tm.matchid);
+	const buli_teammatch_by_id = utils.make_index(data.buli_teammatches, tm => tm.matchid);
+	const matchlogs_by_teammatchid = utils.make_multi_index(data.matchlog, ml => ml.matchid);
+	const playermatches_by_teammatchid = utils.make_multi_index(data.playermatches, pm => pm.teammatchid);
+	const locations_by_id = utils.make_index(data.locations, loc => loc.code);
 
 	const matches_by_player = new Map();
 	function _add_player(pcode, pm) {
 		if (!pcode) return;
-		let all_matches = matches_by_player.get(pcode);
-		if (!all_matches) {
-			all_matches = {
-				hr: [],
-				rr: [],
-			};
-			matches_by_player.set(pcode, all_matches);
-		}
+		const all_matches = utils.setdefault(matches_by_player, pcode, () => {
+			return {hr: [], rr: []};
+		});
 		const round_matches = all_matches[pm.is_hr ? 'hr' : 'rr'];
 		round_matches.push(pm);
 	}
@@ -201,15 +177,7 @@ function enrich(season) {
 		tm_matchfields.set(line.MatchField, line.ValueText);
 	}
 
-	const matchcomments_by_tmid = new Map();
-	for (let line of data.matchcomments) {
-		let mcs = matchcomments_by_tmid.get(line.matchid);
-		if (!mcs) {
-			mcs = [];
-			matchcomments_by_tmid.set(line.matchid, mcs);
-		}
-		mcs.push(line);
-	}
+	const matchcomments_by_tmid = utils.make_multi_index(data.matchcomments, line => line.matchid);
 
 	data.active_teammatches = [];
 	let active_teammatch_ids = new Set();
@@ -235,11 +203,7 @@ function enrich(season) {
 		for (let i = 1;i <= 2; i++) {
 			const team_id = tm[`team${i}id`];
 			if (team_id) {
-				let tms = teammatch_by_team_id.get(team_id);
-				if (!tms) {
-					tms = [];
-					teammatch_by_team_id.set(team_id, tms);
-				}
+				const tms = utils.setdefault(teammatch_by_team_id, team_id, () => []);
 				tms.push(tm);
 			}
 		}
@@ -252,22 +216,6 @@ function enrich(season) {
 	data.played_playermatches = [];
 	const playermatch_by_id = new Map();
 	for (let pm of data.playermatches) {
-		for (let int_key of [
-				'matchtypeno',
-				'winner',
-				'setcount',
-				'set1team1',
-				'set1team2',
-				'set2team1',
-				'set2team2',
-				'set3team1',
-				'set3team2']) {
-			pm[int_key] = data_utils.parse_int(pm[int_key]);
-		}
-		for (let bool_key of ['flag_keinspiel_keinespieler', 'flag_keinspiel_keinspieler_team1', 'flag_keinspiel_keinspieler_team2', 'flag_aufgabe_team1', 'flag_aufgabe_team2', 'flag_umwertung_gegen_team1', 'flag_umwertung_gegen_team2']) {
-			pm[bool_key] = data_utils.parse_bool(pm[bool_key]);
-		}
-
 		playermatch_by_id.set(pm.matchid, pm);
 
 		if (!active_teammatch_ids.has(pm.teammatchid)) {
@@ -501,6 +449,14 @@ function enrich(season) {
 
 		return null;
 	};
+	data.get_comments = function(tm_id) {
+		const comments = matchcomments_by_tmid.get(tm_id);
+		if (!comments) {
+			return [];
+		}
+
+		return comments.filter(c => c['Comment type'] === 'Spielkommentar');
+	};
 	data.vrl_name = function(vrl_id) {
 		const name = {
 			9: 'Hinrunde Herren O19',
@@ -516,6 +472,16 @@ function enrich(season) {
 			throw new Error('Unknown VRL ' + JSON.stringify(vrl_id));
 		}
 		return `VRL ${vrl_id}[${name}]`;
+	};
+	data.get_matchlog = function(tm_id) {
+		return utils.get(matchlogs_by_teammatchid, tm_id, () => []);
+	};
+	data.get_location = function(loc_id) {
+		const res = locations_by_id.get(loc_id);
+		if (!res) {
+			throw new Error('Cannot find location ' + JSON.stringify(loc_id));
+		}
+		return res;
 	};
 }
 

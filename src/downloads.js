@@ -35,6 +35,7 @@ function calc_url(task_name, season) {
     case 'playermatches':
     case 'teammatches':
     case 'matchcomments':
+    case 'matchlog':
         return (BASE_URL +
             'sport/admin/export' + task_name + '.aspx' +
             '?id=' + encodeURIComponent(tournament_id) + '&ft=1&sd=20000101000000&ed=20990101000000');

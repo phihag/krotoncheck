@@ -1,14 +1,9 @@
-fix tests
-	expect one to hit!
-
 fine-grained sending facilities
 	only to Bezirk
 	only to StB
 download: recognize empty files and retry
 	fail if files still empty afterwards
 
-split up enrich so that it's faster for rendering
-move non-data functions from data_access to data_utils
 test that it still works without buli
 render VRL (Nils Falkenrich)
 render player (include all VRL entries)
@@ -23,9 +18,7 @@ make sure to get 100% coverage over all checks
 benchmark check + data_access overhead
 StB statistics (average/median difference club input <-> confirmed)
 
-ignore should ignore consistent JSON representation (not just text!)
 schedule
-send email out
 grep for all TODOs
 make sure sorts are always stable
 
@@ -40,10 +33,7 @@ make utils.ensure_dir atomic
 check that failed renders don't crash server
 use mail-tester.com to test spammyness
 add a test for 2 spaces in all files, and ==
-set up travis
-check errors in checks
 check errors in data_access.enrich (as called from checks)
 make sure 100% coverage
 remove bcrypt in favor of something else
-show time in local timezone
 unberechtigte Umwertung (Umwertung ohne das was falsch ist?)

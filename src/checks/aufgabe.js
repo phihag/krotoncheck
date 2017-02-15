@@ -1,5 +1,7 @@
 'use strict';
 
+const data_utils = require('../data_utils');
+
 function is_winner(candidate, other) {
 	return (
 		((candidate == 21) && (other < 20)) ||
@@ -64,7 +66,7 @@ function* check_comment(data, pm) {
 	yield {
 		teammatch_id: pm.teammatchid,
 		match_id: pm.matchid,
-		message: 'Spielaufgabe im ' + data.match_name(pm) + ', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1 SpO)',
+		message: 'Spielaufgabe im ' + data_utils.match_name(pm) + ', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1 SpO)',
 	};
 }
 

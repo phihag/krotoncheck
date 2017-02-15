@@ -46,7 +46,7 @@ function enrich(season, found) {
 		}
 		if (p.match_id) {
 			p.match = data.get_match(p.match_id);
-			p.match_name = data.match_name(p.match);
+			p.match_name = data_utils.match_name(p.match);
 		}
 		p.id = problem_id(p);
 	});

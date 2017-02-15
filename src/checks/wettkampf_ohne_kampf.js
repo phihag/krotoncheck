@@ -1,5 +1,7 @@
 'use strict';
 
+const data_utils = require('../data_utils');
+
 function* check_teammatch(data, tm) {
 	if ((!tm.flag_ok_gegen_team1) && (!tm.flag_ok_gegen_team2)) {
 		return;
@@ -9,7 +11,7 @@ function* check_teammatch(data, tm) {
 	var offending = [];
 	for (let pm of pms) {
 		if (pm.team1spieler1spielerid || pm.team2spieler1spielerid) {
-			offending.push(data.match_name(pm));
+			offending.push(data_utils.match_name(pm));
 		}
 	}
 

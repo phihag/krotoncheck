@@ -285,10 +285,10 @@ function* check_all(data, tm, pms, team_idx) {
 
 				const message = (
 					'Doppel falsch aufgestellt: ' +
-					data.match_name(mr1.pm) + ' ' +
+					data_utils.match_name(mr1.pm) + ' ' +
 						data.player_name(p1a) + ' DVRL #' + mr1.ratings[0] + '' + ' / ' +
 						data.player_name(p1b) + ' DVRL #' + mr1.ratings[1] + '.\n' +
-					data.match_name(mr2.pm) + ' ' +
+					data_utils.match_name(mr2.pm) + ' ' +
 						data.player_name(p2a) + ' DVRL #' + mr2.ratings[0] + '' + ' / ' +
 						data.player_name(p2b) + ' DVRL #' + mr2.ratings[1] + '.'
 				);
@@ -315,8 +315,8 @@ function* check_all(data, tm, pms, team_idx) {
 
 				const message = (
 						'Einzel falsch aufgestellt: ' +
-						data_utils.player_str(p1) + ' ist VRL #' + mr1.ratings[0] + ' und hat ' + data.match_name(mr1.pm) + ' gespielt. ' +
-						data_utils.player_str(p2) + ' ist VRL #' + mr2.ratings[0] + ' und hat ' + data.match_name(mr2.pm) + ' gespielt.');
+						data_utils.player_str(p1) + ' ist VRL #' + mr1.ratings[0] + ' und hat ' + data_utils.match_name(mr1.pm) + ' gespielt. ' +
+						data_utils.player_str(p2) + ' ist VRL #' + mr2.ratings[0] + ' und hat ' + data_utils.match_name(mr2.pm) + ' gespielt.');
 				yield {
 					teammatch_id: tm.matchid,
 					message: message,

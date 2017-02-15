@@ -18,7 +18,7 @@ function* check_tm(data, tm, pms, team_idx) {
 				const present_player = data.get_player(present_id);
 				const message = (
 					'Nur 1 Spieler im ' +
-					data.match_name(pm) + ' für ' +
+					data_utils.match_name(pm) + ' für ' +
 					tm[`team${team_idx}name`] + ' (' + tm[`team${team_idx}id`] + '): ' +
 					data_utils.player_str(present_player)
 				);
@@ -33,7 +33,7 @@ function* check_tm(data, tm, pms, team_idx) {
 		if (!p1id && !p2id && !pm.flag_keinspiel_keinespieler && !pm[`flag_keinspiel_keinspieler_team${team_idx}`] && (pm.winner != 0)) {
 			const message = (
 				'Spieler von ' + tm[`team${team_idx}name`] + ' (' + tm[`team${team_idx}id`] + ') ' +
-				'fehlen im ' + data.match_name(pm) +
+				'fehlen im ' + data_utils.match_name(pm) +
 				' ("Keine Spieler" falsch eingetragen?)'
 			);
 			yield {
@@ -61,7 +61,7 @@ function* check_tm(data, tm, pms, team_idx) {
 			const player = data.get_player(pcode);
 			const message = (
 				data_utils.player_str(player) + ' hat ' + pms.length + ' Spiele ' +
-				'(' + pms.map(data.match_name).join(', ') + ') ' +
+				'(' + pms.map(data_utils.match_name).join(', ') + ') ' +
 				'gespielt (§57.3a SpO)'
 			);
 			yield {
@@ -80,7 +80,7 @@ function* check_tm(data, tm, pms, team_idx) {
 				const player = data.get_player(pcode);
 				const message = (
 					data_utils.player_str(player) + ' hat ' +
-					pms.map(data.match_name).join(' und ') +
+					pms.map(data_utils.match_name).join(' und ') +
 					' gespielt (Verstoß gegen §57.3b SpO)'
 				);
 				yield {

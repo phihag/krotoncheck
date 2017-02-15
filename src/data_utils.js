@@ -85,9 +85,18 @@ function player_str(player) {
 	return player.vorname + ' ' + player.name + ' (' + player.spielerid + ')';
 }
 
+function match_name(pm) {
+	let res = pm.disziplin;
+	if (pm.matchtypeno) {
+		res = pm.matchtypeno + '. ' + res;
+	}
+	return res;
+}
+
 module.exports = {
 	league_type,
 	matches_by_round,
+	match_name,
 	o19_is_regular,
 	parse_bool,
 	parse_int,

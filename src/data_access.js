@@ -73,7 +73,11 @@ function annotate(data) {
 				'set2team1',
 				'set2team2',
 				'set3team1',
-				'set3team2']) {
+				'set3team2',
+				'team1spielpunkte',
+				'team2spielpunkte',
+				'team1sets',
+				'team2sets']) {
 			pm[int_key] = data_utils.parse_int(pm[int_key]);
 		}
 		for (const bool_key of ['flag_keinspiel_keinespieler', 'flag_keinspiel_keinspieler_team1', 'flag_keinspiel_keinspieler_team2', 'flag_aufgabe_team1', 'flag_aufgabe_team2', 'flag_umwertung_gegen_team1', 'flag_umwertung_gegen_team2']) {
@@ -325,13 +329,6 @@ function enrich(season) {
 	};
 	data.player_name = function(p) {
 		return p.vorname + ' ' + p.name;
-	};
-	data.match_name = function(pm) {
-		var res = pm.disziplin;
-		if (pm.matchtypeno) {
-			res = pm.matchtypeno + '. ' + res;
-		}
-		return res;
 	};
 	data.get_stb = function(tm) {
 		// Careful: May not be present for old leagues

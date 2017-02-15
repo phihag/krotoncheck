@@ -4,37 +4,68 @@ const async = require('async');
 const nodemailer = require('nodemailer');
 
 const render = require('./render');
+const problems = require('./problems');
 
-function filter_receiver(colors, receiver) {
-	// TODO filter by receiver specification
-	return colors;
+
+function filter_receiver(problems_struct, receiver) {
+	const res = Object.assign({}, problems_struct);
+	res.found = problems_struct.found.filter(function(problem) {
+		if (problem.ignored) {
+			return false;
+		}
+
+		if (receiver.stb_filter) {
+			if (! problem.stb) {
+				return false;
+			}
+			const stb_name = problem.stb.firstname + ' ' + problem.stb.lastname;
+			if (!stb_name.includes(receiver.stb_filter)) {
+				return false;
+			}
+		}
+
+		if (receiver.region_filter) {
+			if (!problem.region) {
+				return false;
+			}
+
+			if (! problem.region.includes(receiver.region_filter)) {
+				return false;
+			}
+		}
+
+		return true;
+	});
+	return res;
 }
 
-function craft_emails(season, colors, message, callback) {
+function craft_emails(season, problems_struct, message, callback) {
 	async.map(
 		season.receivers,
-		(r, cb) => craft_single_email(season, colors, r, message, cb),
+		(r, cb) => craft_single_email(season, problems_struct, r, message, cb),
 		callback);
 }
 
-function craft_single_email(season, colors, receiver, message, cb) {
-	const rcolors = filter_receiver(colors, receiver);
-	
+function craft_single_email(season, problems_struct, receiver, message, cb) {
+	const important_problems_struct = filter_receiver(problems_struct, receiver);
+	const colors = problems.color_render(important_problems_struct);	
+
 	const data = {
 		season,
-		color: rcolors,
+		colors,
 		receiver,
 		message,
 	};
 
-	const body_html = render.render_standalone('mail_basic', data, function(err, body_html) {
+	render.render_standalone('mail_basic', data, function(err, body_html) {
 		if (err) return cb(err);
 
 		const res = {
 			subject: 'Kroton-Report',
 			to: receiver.email,
-			body_html: body_html,
+			body_html,
 			html: 'TODO: wrap body',
+			empty: (important_problems_struct.found.length === 0),
 		};
 		cb(null, res);
 	});
@@ -42,7 +73,7 @@ function craft_single_email(season, colors, receiver, message, cb) {
 
 function sendall(config, crafted, cb) {
 	const transporter = nodemailer.createTransport(config.smtp);
-	for (m of crafted) {
+	for (const c of crafted) {
 		const mailOptions = {
 			from: config.mail_from,
 			to: c.to,

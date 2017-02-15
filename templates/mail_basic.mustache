@@ -6,9 +6,9 @@
 
 <p>{{#receiver}}
 Kroton-Report
-{{#group_filter}}für Bezirk {{group_filter}},{{/group_filter}}
+{{#region_filter}}für Bezirk {{region_filter}},{{/region_filter}}
 {{#stb_filter}}für {{stb_filter}},{{/stb_filter}}
-{{^group_filter}}{{^stb_filter}}(alle Bezirke),{{/stb_filter}}{{/group_filter}}
+{{^region_filter}}{{^stb_filter}}(alle Bezirke),{{/stb_filter}}{{/region_filter}}
 {{/receiver}}
 {{#season}}{{name}}, Stand {{#newest_download}}{{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}}{{/newest_download}}{{/season}}.<br />
 

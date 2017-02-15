@@ -1,9 +1,14 @@
 {{#rendered}}
 <h2>To: {{to}}</h2>
 
+{{^empty}}
 <div class="email_preview">
 {{{body_html}}}
 </div>
+{{/empty}}
+{{#empty}}
+Keine Probleme - daher wird auch keine E-Mail verschickt.
+{{/empty}}
 
 {{/rendered}}
 

@@ -53,7 +53,7 @@ function show_handler(req, res, next) {
 			return {
 				email: r.email,
 				stb_filter: r.stb_filter,
-				group_filter: r.group_filter,
+				region_filter: r.region_filter,
 				receiver_json: JSON.stringify(r),
 			};
 		});
@@ -68,8 +68,8 @@ function show_handler(req, res, next) {
 	});
 }
 
-function _colored_season(req, res, cb) {
-	req.app.db.efetch_all(cb, [{
+function show_problems_handler(req, res, next) {
+	req.app.db.efetch_all(next, [{
 		queryFunc: '_findOne',
 		collection: 'seasons',
 		query: {key: req.params.season_key},
@@ -83,14 +83,6 @@ function _colored_season(req, res, cb) {
 		}
 
 		const colors = problems.color_render(problems_struct);
-		cb(null, season, colors);
-	});
-}
-
-function show_problems_handler(req, res, next) {
-	_colored_season(req, res, function(err, season, colors) {
-		if (err) return next(err);
-
 		render(req, res, next, 'season_problems_show', {
 			season: season,
 			colors: colors,
@@ -104,7 +96,7 @@ function receiver_add_handler(req, res, next) {
 	}
 	const receiver = {
 		email: req.body.email,
-		group_filter: req.body.group_filter,
+		region_filter: req.body.region_filter,
 		stb_filter: req.body.stb_filter,
 	};
 	req.app.db.seasons.update({key: req.params.season_key},	{$addToSet: {receivers: receiver}}, {}, function(err) {
@@ -180,10 +172,19 @@ function check_handler(req, res, next) {
 
 function email_preview(req, res, next) {
 	const message = req.body.message;
-	_colored_season(req, res, function(err, season, colors) {
-		if (err) return next(err);
 
-		kc_email.craft_emails(season, colors, message, function(err, rendered) {
+	req.app.db.efetch_all(next, [{
+		queryFunc: '_findOne',
+		collection: 'seasons',
+		query: {key: req.params.season_key},
+	}, {
+		queryFunc: 'findOne',
+		collection: 'problems',
+		query: {key: req.params.season_key},
+	}], function(season, problems_struct) {
+		problems.prepare_render(season, problems_struct.found);
+
+		kc_email.craft_emails(season, problems_struct, message, function(err, rendered) {
 			if (err) return next(err);
 
 			render(req, res, next, 'email_previews', {

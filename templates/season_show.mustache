@@ -36,9 +36,9 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 <ul>
 {{#display_receivers}}
 <li><a href="mailto:{{email}}">{{email}}</a>
-{{#group_filter}}Bezirk: <span class="receiver_filter">{{group_filter}}</span>{{/group_filter}}
+{{#region_filter}}Bezirk: <span class="receiver_filter">{{region_filter}}</span>{{/region_filter}}
 {{#stb_filter}}StB: <span class="receiver_filter">{{stb_filter}}</span>{{/stb_filter}}
-{{^group_filter}}{{^stb_filter}}Alle Meldungen{{/stb_filter}}{{/group_filter}}
+{{^region_filter}}{{^stb_filter}}Alle Meldungen{{/stb_filter}}{{/region_filter}}
 <form method="post" action="{{root_path}}s/{{key}}/receiver_delete" class="receiver_delete_form">
 {{{csrf_field}}}
 <input type="hidden" name="receiver_json" value="{{receiver_json}}" />
@@ -50,7 +50,7 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 <form method="post" action="{{root_path}}s/{{key}}/receiver_add" class="receiver_add_form">
 {{{csrf_field}}}
 <label>Mail: <input type="mail" name="email" required="required" /></label>
-<label>Bezirk: <input type="text" name="group_filter" /></label>
+<label>Bezirk: <input type="text" name="region_filter" /></label>
 <label>StB: <input type="text" name="stb_filter" /></label>
 <button role="submit">Empfänger hinzufügen</button>
 </form>

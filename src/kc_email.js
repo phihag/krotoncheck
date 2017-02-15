@@ -10,20 +10,21 @@ function filter_receiver(colors, receiver) {
 	return colors;
 }
 
-function craft_emails(season, colors, callback) {
+function craft_emails(season, colors, message, callback) {
 	async.map(
 		season.receivers,
-		(r, cb) => craft_single_email(season, colors, r, cb),
+		(r, cb) => craft_single_email(season, colors, r, message, cb),
 		callback);
 }
 
-function craft_single_email(season, colors, receiver, cb) {
+function craft_single_email(season, colors, receiver, message, cb) {
 	const rcolors = filter_receiver(colors, receiver);
 	
 	const data = {
 		season,
 		color: rcolors,
 		receiver,
+		message,
 	};
 
 	const body_html = render.render_standalone('mail_basic', data, function(err, body_html) {

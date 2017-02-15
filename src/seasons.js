@@ -179,15 +179,16 @@ function check_handler(req, res, next) {
 }
 
 function email_preview(req, res, next) {
+	const message = req.body.message;
 	_colored_season(req, res, function(err, season, colors) {
 		if (err) return next(err);
 
-	console.log(season.newest_download);
-		kc_email.craft_emails(season, colors, function(err, rendered) {
+		kc_email.craft_emails(season, colors, message, function(err, rendered) {
 			if (err) return next(err);
 
 			render(req, res, next, 'email_previews', {
-				rendered: rendered,
+				rendered,
+				message,
 			});
 		});
 	});

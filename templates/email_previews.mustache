@@ -9,5 +9,6 @@
 
 <form method="post" action="{{root_path}}s/{{key}}/send" style="margin-top: 2em">
 {{{csrf_field}}}
+<input type="hidden" name="message" value="{{message}}" />
 <button role="submit">E-Mails senden</button>
 </form>

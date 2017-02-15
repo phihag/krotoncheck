@@ -30,7 +30,7 @@ function* check_fixed_date(player, team, vrl_entry, tm) {
 
 	const expected = utils.next_day(tm.ts);
 	const fixed_from = utils.parse_date(vrl_entry.fixed_from);
-	if (!utils.same_day(fixed_from, expected) && !utils.same_day(fixed_from, tm.ts)) {
+	if (!utils.same_day(fixed_from, expected)) {
 		const message = (
 			'Falsche "Fest ab"-Angabe im Eintrag von ' +
 			data_utils.player_str(player) + ' bei ' +

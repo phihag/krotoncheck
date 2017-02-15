@@ -57,6 +57,7 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 
 <form method="post" action="{{root_path}}s/{{key}}/preview" style="margin-top: 2em">
 {{{csrf_field}}}
+<label>Nachricht: <textarea name="message"></textarea></label>
 <button role="submit">E-Mails vorbereiten</button>
 </form>
 

@@ -47,3 +47,8 @@ input,textarea,button {
 	font-size: 80%;
 	cursor: pointer;
 }
+
+.email_preview {
+	border-top: 1px dashed #ccc;
+	border-bottom: 1px dashed #ccc;
+}

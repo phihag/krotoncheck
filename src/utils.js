@@ -109,6 +109,14 @@ function cmp(a, b) {
 	}
 }
 
+function cmp_key(key) {
+	return function(o1, o2) {
+		const v1 = o1[key];
+		const v2 = o2[key];
+		return cmp(v1, v2);
+	};
+}
+
 function natcmp(as, bs){
 	var a, b, a1, b1, i= 0, n, L;
 	var rx = /(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
@@ -289,6 +297,7 @@ function find_last(ar, func) {
 
 module.exports = {
 	cmp,
+	cmp_key,
 	download_page,
 	ensure_dir,
 	escapeRegExp,

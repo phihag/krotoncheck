@@ -64,7 +64,7 @@ function _find_partials(template_id, callback, found, outstanding) {
 	});
 }
 
-function _render_mustache(template_id, data, callback) {
+function render_mustache(template_id, data, callback) {
 	_find_partials(template_id, function(err, partials) {
 		if (err) {
 			return callback(err, null);
@@ -85,20 +85,29 @@ function mustache_format_timestamp() {
 	};
 }
 
-function render(req, res, next, template_id, data) {
-	data.current_user = req.krotoncheck_user;
+function add_helper_funcs(data) {
 	data.urlencode = encodeURIComponent;
+	data.format_timestamp = mustache_format_timestamp;
+}
+
+function render_standalone(template_id, data, cb) {
+	add_helper_funcs(data);
+	render_mustache(template_id, data, cb);
+}
+
+function render(req, res, next, template_id, data) {
+	add_helper_funcs(data);
+	data.current_user = req.krotoncheck_user;
 	data.icon_path = '/static/icons/';
 	data.csrf_token = req.csrfToken();
 	data.csrf_field = '<input type="hidden" name="_csrf" value="' + escape_html(data.csrf_token) + '" />';
 	data.root_path = req.app.root_path;
-	data.format_timestamp = mustache_format_timestamp;
-	_render_mustache(template_id, data, function(err, content) {
+	render_mustache(template_id, data, function(err, content) {
 		if (err) {
 			return next(err);
 		}
 		data.content = content;
-		_render_mustache('scaffold', data, function(err, html) {
+		render_mustache('scaffold', data, function(err, html) {
 			if (err) {
 				return next(err);
 			}
@@ -108,3 +117,5 @@ function render(req, res, next, template_id, data) {
 }
 
 module.exports = render;
+render.render_standalone = render_standalone;
+

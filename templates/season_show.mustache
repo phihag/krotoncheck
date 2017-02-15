@@ -31,6 +31,37 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 
 <button class="download_button" role="button" data-season_key="{{key}}">Download starten</button>
 
+<h2>Empfänger</h2>
+
+<ul>
+{{#display_receivers}}
+<li><a href="mailto:{{email}}">{{email}}</a>
+{{#group_filter}}Bezirk: <span class="receiver_filter">{{group_filter}}</span>{{/group_filter}}
+{{#stb_filter}}StB: <span class="receiver_filter">{{stb_filter}}</span>{{/stb_filter}}
+{{^group_filter}}{{^stb_filter}}Alle Meldungen{{/stb_filter}}{{/group_filter}}
+<form method="post" action="{{root_path}}s/{{key}}/receiver_delete" class="receiver_delete_form">
+{{{csrf_field}}}
+<input type="hidden" name="receiver_json" value="{{receiver_json}}" />
+<button role="submit">Entfernen</button>
+</form>
+</li>{{/display_receivers}}
+</ul>
+
+<form method="post" action="{{root_path}}s/{{key}}/receiver_add" class="receiver_add_form">
+{{{csrf_field}}}
+<label>Mail: <input type="mail" name="email" required="required" /></label>
+<label>Bezirk: <input type="text" name="group_filter" /></label>
+<label>StB: <input type="text" name="stb_filter" /></label>
+<button role="submit">Empfänger hinzufügen</button>
+</form>
+
+<form method="post" action="{{root_path}}s/{{key}}/preview" style="margin-top: 2em">
+{{{csrf_field}}}
+<button role="submit">E-Mails vorbereiten</button>
+</form>
+
+<h2>Treffer</h2>
+
 {{>problems_list}}
 
 <a href="{{root_path}}s/{{key}}/problems">Nur Probleme</a>

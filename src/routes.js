@@ -30,6 +30,11 @@ function setup(app) {
 	app.get('/s/:season_key/problems', seasons.show_problems_handler);
 	app.post('/s/:season_key/ignore', seasons.ignore_handler);
 	app.post('/s/:season_key/unignore', seasons.unignore_handler);
+	app.post('/s/:season_key/receiver_add', seasons.receiver_add_handler);
+	app.post('/s/:season_key/receiver_delete', seasons.receiver_delete_handler);
+	app.post('/s/:season_key/preview', seasons.email_preview);
+	app.post('/s/:season_key/send', seasons.email_send);
+
 
 	app.get('/s/:season_key/show/', show.season_handler);
 	app.get('/s/:season_key/show/player/:player_id', show.player_handler);

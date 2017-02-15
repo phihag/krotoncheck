@@ -28,6 +28,7 @@
     "serve-favicon": "*",
     "mustache": "*",
     "mustache-express": "*",
+    "nodemailer": "*",
     "nedb": "*",
     "request": "*",
     "timezone": "*",

@@ -1,0 +1,13 @@
+{{#rendered}}
+<h2>To: {{to}}</h2>
+
+<div class="email_preview">
+{{{body_html}}}
+</div>
+
+{{/rendered}}
+
+<form method="post" action="{{root_path}}s/{{key}}/send" style="margin-top: 2em">
+{{{csrf_field}}}
+<button role="submit">E-Mails senden</button>
+</form>

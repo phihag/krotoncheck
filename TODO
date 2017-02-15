@@ -1,6 +1,8 @@
 fine-grained sending facilities
-	only to Bezirk
-	only to StB
+	add a message
+	actually filter
+	actually send
+
 download: recognize empty files and retry
 	fail if files still empty afterwards
 

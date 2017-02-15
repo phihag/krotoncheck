@@ -27,3 +27,10 @@ textarea[name="sg_csv"] {
 	font-size: 8px;
 	width: 30em;
 }
+
+.receiver_delete_form {
+	display: inline-block;
+}
+.receiver_filter {
+	font-family: monospace;
+}

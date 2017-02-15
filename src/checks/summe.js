@@ -6,7 +6,7 @@ module.exports = function*(season) {
 	const data = season.data;
 
 	for (const pm of data.playermatches) {
-		if (pm.flag_aufgabe_team1 || pm.flag_aufgabe_team2 || pm.flag_keinspiel_keinespieler || pm.flag_keinspiel_keinspieler_team1 || pm.flag_keinspiel_keinspieler_team2) {
+		if (pm.flag_aufgabe_team1 || pm.flag_aufgabe_team2 || pm.flag_umwertung_gegen_team1 || pm.flag_umwertung_gegen_team2 || pm.flag_keinspiel_keinespieler || pm.flag_keinspiel_keinspieler_team1 || pm.flag_keinspiel_keinspieler_team2) {
 			// handled by other checks
 			continue;
 		}
@@ -65,11 +65,16 @@ module.exports = function*(season) {
 		const correct_winner = ((games[0] > games[1]) ? 1 : ((games[0] < games[1]) ? 2 : 0));
 		const table_winner = pm.winner;
 		if (correct_winner !== table_winner) {
-			const tm = data.get_teammatch(pm.teammatchid);
+			const tm = data.try_get_teammatch(pm.teammatchid);
+			if (!tm) {
+				continue; // Match not played
+			}
 			const team_name = tm[`team${correct_winner}name`];
+			const lost_team_name = tm[`team${3 - correct_winner}name`];
+
 			const message = (
 				team_name + ' hat das ' + data_utils.match_name(pm) + ' ' +
-				'gewonnen, aber als Gewinner-Wert ist ' + table_winner + ' statt ' + correct_winner + ' eingetragen'
+				'gewonnen, aber als Gewinner ist ' + lost_team_name + ' eingetragen'
 			);
 			yield {
 				teammatch_id: pm.teammatchid,

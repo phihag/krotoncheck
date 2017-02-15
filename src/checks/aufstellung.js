@@ -2,17 +2,32 @@
 
 const data_utils = require('../data_utils');
 const laws = require('../laws');
+const utils = require('../utils');
 
+
+function matches_by_disciplines(pms) {
+	const res = utils.make_multi_index(pms, pm => pm.disziplin);
+	for (const dpms of res.values()) {
+		dpms.sort((pm1, pm2) => utils.cmp(pm1.matchtypeno, pm2.matchtypeno));
+	}
+	return res;
+}
 
 function* check_tm(data, tm, pms, team_idx) {
 	const matches_by_player = new Map();
+	const holes = new Map(); // true: not enough player
 
 	for (const pm of pms) {
 		const p1id = pm[`team${team_idx}spieler1spielerid`];
 		const p2id = pm[`team${team_idx}spieler2spielerid`];
+		const is_doubles = laws.is_doubles(pm.disziplin);
+
+		if (!p1id || (is_doubles && !p2id)) {
+			holes.set(pm.matchid, true);
+		}
 
 		// Not enough players for doubles?
-		if (laws.is_doubles(pm.disziplin)) {
+		if (is_doubles) {
 			const present_id = (!p1id && p2id) ? p2id : ((p1id && !p2id) ? p1id : null);
 			if (present_id) {
 				const present_player = data.get_player(present_id);
@@ -90,6 +105,30 @@ function* check_tm(data, tm, pms, team_idx) {
 			}
 
 			played.push(pm.disziplin);
+		}
+	}
+
+	for (const dpms of matches_by_disciplines(pms).values()) {
+		let missing;
+		for (const pm of dpms) {
+			const is_hole = holes.get(pm.matchid);
+			if (is_hole) {
+				missing = pm;
+			} else if (missing) {
+				if (pm[`flag_umwertung_gegen_team${team_idx}`]) { // Already handled
+					continue;
+				}
+
+				const message = (
+					tm[`team${team_idx}name`] + ' hat nicht genügend Spieler im ' +
+					data_utils.match_name(missing) + ' aufgestellt; damit ' +
+					'muss auch das ' + data_utils.match_name(pm) + ' umgewertet werden'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			}
 		}
 	}
 }

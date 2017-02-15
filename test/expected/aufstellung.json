@@ -19,8 +19,17 @@
 {
 	"message": "01-fv-m4 vorname 01-fv-m4 nachname (01-fv-m4) hat 1. HD und 2. HD gespielt (Verstoß gegen §57.3b SpO)",
 	"teammatch_id": "14"
-}
+},
 
+{
+	"message": "FV 1 hat nicht genügend Spieler im 1. HE aufgestellt; damit muss auch das 2. HE umgewertet werden",
+	"teammatch_id": "27"
+},
+
+{
+	"message": "FV 1 hat nicht genügend Spieler im 1. HE aufgestellt; damit muss auch das 3. HE umgewertet werden",
+	"teammatch_id": "27"
+}
 
 
 ]

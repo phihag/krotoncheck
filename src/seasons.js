@@ -190,23 +190,38 @@ function email_preview(req, res, next) {
 			render(req, res, next, 'email_previews', {
 				rendered,
 				message,
+				season,
 			});
 		});
 	});
 }
 
 function email_send(req, res, next) {
-	_colored_season(req, res, function(err, season, colors) {
-		if (err) return next(err);
+	const message = req.body.message;
 
-		// TODO use code from preview!
-		const rendered = season.receivers.map(r => kc_email.craft_email(season, colors, r));
-		rendered.sort(utils.cmp_key('to'));
+	req.app.db.efetch_all(next, [{
+		queryFunc: '_findOne',
+		collection: 'seasons',
+		query: {key: req.params.season_key},
+	}, {
+		queryFunc: 'findOne',
+		collection: 'problems',
+		query: {key: req.params.season_key},
+	}], function(season, problems_struct) {
+		problems.prepare_render(season, problems_struct.found);
 
-		// TODO actually send emails
+		kc_email.craft_emails(season, problems_struct, message, function(err, crafted) {
+			if (err) return next(err);
 
-		render(req, res, next, 'email_sent', {
-			rendered: rendered,
+			kc_email.sendall(req.app.config, crafted, function(err) {
+				if (err) {
+					return next(err);
+				}
+
+				render(req, res, next, 'email_sent', {
+					season,
+				});
+			});
 		});
 	});
 }

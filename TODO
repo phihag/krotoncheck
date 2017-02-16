@@ -1,6 +1,5 @@
 fine-grained sending facilities
-	actually filter
-	actually send
+	plaintext
 
 download: recognize empty files and retry
 	fail if files still empty afterwards

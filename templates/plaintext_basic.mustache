@@ -1,0 +1,9 @@
+{{#message}}
+{{message}}
+
+{{/message}}{{>plaintext_problems}}
+
+{{#receiver}}Kroton-Report{{#region_filter}}für Bezirk {{region_filter}},{{/region_filter}}{{#stb_filter}}für {{stb_filter}},{{/stb_filter}}{{^region_filter}}{{^stb_filter}}(alle Bezirke),{{/stb_filter}}{{/region_filter}}
+{{/receiver}}{{#season}}{{name}}, Stand {{#newest_download}}{{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}}{{/newest_download}}{{/season}}.
+
+Darstellungsprobleme, Fehler und Verbesserungsvorschläge können gerne bei Philipp Hagemeiste (philipp.hagemeister@badminton-nrw.de) gemeldet werden.

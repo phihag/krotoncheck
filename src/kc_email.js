@@ -2,6 +2,8 @@
 
 const async = require('async');
 const nodemailer = require('nodemailer');
+const html_entities = require('html-entities');
+
 
 const render = require('./render');
 const problems = require('./problems');
@@ -64,34 +66,45 @@ function craft_single_email(season, problems_struct, receiver, message, cb) {
 			subject: 'Kroton-Report',
 			to: receiver.email,
 			body_html,
-			html: 'TODO: wrap body',
 			empty: (important_problems_struct.found.length === 0),
 		};
-		cb(null, res);
+		render.render_standalone('mail_scaffold', res, function(err, mail_html) {
+			if (err) return cb(err);
+			res.mail_html = mail_html;
+
+			render.render_standalone('plaintext_basic', data, function(err, rendered_mail_text) {
+				if (err) return cb(err);
+
+				const decode = new html_entities.AllHtmlEntities().decode;
+				const mail_text = decode(rendered_mail_text);
+				res.mail_text = mail_text;
+				cb(null, res);
+			});
+		});
 	});
 }
 
-function sendall(config, crafted, cb) {
-	const transporter = nodemailer.createTransport(config.smtp);
-	for (const c of crafted) {
+function sendall(config, crafted, callback) {
+	const smtp_config = config('smtp');
+	const transporter = nodemailer.createTransport(smtp_config);
+	async.map(crafted, function(c, cb) {
+		if (c.empty) {
+			return cb();
+		}
+
 		const mailOptions = {
-			from: config.mail_from,
+			from: config('mail_from'),
 			to: c.to,
 			subject: c.subject,
-			text: 'TODO: plain text version',
-			html: c.html,
+			text: c.mail_text,
+			html: c.mail_html,
 		};
 
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				return console.log(error);
-			}
-			// TODO give actual feedback
-			console.log('Message %s sent: %s', info.messageId, info.response);
-		});
-	}
+		transporter.sendMail(mailOptions, cb);
+	}, callback);
 }
 
 module.exports = {
 	craft_emails,
+	sendall,
 };

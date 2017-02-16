@@ -25,6 +25,7 @@
     "cookie-parser": "*",
     "csurf": "*",
     "express": "*",
+    "html-entities": "*",
     "serve-favicon": "*",
     "mustache": "*",
     "mustache-express": "*",

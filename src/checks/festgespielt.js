@@ -62,13 +62,15 @@ function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
 				return; // Special case, oftentimes moved up to fill team
 			}
 
+			const vrl_team = vrl_entry.teamcode ? data.get_team(vrl_entry.teamcode) : null;
 			const message = (
 				data_utils.player_str(player) +
 				' steht in VRL ' + vrl_entry.typeid + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' als ' +
 				' Fest in ' + JSON.stringify(vrl_entry.fixed_in) +
 				(vrl_entry.fixed_from ? (' (ab ' + vrl_entry.fixed_from + ')') : '') +
 				', aber der Grund des Festspielens konnte nicht gefunden werden' +
-				(vrl_entry.teamcode ? '' : ' (Reiner Bundesliga-Spieler!)')
+				(vrl_entry.teamcode ? '' : ' (Reiner Bundesliga-Spieler!)') +
+				((vrl_team && (vrl_entry.fixed_in === vrl_team.number)) ? ' (vkz3="FIX" beim Festschreiben vergessen?)' : '')
 			);
 			yield {
 				type: 'vrl',
@@ -109,8 +111,9 @@ function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
 			const message = (
 				data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
 				'(' + team.code + ') ' + team.name + ' festgespielt (Bundesliga!), ' +
-				'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
-				'kein F-Kennzeichen'
+				'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' fehlt ' +
+				'[Fest in] = ' + JSON.stringify(should_fixed.team.number) +
+				' und [Fest ab] = ' + JSON.stringify(utils.ts2dstr(utils.next_day(tm.ts)))
 			);
 			yield {
 				type: 'vrl',
@@ -141,8 +144,9 @@ function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
 			const message = (
 				data_utils.player_str(player) + ' hat sich am ' + tm.spieldatum + ' in ' +
 				'(' + team.code + ') ' + team.name + ' festgespielt, ' +
-				'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' steht ' +
-				'kein F-Kennzeichen'
+				'aber im Eintrag in ' + data.vrl_name(vrl_entry.typeid) + ' von (' + vrl_entry.clubcode + ') ' + vrl_entry.clubname + ' fehlt ' +
+				'[Fest in] = ' + JSON.stringify(should_fixed.team.number) +
+				' und [Fest ab] = ' + JSON.stringify(utils.ts2dstr(utils.next_day(tm.ts)))
 			);
 			yield {
 				type: 'vrl',

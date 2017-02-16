@@ -162,11 +162,13 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 		// Check that player is allowed to play for the team
 		if (ve.fixed_in && (!ve.fixed_from || (ve.parsed_fixed_from <= tm.ts))) {
 			if (ve.fixed_in !== team.number) {
+				const fixed_externally = (ve.vkz3 === 'FIX');
 				const message = (
 					ve.firstname + ' ' + ve.lastname + ' (' + ve.memberid + ')' +
 					' ist in ' + ve.clubname + ' ' + ve.fixed_in +
-					(ve.fixed_from ? (' (ab ' + ve.fixed_from + ')') : '') +
-					' festgeschrieben, hat aber am ' + tm.spieldatum +
+					(ve.fixed_from ? (' (ab ' + ve.fixed_from + ')') : '') + ' ' +
+					(fixed_externally ? 'festgeschrieben' : 'festgespielt') +
+					', hat aber am ' + tm.spieldatum +
 					' für (' + team.code + ') ' + team.name +
 					' gespielt.'
 				);

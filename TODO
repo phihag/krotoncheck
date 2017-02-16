@@ -1,3 +1,7 @@
+collect
+mail fusion
+mail future
+
 note which mails (to which receivers) were sent
 download: recognize empty files and retry
 	fail if files still empty afterwards

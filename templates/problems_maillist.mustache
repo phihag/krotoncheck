@@ -1,38 +1,12 @@
-<style>
-.tm_title {
-	display: block;
-}
-.bg-red {
-	background: #ffacac;
-}
-.bg-green {
-	background: #acffac;
-}
-.bg-yellow {
-	background: #ffff96;
-}
-.bg-black {
-	background: #888;
-}
-.bg-lightgray {
-	background: #eee;
-}
-.bg-lightblue {
-	background: #d6e0ff;
-}
-
-
-</style>
-
 <div class="problems_maillist">
 {{#colors}}
 {{#regions}}
 <h2>{{name}}</h2>
 {{#groups}}
-<p>
-<strong class="tm_title bg-{{color}}">{{header}}{{#teammatch}}
+<p style="margin-bottom: 1em">
+<span style="display: block; font-weight: bold; background: {{#lookup_color}}{{color}}{{/lookup_color}};">{{header}}{{#teammatch}}
 {{#hrt}}{{team2name}} - {{team1name}}{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} {{#ergebnisbestaetigt_datum}}(bestätigt){{/ergebnisbestaetigt_datum}}
-{{/teammatch}}</strong>
+{{/teammatch}}<br/></span>
 <a href="{{turnier_url}}">{{turnier_url}}</a><br/>
 
 {{#problems}}

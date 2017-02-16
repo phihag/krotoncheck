@@ -85,9 +85,26 @@ function mustache_format_timestamp() {
 	};
 }
 
+function mustache_lookup_color() {
+	return function format_timestamp(text, renderfunc) {
+		const color_name = renderfunc(text);
+		const res = {
+			red: '#ffacac',
+			green: '#acffac',
+			yellow: '#ffff96',
+			black: '#888',
+			lightgray: '#eee',
+			lightblue: '#d6e0ff',
+		}[color_name.trim()];
+
+		return res ? res : 'auto';
+	};
+}
+
 function add_helper_funcs(data) {
 	data.urlencode = encodeURIComponent;
 	data.format_timestamp = mustache_format_timestamp;
+	data.lookup_color = mustache_lookup_color;
 }
 
 function render_standalone(template_id, data, cb) {

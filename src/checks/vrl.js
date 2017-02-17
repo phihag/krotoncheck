@@ -406,11 +406,17 @@ function* check_vrl(season, vrl) {
 		players_by_team.get(line.teamcode).push(line);
 
 		if (line.position != line.teamposition) {
+			const message = (
+				'Ungültige ' + data.vrl_name(vrl.typeid) +
+				' von (' + vrl.clubcode + ') ' + vrl.clubname + ': ' +
+				'position (' + line.position + ') != teamposition (' + line.teamposition + ') ' +
+				'bei Spieler (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
+			);
 			yield {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
 				clubcode: vrl.clubcode,
-				message: 'Ungültige ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ': position (' + line.position + ') != teamposition (' + line.teamposition + ') bei Spieler (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
+				message,
 			};
 		}
 

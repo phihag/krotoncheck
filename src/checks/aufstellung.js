@@ -6,7 +6,11 @@ const laws = require('../laws');
 
 function* check_tm(data, tm, pms, team_idx) {
 	const matches_by_player = new Map();
-	const holes = new Map(); // true: not enough player
+	const holes = new Map(); // true: not enough players
+
+	if (! tm.detailergebnis_eintragedatum) {
+		return;
+	}
 
 	for (const pm of pms) {
 		const p1id = pm[`team${team_idx}spieler1spielerid`];

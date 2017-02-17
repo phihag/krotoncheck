@@ -157,8 +157,8 @@ function* check_tm(season, tm) {
 			const message = (
 				'Detailergebnis zu spät eingetragen: ' +
 				'Spiel um ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
-				'aber immer noch nicht eingetragen' +
-				' (Nachverlegung vergessen oder Spiel ausgefallen?)');
+				'aber noch nicht eingetragen' +
+				' (Termin nicht aktuell, Nachverlegung oder Spiel endgültig ausgefallen?)');
 			yield {
 				teammatch_id: tm.matchid,
 				message,

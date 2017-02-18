@@ -9,12 +9,22 @@ function* check_min_count(league_type, tm, team, valid_players_by_gender) {
 	const f_count = valid_players_by_gender.F.size;
 	const m_count = valid_players_by_gender.M.size;
 
-
 	if ((m_count + f_count) === 0) {
-		yield {
-			teammatch_id: tm.matchid,
-			message: 'Keine spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (Kampflos falsch eingetragen? Sollte kein Detailergebnis haben)',
-		};
+		if (tm.tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
+			const message = (
+				'Ergebnis „Kampflos“ korrekt? Dann gibt es kein Detailergebnis. ' +
+				'Falls doch ein Detailergebnis vorliegt, bitte Mail an miles.eggers@badminton-nrw.de'
+			);
+			yield {
+				teammatch_id: tm.matchid,
+				message,
+			};
+		} else {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Keine spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (Kampflos falsch eingetragen? Sollte kein Detailergebnis haben)',
+			};
+		}
 		return;
 	}
 

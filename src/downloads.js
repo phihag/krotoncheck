@@ -10,7 +10,7 @@ const url = require('url');
 const utils = require('./utils');
 const data_access = require('./data_access');
 
-const BASE_URL = 'http://www.turnier.de/';
+const BASE_URL = 'https://www.turnier.de/';
 const INPROGRESS_ROOT = path.join(path.dirname(__dirname), 'data/download_inprogress/');
 const DATA_ROOT = path.join(path.dirname(__dirname), 'data/download_data/');
 const HTTP_HEADERS = {

@@ -2,10 +2,11 @@
 Description=krotoncheck
 
 [Service]
-ExecStart=/usr/bin/env node KROTONCHECK_ROOT_DIR/krotoncheck.js
+ExecStart=/usr/bin/env node KROTONCHECK_ROOT_DIR/src/krotoncheck.js
 Type=simple
 User=krotoncheck
 Group=krotoncheck
+WorkingDirectory=KROTONCHECK_ROOT_DIR
 
 [Install]
 WantedBy=multi-user.target

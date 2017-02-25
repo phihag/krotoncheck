@@ -1,7 +1,4 @@
-set up on server
-	set up ssl
-	service from buphub
-automatically send to Miles every day
+automatically send to Miles every day?
 
 note which mails (to which receivers) were sent
 download: recognize empty files and retry

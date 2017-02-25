@@ -11,7 +11,7 @@ const data_access = require('./data_access');
 const downloads = require('./downloads');
 
 
-function _load_single_season(db, season_key, callback) {
+function load_season(db, season_key, callback) {
 	async.waterfall([function(cb) {
 		db.fetch_all([{
 			queryFunc: '_findOne',
@@ -36,18 +36,6 @@ function _load_single_season(db, season_key, callback) {
 		});
 	}], callback);
 }
-
-function load_season(db, season_key, callback) {
-	async.waterfall([function(cb) {
-		_load_single_season(db, season_key, cb);
-	}], function(err, season) {
-		if (err) return callback(err);
-		data_access.enrich(season);
-
-		callback(err, season);
-	});
-}
-
 
 function load_data(dirname, tasks, callback) {
 	let data = {};

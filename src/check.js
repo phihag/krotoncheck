@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 
+const data_access = require('./data_access');
 const loader = require('./loader');
 const problems = require('./problems');
 const utils = require('./utils');
@@ -39,20 +40,29 @@ function recheck(db, season_key, callback, store=false) {
 	loader.load_season(db, season_key, function(err, season) {
 		if (err) return callback(err);
 
-		var found = Array.from(check(season));
-		problems.enrich(season, found);
-
-		if (store) {
-			problems.store(db, season, found, callback);
-		} else {
-			console.log('found problems', found);
-			callback(null, found);
-		}
+		run_recheck(season, function(err, found) {
+			if (store) {
+				problems.store(db, season, found, callback);
+			} else {
+				console.log('found problems', found);
+				callback(null, found);
+			}
+		});
 	});
+}
+
+function run_recheck(season, callback) {
+	data_access.enrich(season);
+
+	var found = Array.from(check(season));
+	problems.enrich(season, found);
+
+	callback(null, found);
 }
 
 
 module.exports = {
+	run_recheck,
 	recheck,
 	CHECKS,
 	CHECKS_BY_NAME,

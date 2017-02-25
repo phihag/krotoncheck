@@ -12,7 +12,7 @@ help:
 	@echo '  clean         Remove temporary files'
 
 
-deps: 
+deps:
 	(node --version && npm --version) >/dev/null 2>/dev/null || sudo apt-get install -y nodejs npm
 	npm install
 

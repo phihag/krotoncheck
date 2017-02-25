@@ -35,6 +35,7 @@ function add_dialog_handler(req, res, next) {
 }
 
 function calc_receivers_display(receivers) {
+	if (!receivers) return [];
 	const res = receivers.map(r => {
 		return {
 			email: r.email,

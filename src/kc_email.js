@@ -41,9 +41,9 @@ function filter_receiver(problems_struct, receiver) {
 	return res;
 }
 
-function craft_emails(season, problems_struct, message, callback) {
+function craft_emails(season, receivers, problems_struct, message, callback) {
 	async.map(
-		season.receivers,
+		receivers,
 		(r, cb) => craft_single_email(season, problems_struct, r, message, cb),
 		callback);
 }

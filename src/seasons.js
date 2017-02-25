@@ -198,7 +198,7 @@ function email_preview(req, res, next) {
 	}], function(season, problems_struct) {
 		problems.prepare_render(season, problems_struct.found);
 
-		kc_email.craft_emails(season, problems_struct, message, function(err, rendered) {
+		kc_email.craft_emails(season, season.receivers, problems_struct, message, function(err, rendered) {
 			if (err) return next(err);
 
 			render(req, res, next, 'email_previews', {
@@ -224,7 +224,7 @@ function email_send(req, res, next) {
 	}], function(season, problems_struct) {
 		problems.prepare_render(season, problems_struct.found);
 
-		kc_email.craft_emails(season, problems_struct, message, function(err, crafted) {
+		kc_email.craft_emails(season, season.receivers, problems_struct, message, function(err, crafted) {
 			if (err) return next(err);
 
 			kc_email.sendall(req.app.config, crafted, function(err) {

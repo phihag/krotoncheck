@@ -182,52 +182,68 @@ function start_handler(req, res, next) {
 		collection: 'seasons',
 		query: {key: req.params.season_key},
 	}], function(season) {
-		download_season(req.app.config, season, function(err, dl) {
+		download_job(req.app, season, function(err, dl) {
 			if (err) {
-				dl = {
+				utils.render_json({
 					status: 'error',
 					message: err.message,
-				};
-			} else {
-				current_downloads.set(dl.id, dl);
-			}
+				});
 
+				return;
+			}
 			utils.render_json(res, {
 				download: dl,
 			});
-		}, function(err, dl) {
+		}, () => {});
+	});
+}
+
+function download_job(app, season, cb_started, cb_finished)  {
+	download_season(app.config, season, function(err, dl) {
+		if (err) {
+			return cb_started(err, dl);
+		} else {
+			current_downloads.set(dl.id, dl);
+		}
+
+		cb_started(err, dl);
+	}, function(err, dl) {
+		if (err) {
+			dl.status = 'error';
+			dl.done_timestamp = Date.now();
+			dl.error = err;
+			// TODO: clean up?
+			cb_finished(err, dl);
+			return;
+		}
+
+		fs.rename(path.join(INPROGRESS_ROOT, dl.id), path.join(DATA_ROOT, dl.id), function(err) {
+			dl.done_timestamp = Date.now();
 			if (err) {
 				dl.status = 'error';
-				dl.done_timestamp = Date.now();
 				dl.error = err;
-				// TODO: clean up?
+				// TODO: clean up
+				cb_finished(err, dl);
 				return;
 			}
 
-			fs.rename(path.join(INPROGRESS_ROOT, dl.id), path.join(DATA_ROOT, dl.id), function(err) {
-				dl.done_timestamp = Date.now();
+			app.db.seasons.update({_id: season._id}, {
+				$set: {newest_download: dl},
+			}, function(err) {
 				if (err) {
+					// TODO: clean up in DATA_ROOT
 					dl.status = 'error';
 					dl.error = err;
-					// TODO: clean up
+					cb_finished(err, dl);
 					return;
 				}
 
-				req.app.db.seasons.update({_id: season._id}, {
-					$set: {newest_download: dl},
-				}, function(err) {
-					if (err) {
-						// TODO: clean up in DATA_ROOT
-						dl.status = 'error';
-						dl.error = err;
-						return;
-					}
+				current_downloads.delete(dl.id);
 
-					current_downloads.delete(dl.id);
-
-					const check = require('./check');
-					check.recheck(req.app.db, season._id, function() {}, true);
-				});
+				const check = require('./check');
+				check.recheck(app.db, season.key, function(err, found) {
+					cb_finished(err, dl);
+				}, true);
 			});
 		});
 	});

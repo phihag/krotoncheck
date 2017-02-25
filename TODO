@@ -1,3 +1,11 @@
+automatically send to Miles every day
+	run checks in external process (node-webworker-threads)
+	set up autorun data structures
+	UI to input autorun (cron)
+	UI to configure autorun receivers
+	schedule them with node-cron
+	set up on server
+
 note which mails (to which receivers) were sent
 download: recognize empty files and retry
 	fail if files still empty afterwards

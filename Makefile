@@ -38,4 +38,10 @@ eslint-server:
 eslint-client:
 	@node_modules/.bin/eslint -c static/.eslintrc static/*.js
 
-.PHONY: default compile help deps test clean run-server lint eslint eslint-server eslint-client
+install-service:
+	sed -e "s#KROTONCHECK_ROOT_DIR#$$PWD#" krotoncheck.service.template | sudo tee /etc/systemd/system/krotoncheck.service >/dev/null
+	sudo chmod +x /etc/systemd/system/krotoncheck.service
+	systemctl enable krotoncheck
+	systemctl start krotoncheck
+
+.PHONY: default compile help deps test clean run-server lint eslint eslint-server eslint-client install-service

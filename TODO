@@ -1,5 +1,7 @@
+set up on server
+	create user
+	service from buphub
 automatically send to Miles every day
-	set up on server
 
 note which mails (to which receivers) were sent
 download: recognize empty files and retry

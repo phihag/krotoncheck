@@ -39,7 +39,7 @@ eslint-client:
 	@node_modules/.bin/eslint -c static/.eslintrc static/*.js
 
 install-service:
-	sed -e "s#KROTONCHECK_ROOT_DIR#$$PWD#" krotoncheck.service.template > /etc/systemd/system/krotoncheck.service
+	sed -e "s#KROTONCHECK_ROOT_DIR#$$PWD#" div/krotoncheck.service.template > /etc/systemd/system/krotoncheck.service
 	chmod +x /etc/systemd/system/krotoncheck.service
 	systemctl enable krotoncheck
 	systemctl start krotoncheck

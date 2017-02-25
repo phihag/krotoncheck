@@ -23,6 +23,7 @@
     "bcrypt": "*",
     "body-parser": "*",
     "cookie-parser": "*",
+    "cron": "*",
     "csurf": "*",
     "express": "*",
     "html-entities": "*",

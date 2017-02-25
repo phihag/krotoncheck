@@ -1,14 +1,15 @@
 'use strict';
 
-var express = require('express');
-var favicon = require('serve-favicon');
-var path = require('path');
+const express = require('express');
+const favicon = require('serve-favicon');
+const path = require('path');
 
-var downloads = require('./downloads');
-var root = require('./root');
-var seasons = require('./seasons');
-var show = require('./show');
-var users = require('./users');
+const autoruns = require('./autoruns');
+const downloads = require('./downloads');
+const root = require('./root');
+const seasons = require('./seasons');
+const show = require('./show');
+const users = require('./users');
 
 function setup(app) {
 	app.use('/static', express.static('static'));
@@ -34,6 +35,11 @@ function setup(app) {
 	app.post('/s/:season_key/receiver_delete', seasons.receiver_delete_handler);
 	app.post('/s/:season_key/preview', seasons.email_preview);
 	app.post('/s/:season_key/send', seasons.email_send);
+
+	app.post('/s/:season_key/autorun/create', autoruns.create_handler);
+	app.post('/s/:season_key/autorun/:autorun_id/delete', autoruns.delete_handler);
+	app.post('/s/:season_key/autorun/:autorun_id/receiver_add', autoruns.receiver_add_handler);
+	app.post('/s/:season_key/autorun/:autorun_id/receiver_delete', autoruns.receiver_delete_handler);
 
 
 	app.get('/s/:season_key/show/', show.season_handler);

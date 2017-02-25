@@ -101,7 +101,6 @@ function download_file(req, fn, cb) {
 		if (encountered_error) {
 			return;
 		}
-		console.error('DOWNLOAD ERROR!!!', err);
 		encountered_error = true;
 		cb(err);
 	}
@@ -241,8 +240,9 @@ function download_job(app, season, cb_started, cb_finished)  {
 				current_downloads.delete(dl.id);
 
 				const check = require('./check');
-				check.recheck(app.db, season.key, app.config('check_background'), function(err) {
-					cb_finished(err, dl);
+				check.recheck(app.db, season.key, app.config('check_background'), function(err, found) {
+					assert(Array.isArray(found));
+					cb_finished(err, dl, found);
 				}, true);
 			});
 		});
@@ -257,6 +257,7 @@ function inprogress_by_season(season_key) {
 
 
 module.exports = {
+	download_job,
 	BASE_URL,
 	DATA_ROOT,
 	start_handler,

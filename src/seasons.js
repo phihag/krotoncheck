@@ -34,34 +34,48 @@ function add_dialog_handler(req, res, next) {
 	render(req, res, next, 'seasons_add_dialog', {});
 }
 
+function calc_receivers_display(receivers) {
+	const res = receivers.map(r => {
+		return {
+			email: r.email,
+			stb_filter: r.stb_filter,
+			region_filter: r.region_filter,
+			receiver_json: JSON.stringify(r),
+		};
+	});
+	res.sort(utils.cmp_key('email'));
+	return res;
+}
+
 function show_handler(req, res, next) {
+	const season_key = req.params.season_key;
 	req.app.db.efetch_all(next, [{
 		queryFunc: '_findOne',
 		collection: 'seasons',
-		query: {key: req.params.season_key},
+		query: {key: season_key},
 	}, {
 		queryFunc: 'findOne',
 		collection: 'problems',
-		query: {key: req.params.season_key},
-	}], function(season, problems_struct) {
+		query: {key: season_key},
+	}, {
+		queryFunc: 'find',
+		collection: 'autoruns',
+		query: {season_key: season_key},
+	}], function(season, problems_struct, autoruns) {
 		const downloads_inprogress = downloads.inprogress_by_season(season.key);
 		if (problems_struct) {
 			problems.prepare_render(season, problems_struct.found);
 		}
 
-		const display_receivers = season.receivers.map(r => {
-			return {
-				email: r.email,
-				stb_filter: r.stb_filter,
-				region_filter: r.region_filter,
-				receiver_json: JSON.stringify(r),
-			};
-		});
-		display_receivers.sort(utils.cmp_key('email'));
+		const display_receivers = calc_receivers_display(season.receivers);
+		for (const ar of autoruns) {
+			ar.display_receivers = calc_receivers_display(ar.receivers);
+		}
 
 		render(req, res, next, 'season_show', {
 			display_receivers: display_receivers,
-			season: season,
+			season,
+			autoruns,
 			downloads_inprogress: downloads_inprogress,
 			problems: problems_struct ? problems_struct.found : [],
 		});

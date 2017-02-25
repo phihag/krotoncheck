@@ -1,8 +1,7 @@
 automatically send to Miles every day
-	set up autorun data structures
-	UI to input autorun (cron)
-	UI to configure autorun receivers
-	schedule them with node-cron
+	email sending fails
+	show last run
+	remove all console.logs
 	set up on server
 
 note which mails (to which receivers) were sent
@@ -36,7 +35,6 @@ check that on download error status is correctly set
 show download status
 make utils.ensure_dir atomic
 check that failed renders don't crash server
-use mail-tester.com to test spammyness
 add a test for 2 spaces in all files, and ==
 check errors in data_access.enrich (as called from checks)
 make sure 100% coverage

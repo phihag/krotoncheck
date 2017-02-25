@@ -1,0 +1,27 @@
+{{#autoruns}}
+<div class="autorun_container">
+<h3 class="autorun_entry" id="autorun_{{_id}}">{{name}} <span class="autorun_schedule">{{schedule}}</span> <form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/delete" class="autorun_delete_form">{{{csrf_field}}}<button role="submit">-</button></form></h3>
+<ul>
+{{#display_receivers}}
+<li>{{>receiver_render}} <form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/receiver_delete" class="autorun_receiver_delete_form"><input type="hidden" name="receiver_json" value="{{receiver_json}}"/>{{{csrf_field}}}<button role="submit">-</button></form>
+</li>
+{{/display_receivers}}
+</ul>
+
+<form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/receiver_add" class="receiver_add_form">
+{{{csrf_field}}}
+<label>Mail: <input type="mail" name="email" required="required" /></label>
+<label>Bezirk: <input type="text" name="region_filter" /></label>
+<label>StB: <input type="text" name="stb_filter" /></label>
+<button role="submit">Empfänger hinzufügen</button>
+</form>
+</div>
+
+{{/autoruns}}
+
+<form method="post" action="{{root_path}}s/{{key}}/autorun/create">
+{{{csrf_field}}}
+<input type="text" name="name" placeholder="Beschreibung" required="required" />
+<input type="text" pattern="(?:(?:[*]|[0-9/-]+)\s+){5}(?:(?:[*]|[0-9/-]+))" name="schedule" required="required" placeholder="cron schedule" title="seconds minutes hours day-of-month month day-of-week" />
+<button role="submit">Überprüfung hinzufügen</button>
+</form>

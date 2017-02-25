@@ -1,21 +1,22 @@
 'use strict';
 
-var async = require('async');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var csrf = require('csurf');
-var express = require('express');
+const async = require('async');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
+const express = require('express');
 
-var config = require('./config');
-var users = require('./users');
-var database = require('./database');
-var routes = require('./routes');
+const autoruns = require('./autoruns');
+const config = require('./config');
+const users = require('./users');
+const database = require('./database');
+const routes = require('./routes');
 
 function run_server(app_cfg, db) {
-	var server = require('http').createServer();
-	var app = express();
-	var csrfProtection = csrf({cookie: true});
-	var parseForm = bodyParser.urlencoded({extended: false});
+	const server = require('http').createServer();
+	const app = express();
+	const csrfProtection = csrf({cookie: true});
+	const parseForm = bodyParser.urlencoded({extended: false});
 
 	app.db = db;
 	app.config = app_cfg;
@@ -40,6 +41,8 @@ async.waterfall([
 		database.init(function(err, db) {
 			return cb(err, app_cfg, db);
 		});
+	}, function(app_cfg, db, cb) {
+		autoruns.init(app_cfg, db, (err) => cb(err, app_cfg, db));
 	},
 ], function(err, app_cfg, db) {
 	if (err) {

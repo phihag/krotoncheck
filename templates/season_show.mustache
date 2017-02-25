@@ -35,10 +35,8 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 
 <ul>
 {{#display_receivers}}
-<li><a href="mailto:{{email}}">{{email}}</a>
-{{#region_filter}}Bezirk: <span class="receiver_filter">{{region_filter}}</span>{{/region_filter}}
-{{#stb_filter}}StB: <span class="receiver_filter">{{stb_filter}}</span>{{/stb_filter}}
-{{^region_filter}}{{^stb_filter}}Alle Meldungen{{/stb_filter}}{{/region_filter}}
+<li>
+{{>receiver_render}}
 <form method="post" action="{{root_path}}s/{{key}}/receiver_delete" class="receiver_delete_form">
 {{{csrf_field}}}
 <input type="hidden" name="receiver_json" value="{{receiver_json}}" />
@@ -63,12 +61,7 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 
 <h2>Automatische Überprüfungen</h2>
 
-<form method="post" action="{{root_path}}s/{{key}}/autorun/create">
-{{{csrf_field}}}
-<input type="text" name="description" placeholder="Beschreibung" required="required" />
-<input type="text" pattern="(?:(?:[*]|[0-9/-])\s+){4}(?:(?:[*]|[0-9/-]))" name="schedule" required="required" placeholder="cron schedule" />
-<button role="submit">Überprüfung hinzufügen</button>
-</form>
+{{>autoruns_list}}
 
 <h2>Treffer</h2>
 

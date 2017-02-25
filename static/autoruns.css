@@ -1,0 +1,22 @@
+.autorun_container {
+	margin: 1em 0 2em 1em;
+}
+
+.autorun_container ul {
+	margin: 0;
+}
+.autorun_container h3 {
+	margin: 0;
+}
+
+.autorun_schedule {
+	white-space: pre;
+	background: #eee;
+	font-family: monospace;
+}
+
+.autorun_delete_form,
+.autorun_receiver_delete_form
+{
+	display: inline-block;
+}

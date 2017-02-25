@@ -46,9 +46,12 @@ function recheck(db, season_key, in_background, callback, store=false) {
 		const func = in_background ? bg_recheck : run_recheck;
 		func(season, function(err, found) {
 			if (store) {
-				problems.store(db, season, found, callback);
+				problems.store(db, season, found, function(err) {
+					if (err) return callback(err);
+
+					callback(null, found);
+				});
 			} else {
-				console.log('found problems', found);
 				callback(null, found);
 			}
 		});

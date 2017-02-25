@@ -1,6 +1,4 @@
 automatically send to Miles every day
-	run checks in external process (node-webworker-threads)
-
 	set up autorun data structures
 	UI to input autorun (cron)
 	UI to configure autorun receivers

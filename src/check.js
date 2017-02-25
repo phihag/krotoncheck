@@ -1,6 +1,9 @@
 'use strict';
 
+const assert = require('assert');
+const child_process = require('child_process');
 const fs = require('fs');
+const path = require('path');
 
 const data_access = require('./data_access');
 const loader = require('./loader');
@@ -36,11 +39,12 @@ function* check(season) {
 
 // Runs a new check and stores the results in the database
 // cb gets called with err, if any
-function recheck(db, season_key, callback, store=false) {
+function recheck(db, season_key, in_background, callback, store=false) {
 	loader.load_season(db, season_key, function(err, season) {
 		if (err) return callback(err);
 
-		run_recheck(season, function(err, found) {
+		const func = in_background ? bg_recheck : run_recheck;
+		func(season, function(err, found) {
 			if (store) {
 				problems.store(db, season, found, callback);
 			} else {
@@ -51,6 +55,30 @@ function recheck(db, season_key, callback, store=false) {
 	});
 }
 
+function bg_recheck(season, callback) {
+	const season_json = JSON.stringify(season);
+
+	// node.js IPC does not seem suitable to extremely large structures like season right now.
+	// Therefore, run a child program.
+	const worker_fn = path.join(__dirname, 'check_worker.js');
+
+	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 1024 * 1024 * 1024}, (err, stdout) => {
+		if (err) return callback(err);
+
+		const res = JSON.parse(stdout);
+		if (res.error) {
+			return callback(res.error);
+		}
+		const found = res.found;
+
+		assert(Array.isArray(found));
+		callback(null, found);
+	});
+	child.stdin.setEncoding('utf-8');
+	child.stdin.write(season_json);
+	child.stdin.end();
+}
+
 function run_recheck(season, callback) {
 	data_access.enrich(season);
 
@@ -59,7 +87,6 @@ function run_recheck(season, callback) {
 
 	callback(null, found);
 }
-
 
 module.exports = {
 	run_recheck,

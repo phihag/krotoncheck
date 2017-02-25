@@ -1,22 +1,22 @@
 'use strict';
 
-var async = require('async');
-var Datastore = require('nedb');
-var fs = require('fs');
-var path = require('path');
+const async = require('async');
+const Datastore = require('nedb');
+const fs = require('fs');
+const path = require('path');
 
-var utils = require('./utils');
-var users = require('./users');
+const utils = require('./utils');
+const users = require('./users');
 
 function init(callback) {
-	var db = {};
+	const db = {};
 
-	var db_dir = path.dirname(__dirname) + '/data';
+	const db_dir = path.dirname(__dirname) + '/data';
 	if (! fs.existsSync(db_dir)) {
 		fs.mkdirSync(db_dir);
 	}
 
-	['users', 'sessions', 'seasons', 'problems'].forEach(function(key) {
+	['users', 'sessions', 'seasons', 'problems', 'autoruns'].forEach(function(key) {
 		db[key] = new Datastore({filename: db_dir + '/' + key, autoload: true});
 	});
 
@@ -25,14 +25,14 @@ function init(callback) {
 	db.seasons.ensureIndex({fieldName: 'key', unique: true});
 	db.problems.ensureIndex({fieldName: 'key', unique: true});
 
-	var admin_email = 'krotoncheck@aufschlagwechsel.de';
+	const admin_email = 'krotoncheck@aufschlagwechsel.de';
 	db.users.find({email: admin_email}, function(err, docs) {
 		if (err) {
 			throw err;
 		}
 		if (docs.length === 0) {
-			var pw = utils.gen_token();
-			var admin = users.create(db, admin_email, pw, ['admin']);
+			const pw = utils.gen_token();
+			const admin = users.create(db, admin_email, pw, ['admin']);
 			console.log('Initial admin account: ' + admin.email +  ' : ' + pw + ' .');
 		}
 	});
@@ -49,7 +49,13 @@ function init(callback) {
 		});
 	};
 
-	callback(null, db);
+	async.waterfall([
+		function (cb) {
+			setup_autonum(cb, db, 'autoruns');
+		},
+	], function(err) {
+		callback(err, db);
+	});
 }
 
 function fetch_all(db, specs, callback) {
@@ -100,5 +106,4 @@ function setup_autonum(callback, db, collection, start) {
 
 module.exports = {
 	init: init,
-	setup_autonum: setup_autonum, // Currently unused(?)
 };

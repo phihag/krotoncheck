@@ -157,14 +157,14 @@ function change_handler(req, res, next) {
 }
 
 function recheck_handler(req, res, next) {
-	check.recheck(req.app.db, req.params.season_key, function(err) {
+	check.recheck(req.app.db, req.params.season_key, req.app.config('check_background'), function(err) {
 		if (err) return next(err);
 		res.redirect(req.app.root_path + 's/' + encodeURIComponent(req.params.season_key) + '/');
 	}, true);
 }
 
 function check_handler(req, res, next) {
-	check.recheck(req.app.db, req.params.season_key, function(err, problems) {
+	check.recheck(req.app.db, req.params.season_key, req.app.config('check_background'), function(err, problems) {
 		if (err) return next(err);
 		utils.render_json(res, problems);
 	}, false);

@@ -7,7 +7,6 @@ const path = require('path');
 const atomic_write = require('atomic-write');
 const Baby = require('babyparse');
 
-const data_access = require('./data_access');
 const downloads = require('./downloads');
 
 

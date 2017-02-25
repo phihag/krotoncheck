@@ -241,7 +241,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 				current_downloads.delete(dl.id);
 
 				const check = require('./check');
-				check.recheck(app.db, season.key, function(err) {
+				check.recheck(app.db, season.key, app.config('check_background'), function(err) {
 					cb_finished(err, dl);
 				}, true);
 			});

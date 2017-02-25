@@ -61,6 +61,15 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 <button role="submit">E-Mails vorbereiten</button>
 </form>
 
+<h2>Automatische Überprüfungen</h2>
+
+<form method="post" action="{{root_path}}s/{{key}}/autorun/create">
+{{{csrf_field}}}
+<input type="text" name="description" placeholder="Beschreibung" required="required" />
+<input type="text" pattern="(?:(?:[*]|[0-9/-])\s+){4}(?:(?:[*]|[0-9/-]))" name="schedule" required="required" placeholder="cron schedule" />
+<button role="submit">Überprüfung hinzufügen</button>
+</form>
+
 <h2>Treffer</h2>
 
 {{>problems_list}}

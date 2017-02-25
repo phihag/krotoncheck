@@ -22,14 +22,11 @@ function run(config, db, ar_id) {
 			if (!season) return cb(new Error('Cannot find season ' + ar.season_key));
 
 			const fake_app = {config, db};
-			console.log('starting download');
 			downloads.download_job(
 				fake_app, season, () => {},
 				(err, dl, found) => cb(err, ar, season, dl, found));
 		},
 		function(ar, season, dl, found, cb) {
-			console.log('found: ', typeof found, found.length);
-
 			assert(Array.isArray(found));
 			problems.prepare_render(season, found);
 			const problems_struct = {found};
@@ -41,14 +38,12 @@ function run(config, db, ar_id) {
 				(err, crafted) => cb(err, ar, season, dl, found, crafted)
 			);
 		}, function(ar, season, dl, found, crafted, cb) {
-			console.log('Crafted emails:', crafted);
 			kc_email.sendall(
 				config, crafted,
 				err => cb(err, ar, season, dl, found, crafted)
 			);
 		},
 		function(ar, season, dl, found, crafted, cb) {
-			console.log('SUCCESS!');
 			db.autoruns.update({_id: ar_id}, {$set: {last_success: Date.now()}}, {}, cb);
 		},
 	], function(err) {

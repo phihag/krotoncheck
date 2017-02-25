@@ -1,7 +1,5 @@
 automatically send to Miles every day
-	email sending fails
 	show last run
-	remove all console.logs
 	set up on server
 
 note which mails (to which receivers) were sent

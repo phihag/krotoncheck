@@ -40,7 +40,11 @@ function* check(season) {
 // Runs a new check and stores the results in the database
 // cb gets called with err, if any
 function recheck(db, season_key, in_background, callback, store=false) {
-	loader.load_season(db, season_key, function(err, season) {
+	db.fetch_all([{
+		queryFunc: '_findOne',
+		collection: 'seasons',
+		query: {key: season_key},
+	}], function(err, season) {
 		if (err) return callback(err);
 
 		const func = in_background ? bg_recheck : run_recheck;
@@ -65,7 +69,7 @@ function bg_recheck(season, callback) {
 	// Therefore, run a child program.
 	const worker_fn = path.join(__dirname, 'check_worker.js');
 
-	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 1024 * 1024 * 1024}, (err, stdout) => {
+	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 10 * 1024 * 1024}, (err, stdout) => {
 		if (err) return callback(err);
 
 		const res = JSON.parse(stdout);
@@ -83,12 +87,16 @@ function bg_recheck(season, callback) {
 }
 
 function run_recheck(season, callback) {
-	data_access.enrich(season);
+	loader.load_season_data(season, function(err) {
+		if (err) return callback(err);
 
-	var found = Array.from(check(season));
-	problems.enrich(season, found);
+		data_access.enrich(season);
 
-	callback(null, found);
+		var found = Array.from(check(season));
+		problems.enrich(season, found);
+
+		callback(null, found);
+	});
 }
 
 module.exports = {

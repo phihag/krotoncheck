@@ -10,14 +10,8 @@ const Baby = require('babyparse');
 const downloads = require('./downloads');
 
 
-function load_season(db, season_key, callback) {
+function load_season_data(season, callback) {
 	async.waterfall([function(cb) {
-		db.fetch_all([{
-			queryFunc: '_findOne',
-			collection: 'seasons',
-			query: {key: season_key},
-		}], cb);
-	}, function(season, cb) {
 		load_files(season, function(err, data) {
 			season.data = data;
 			cb(err, season);
@@ -103,6 +97,6 @@ function parse_csv_fn(fn, cb) {
 }
 
 module.exports = {
-	load_season,
+	load_season_data,
 	load_data, // testing only
 };

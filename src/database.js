@@ -32,8 +32,10 @@ function init(callback) {
 		}
 		if (docs.length === 0) {
 			const pw = utils.gen_token();
-			const admin = users.create(db, admin_email, pw, ['admin']);
-			console.log('Initial admin account: ' + admin.email +  ' : ' + pw + ' .');
+			users.create(db, admin_email, pw, ['admin'], function(err) {
+				if (err) throw err;
+				console.log('Initial admin account: ' + admin_email +  ' : ' + pw + ' .');
+			});
 		}
 	});
 	db.fetch_all = function(specs, callback) {

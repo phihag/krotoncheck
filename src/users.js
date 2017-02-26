@@ -10,14 +10,34 @@ function hash_password(pw) {
 	return bcrypt.hashSync(pw, salt);
 }
 
-function create(db, email, password, permissions) {
-	var u = {
+function create(db, email, password, permissions, cb) {
+	const u = {
 		email: email,
 		password: hash_password(password),
 		permissions: permissions,
 	};
-	db.users.insert(u);
-	return u;
+	db.users.insert(u, err => cb(err, u));
+}
+
+function create_dialog_handler(req, res, next) {
+	render(req, res, next, 'user_create_dialog', {});
+}
+
+function create_handler(req, res, next) {
+	const password = utils.gen_token();
+	const email = req.body.email;
+	if (! email) {
+		return next(new Error('Missing field email'));
+	}
+
+	create(req.app.db, email, password, [''], function(err) {
+		if (err) return next(err);
+
+		render(req, res, next, 'user_created', {
+			email,
+			password,
+		});
+	});
 }
 
 function login_handler(req, res, next) {
@@ -155,14 +175,16 @@ function middleware(req, res, next) {
 }
 
 module.exports = {
-	create: create,
-	login_handler: login_handler,
-	me_handler: me_handler,
-	logout_handler: logout_handler,
-	change_password_handler: change_password_handler,
-	has_permission: has_permission,
-	user_has_permission: user_has_permission,
-	middleware: middleware,
-	need_permission: need_permission,
+	create,
+	create_handler,
+	create_dialog_handler,
+	login_handler,
+	me_handler,
+	logout_handler,
+	change_password_handler,
+	has_permission,
+	user_has_permission,
+	middleware,
+	need_permission,
 	get_user_by_session: get_user_by_session,
 };

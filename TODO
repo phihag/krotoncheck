@@ -1,7 +1,4 @@
-move automatic message to the bottom
-fix https://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=12919
-
-note which mails (to which receivers) were sent
+after manual sending: show which mails (to which receivers) were sent
 download: recognize empty files and retry
 	fail if files still empty afterwards
 

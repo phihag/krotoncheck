@@ -30,11 +30,11 @@ function run(config, db, ar_id) {
 			assert(Array.isArray(found));
 			problems.prepare_render(season, found);
 			const problems_struct = {found};
-			const message = '[Automatisch verschickte E-Mail. Job-ID: ' + ar.name + ', schedule ' + ar.schedule + ']';
+			const message_bottom = 'Automatisch verschickte E-Mail. Job-ID: ' + ar.name + ', schedule ' + ar.schedule;
 
 			kc_email.craft_emails(
 				season, ar.receivers, problems_struct,
-				message,
+				null, message_bottom,
 				(err, crafted) => cb(err, ar, season, dl, found, crafted)
 			);
 		}, function(ar, season, dl, found, crafted, cb) {

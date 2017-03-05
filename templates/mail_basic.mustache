@@ -1,10 +1,11 @@
-{{#message}}
-<p style="white-space: pre-wrap;">{{message}}</p>
-{{/message}}
+{{#message_top}}
+<p style="white-space: pre-wrap;">{{message_top}}</p>
+{{/message_top}}
 
 {{>problems_maillist}}
 
-<p style="color: #333;">{{#receiver}}
+<p style="color: #333;">{{#message_bottom}}{{message_bottom}}<br/>
+{{/message_bottom}}{{#receiver}}
 Kroton-Report
 {{#region_filter}}für Bezirk {{region_filter}},{{/region_filter}}
 {{#stb_filter}}für {{stb_filter}},{{/stb_filter}}

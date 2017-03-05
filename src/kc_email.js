@@ -41,14 +41,14 @@ function filter_receiver(problems_struct, receiver) {
 	return res;
 }
 
-function craft_emails(season, receivers, problems_struct, message, callback) {
+function craft_emails(season, receivers, problems_struct, message_top, message_bottom, callback) {
 	async.map(
 		receivers,
-		(r, cb) => craft_single_email(season, problems_struct, r, message, cb),
+		(r, cb) => craft_single_email(season, problems_struct, r, message_top, message_bottom, cb),
 		callback);
 }
 
-function craft_single_email(season, problems_struct, receiver, message, cb) {
+function craft_single_email(season, problems_struct, receiver, message_top, message_bottom, cb) {
 	const important_problems_struct = filter_receiver(problems_struct, receiver);
 	const colors = problems.color_render(important_problems_struct);	
 
@@ -56,7 +56,8 @@ function craft_single_email(season, problems_struct, receiver, message, cb) {
 		season,
 		colors,
 		receiver,
-		message,
+		message_top,
+		message_bottom,
 	};
 
 	render.render_standalone('mail_basic', data, function(err, body_html) {

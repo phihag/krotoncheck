@@ -69,7 +69,7 @@ function bg_recheck(season, callback) {
 	// Therefore, run a child program.
 	const worker_fn = path.join(__dirname, 'check_worker.js');
 
-	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 10 * 1024 * 1024}, (err, stdout) => {
+	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 10 * 1024 * 1024}, (err, stdout, stderr) => {
 		if (err) return callback(err);
 
 		const res = JSON.parse(stdout);

@@ -351,6 +351,7 @@ function* check_all(data, tm, pms, team_idx) {
 				if (pm[`flag_umwertung_gegen_team${team_idx}`]) { // Already handled
 					continue;
 				}
+				console.error(pm)
 
 				const message = (
 					tm[`team${team_idx}name`] + ' hat im ' +

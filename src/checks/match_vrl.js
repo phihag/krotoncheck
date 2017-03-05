@@ -351,7 +351,9 @@ function* check_all(data, tm, pms, team_idx) {
 				if (pm[`flag_umwertung_gegen_team${team_idx}`]) { // Already handled
 					continue;
 				}
-				console.error(pm)
+				if (pm.flag_keinspiel_keinespieler && !pm[`team${3 - team_idx}spieler1spielerid`]) {
+					continue; // Opposing teams had no players
+				}
 
 				const message = (
 					tm[`team${team_idx}name`] + ' hat im ' +

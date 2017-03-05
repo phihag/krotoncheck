@@ -72,6 +72,10 @@ function bg_recheck(season, callback) {
 	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 10 * 1024 * 1024}, (err, stdout, stderr) => {
 		if (err) return callback(err);
 
+		if (stderr) {
+			console.error(stderr);
+		}
+
 		const res = JSON.parse(stdout);
 		if (res.error) {
 			return callback(res.error);

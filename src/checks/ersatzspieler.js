@@ -24,21 +24,41 @@ module.exports = function*(season) {
 
 	for (const tm of data.teammatches) {
 		const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
+		const is_high_league = /^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname);
+		const notes = data.get_matchfield(tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
+		const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
 
 		if (!backup_players) {
+			const BACKUP_PLAYER_RE = /(?:spielte?\ (?:statt|anstatt|für|aufgrund))|ersetzt/;
+			if (notes && BACKUP_PLAYER_RE.exec(notes)) {
+				const message = (
+					'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
+					' (besonderes Vorkommnis: ' + JSON.stringify(notes) + ')'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				}
+			} else if (resigned && BACKUP_PLAYER_RE.exec(resigned)) {
+				const message = (
+					'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
+					' (Aufgabe: ' + JSON.stringify(resigned) + ')'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				}
+			}
 			continue;
 		}
 
-		if (! /^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname)) {
+		if (! is_high_league) {
 			yield {
 				teammatch_id: tm.matchid,
 				message: 'Eintrag im Feld "vorgesehene Ersatzspieler" unterhalb Verbandsliga (vgl. §61.3 SpO)',
 			};
 			continue;
 		}
-
-		const notes = data.get_matchfield(tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
-		const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
 
 		for (const player_id of all_players(data, tm)) {
 			const player = data.get_player(player_id);

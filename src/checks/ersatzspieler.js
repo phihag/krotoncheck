@@ -29,24 +29,26 @@ module.exports = function*(season) {
 		const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
 
 		if (!backup_players) {
-			const BACKUP_PLAYER_RE = /(?:spielte?\ (?:statt|anstatt|für|aufgrund))|ersetzt/;
-			if (notes && BACKUP_PLAYER_RE.exec(notes)) {
-				const message = (
-					'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
-					' (besonderes Vorkommnis: ' + JSON.stringify(notes) + ')'
-				);
-				yield {
-					teammatch_id: tm.matchid,
-					message,
-				}
-			} else if (resigned && BACKUP_PLAYER_RE.exec(resigned)) {
-				const message = (
-					'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
-					' (Aufgabe: ' + JSON.stringify(resigned) + ')'
-				);
-				yield {
-					teammatch_id: tm.matchid,
-					message,
+			if (is_high_league) {
+				const BACKUP_PLAYER_RE = /(?:spielte?\ (?:statt|anstatt|für|aufgrund))|ersetzt/;
+				if (notes && BACKUP_PLAYER_RE.exec(notes)) {
+					const message = (
+						'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
+						' (besonderes Vorkommnis: ' + JSON.stringify(notes) + ')'
+					);
+					yield {
+						teammatch_id: tm.matchid,
+						message,
+					}
+				} else if (resigned && BACKUP_PLAYER_RE.exec(resigned)) {
+					const message = (
+						'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
+						' (Aufgabe: ' + JSON.stringify(resigned) + ')'
+					);
+					yield {
+						teammatch_id: tm.matchid,
+						message,
+					}
 				}
 			}
 			continue;

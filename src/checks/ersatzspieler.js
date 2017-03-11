@@ -39,7 +39,7 @@ module.exports = function*(season) {
 					yield {
 						teammatch_id: tm.matchid,
 						message,
-					}
+					};
 				} else if (resigned && BACKUP_PLAYER_RE.exec(resigned)) {
 					const message = (
 						'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +
@@ -48,7 +48,7 @@ module.exports = function*(season) {
 					yield {
 						teammatch_id: tm.matchid,
 						message,
-					}
+					};
 				}
 			}
 			continue;

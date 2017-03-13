@@ -115,7 +115,7 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 			} else if (league_type === 'Mini') {
 				// Look up in U19 database
 				const u19_vrl_type = laws.get_vrl_type('U19', tm, player.sex);
-				const u19_ve = data.get_vrl_entry(team.clubcode, u19_vrl_type, player_id);
+				const u19_ve = data.try_get_vrl_entry(team.clubcode, u19_vrl_type, player_id);
 				if (u19_ve) {
 					continue;
 				}

@@ -1,8 +1,11 @@
 only store problems unless error!
 detect date change comments
+send error email on change
 
-<keep Miles
 on date change comment: change mail to the other club
+
+separes Modul: Umwertungs-Kommentare erkennen und per Mail an die Vereine
+	reply-to=Staffelbetreuer
 
 after manual sending: show which mails (to which receivers) were sent
 download: recognize empty files and retry

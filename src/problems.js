@@ -63,6 +63,9 @@ function problem_id(p) {
 }
 
 function prepare_render(season, problems) {
+	if (!Array.isArray(problems)) {
+		return;
+	}
 	const ignore = season.ignore ? season.ignore : [];
 
 	for (const p of problems) {

@@ -1,3 +1,9 @@
+only store problems unless error!
+detect date change comments
+
+<keep Miles
+on date change comment: change mail to the other club
+
 after manual sending: show which mails (to which receivers) were sent
 download: recognize empty files and retry
 	fail if files still empty afterwards

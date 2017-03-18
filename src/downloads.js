@@ -241,7 +241,9 @@ function download_job(app, season, cb_started, cb_finished)  {
 
 				const check = require('./check');
 				check.recheck(app.db, season.key, app.config('check_background'), function(err, found) {
-					assert(Array.isArray(found));
+					if (!err) {
+						assert(Array.isArray(found));
+					}
 					cb_finished(err, dl, found);
 				}, true);
 			});

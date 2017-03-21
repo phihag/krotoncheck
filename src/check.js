@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert');
-const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,6 +8,7 @@ const data_access = require('./data_access');
 const loader = require('./loader');
 const problems = require('./problems');
 const utils = require('./utils');
+const worker_utils = require('./worker_utils');
 
 
 const CHECK_NAMES = fs.readdirSync(__dirname + '/checks').filter(fn => /\.js$/.test(fn)).map(fn => /^(.*)\.js$/.exec(fn)[1]);
@@ -63,31 +63,14 @@ function recheck(db, season_key, in_background, callback, store=false) {
 }
 
 function bg_recheck(season, callback) {
-	const season_json = JSON.stringify(season);
-
-	// node.js IPC does not seem suitable to extremely large structures like season right now.
-	// Therefore, run a child program.
 	const worker_fn = path.join(__dirname, 'check_worker.js');
 
-	const child = child_process.execFile('node', [worker_fn], {maxBuffer: 10 * 1024 * 1024}, (err, stdout, stderr) => {
+	worker_utils.in_background(worker_fn, season, function(err, res) {
 		if (err) return callback(err);
-
-		if (stderr) {
-			console.error(stderr);
-		}
-
-		const res = JSON.parse(stdout);
-		if (res.error) {
-			return callback(res.error);
-		}
 		const found = res.found;
-
 		assert(Array.isArray(found));
 		callback(null, found);
 	});
-	child.stdin.setEncoding('utf-8');
-	child.stdin.write(season_json);
-	child.stdin.end();
 }
 
 function run_recheck(season, callback) {

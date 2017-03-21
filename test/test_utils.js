@@ -53,4 +53,12 @@ describe('utils', function() {
 		assert.deepStrictEqual(utils.find_last([1, 2, 4, -1, 4, 98, 77, 32], i => (i % 2) === 1), 77);
 		assert.deepStrictEqual(utils.find_last([14, 2, 4, 44, 4, 98, 772, 32], i => (i % 2) === 1), undefined);
 	});
+
+	it('format_duration', function() {
+		assert.deepStrictEqual(utils.format_duration(97200000), '1 Tag 3 Stunden');
+		assert.deepStrictEqual(utils.format_duration(212400000), '2 Tage 11 Stunden');
+		assert.deepStrictEqual(utils.format_duration(4200000), '1 Stunde 10 Minuten');
+		assert.deepStrictEqual(utils.format_duration(55380000), '15 Stunden 23 Minuten');
+	});
+
 });

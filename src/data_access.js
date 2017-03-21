@@ -413,6 +413,9 @@ function enrich(season) {
 		}
 		return res[is_hr ? 'hr' : 'rr'];
 	};
+	data.get_all_notes = function(tm_id) {
+		return matchcomments_by_tmid.get(tm_id);
+	};
 	data.get_stb_note = function(tm_id, textfilter) {
 		const comments = matchcomments_by_tmid.get(tm_id);
 		if (!comments) {

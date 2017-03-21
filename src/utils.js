@@ -295,6 +295,30 @@ function find_last(ar, func) {
 	return res;
 }
 
+function map2obj(map) {
+	const res = {};
+	for (const [k, v] of map.entries()) {
+		res[k] = v;
+	}
+	return res;
+}
+
+function format_duration(duration_ms) {
+	const total_secs = duration_ms / 1000;
+	const total_mins = total_secs / 60;
+	const mins = Math.floor(total_mins) % 60;
+	const total_hours = total_mins / 60;
+	const hours = Math.floor(total_hours) % 24;
+	const total_days = total_hours / 24;
+	const days = Math.floor(total_days);
+
+	if (total_days >= 1) {
+		return ((days === 1) ? '1 Tag' : (days + ' Tage')) + ' ' + hours + ' Stunden';
+	} else {
+		return ((hours === 1) ? '1 Stunde' : (hours + ' Stunden')) + ' ' + mins + ' Minuten';
+	}
+}
+
 module.exports = {
 	cmp,
 	cmp_key,
@@ -303,12 +327,14 @@ module.exports = {
 	escapeRegExp,
 	filter,
 	filterr,
+	format_duration,
 	format_iso8601,
 	gen_token,
 	get,
 	make_key,
 	make_index,
 	make_multi_index,
+	map2obj,
 	map_obj,
 	match_all,
 	monday_1200,

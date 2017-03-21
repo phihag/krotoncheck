@@ -1,0 +1,11 @@
+<h1>StB-Statistiken für {{#season}}{{name}}{{/season}}</h1>
+
+<table>
+<thead><tr><th>StB</th><th># Spiele</th><th>Median</th></tr></thead>
+<tbody>
+{{#stats}}
+<tr><td>{{stb_name}}</td><td class="stbstats_count">{{count}}</td><td class="stbstats_median">{{#format_duration}}{{median}}{{/format_duration}}</td></tr>
+{{/stats}}
+
+</tbody>
+</table>

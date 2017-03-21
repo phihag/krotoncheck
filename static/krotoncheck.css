@@ -58,3 +58,8 @@ input,textarea,button {
 	border-top: 1px dashed #ccc;
 	border-bottom: 1px dashed #ccc;
 }
+
+.stbstats_count,
+.stbstats_median {
+	text-align: right;
+}

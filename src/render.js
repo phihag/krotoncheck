@@ -85,6 +85,17 @@ function mustache_format_timestamp() {
 	};
 }
 
+function mustache_format_duration() {
+	return function format_duration(text, renderfunc) {
+		var content = renderfunc(text);
+		var ts = parseInt(content, 10);
+		if (!ts) {
+			return '(Ungültige Zeitdauer)';
+		}
+		return utils.format_duration(ts);
+	};
+}
+
 function mustache_lookup_color() {
 	return function format_timestamp(text, renderfunc) {
 		const color_name = renderfunc(text);
@@ -104,6 +115,7 @@ function mustache_lookup_color() {
 function add_helper_funcs(data) {
 	data.urlencode = encodeURIComponent;
 	data.format_timestamp = mustache_format_timestamp;
+	data.format_duration = mustache_format_duration;
 	data.lookup_color = mustache_lookup_color;
 }
 

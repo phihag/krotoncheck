@@ -31,7 +31,6 @@ function show_handler(req, res, next) {
 	}], function(season) {
 		worker_utils.in_background(worker_fn, season, function(err, wr) {
 			if (err) return next(err);
-			console.error('stats:', wr)
 			render(req, res, next, 'stbstats_show', {
 				season,
 				stats: wr.stats,
@@ -95,7 +94,7 @@ function calc_stats(durations_by_stb) {
 
 function run_calc(season, cb) {
 	loader.load_season_data(season, (err) => {
-		if (err) return callback(err);
+		if (err) return cb(err);
 
 		data_access.enrich(season);
 

@@ -1,7 +1,8 @@
-only store problems unless error!
 detect date change comments
+write tests for possible date change comments
 send error email on change
 
+only store problems unless error!
 on date change comment: change mail to the other club
 
 separes Modul: Umwertungs-Kommentare erkennen und per Mail an die Vereine

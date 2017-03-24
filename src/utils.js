@@ -319,6 +319,26 @@ function format_duration(duration_ms) {
 	}
 }
 
+function format_duration_float(duration_ms) {
+	const format_float = f => (f.toFixed(1)).replace('.', ',');
+
+	const secs = duration_ms / 1000;
+	const mins = secs / 60;
+	if (mins < 1) {
+		return format_float(secs) + ' Sekunden';
+	}
+	const hours = mins / 60;
+	if (hours < 1) {
+		return format_float(mins) + ' Minuten';
+	}
+	const days = hours / 24;
+	if (days < 1) {
+		return format_float(hours) + ' Stunden';
+	}
+
+	return format_float(days) + ' Tage';
+}
+
 module.exports = {
 	cmp,
 	cmp_key,
@@ -328,6 +348,7 @@ module.exports = {
 	filter,
 	filterr,
 	format_duration,
+	format_duration_float,
 	format_iso8601,
 	gen_token,
 	get,

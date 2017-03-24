@@ -96,6 +96,17 @@ function mustache_format_duration() {
 	};
 }
 
+function mustache_format_duration_float() {
+	return function format_duration_float(text, renderfunc) {
+		var content = renderfunc(text);
+		var ts = parseInt(content, 10);
+		if (!ts) {
+			return '(Ungültige Zeitdauer)';
+		}
+		return utils.format_duration_float(ts);
+	};
+}
+
 function mustache_lookup_color() {
 	return function format_timestamp(text, renderfunc) {
 		const color_name = renderfunc(text);
@@ -116,6 +127,7 @@ function add_helper_funcs(data) {
 	data.urlencode = encodeURIComponent;
 	data.format_timestamp = mustache_format_timestamp;
 	data.format_duration = mustache_format_duration;
+	data.format_duration_float = mustache_format_duration_float;
 	data.lookup_color = mustache_lookup_color;
 }
 

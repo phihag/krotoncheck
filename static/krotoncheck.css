@@ -60,6 +60,11 @@ input,textarea,button {
 }
 
 .stbstats_count,
-.stbstats_median {
+.stbstats_median,
+.stbstats_q95 {
 	text-align: right;
+}
+.stbstats_median,
+.stbstats_q95 {
+	padding-left: 1em;
 }

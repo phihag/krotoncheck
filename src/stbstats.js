@@ -8,16 +8,16 @@ const render = require('./render');
 const utils = require('./utils');
 const worker_utils = require('./worker_utils');
 
-function median(ar) {
+function quantile(ar, q) {
 	ar.sort(function(a, b) {
 		return a - b;
 	});
 
-	const idx = Math.floor((ar.length - 1) / 2);
-	if (ar.length % 2 === 0) {
-		return (ar[idx] + ar[idx + 1]) / 2;
-	} else {
+	const idx = q * (ar.length - 1);
+	if (idx === Math.floor(idx)) {
 		return ar[idx];
+	} else {
+		return (ar[Math.floor(idx)] + ar[Math.ceil(idx)]) / 2;
 	}
 }
 
@@ -69,13 +69,14 @@ function calc_ms(data, tm, stb_name, now) {
 	}
 
 	if (handled_ar.length === 0) {
-		return now; // Not yet handled
+		return now - entered; // Not yet handled
 	}
 
 	const handled = Math.min.apply(null, handled_ar);
 	if (entered > handled) {
 		return;
 	}
+
 	return handled - entered;
 }
 
@@ -84,7 +85,8 @@ function calc_stats(durations_by_stb) {
 	for (const [stb_name, durs] of durations_by_stb.entries()) {
 		res.push({
 			stb_name,
-			median: median(durs),
+			median: quantile(durs, 0.5),
+			q95: quantile(durs, 0.95),
 			count: durs.length,
 		});
 	}

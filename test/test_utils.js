@@ -61,4 +61,13 @@ describe('utils', function() {
 		assert.deepStrictEqual(utils.format_duration(55380000), '15 Stunden 23 Minuten');
 	});
 
+	it('format_duration_float', function() {
+		assert.deepStrictEqual(utils.format_duration_float(1500), '1,5 Sekunden');
+		assert.deepStrictEqual(utils.format_duration_float(138000), '2,3 Minuten');
+		assert.deepStrictEqual(utils.format_duration_float(97200000), '1,1 Tage');
+		assert.deepStrictEqual(utils.format_duration_float(212400000), '2,5 Tage');
+		assert.deepStrictEqual(utils.format_duration_float(4200000), '1,2 Stunden');
+		assert.deepStrictEqual(utils.format_duration_float(55380000), '15,4 Stunden');
+	});
+
 });

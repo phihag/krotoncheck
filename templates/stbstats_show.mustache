@@ -4,7 +4,7 @@
 <thead><tr><th>StB</th><th># Spiele</th><th>Median</th><th>95%-Quantil</th></tr></thead>
 <tbody>
 {{#stats}}
-<tr><td>{{stb_name}}</td><td class="stbstats_count">{{count}}</td><td class="stbstats_median">{{#format_duration}}{{median}}{{/format_duration}}</td><td class="stbstats_q95">{{#format_duration}}{{q95}}{{/format_duration}}</td></tr>
+<tr><td>{{stb_name}}</td><td class="stbstats_count">{{count}}</td><td class="stbstats_median">{{#format_duration_float}}{{median}}{{/format_duration_float}}</td><td class="stbstats_q95">{{#format_duration_float}}{{q95}}{{/format_duration_float}}</td></tr>
 {{/stats}}
 
 </tbody>

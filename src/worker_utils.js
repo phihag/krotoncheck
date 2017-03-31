@@ -49,6 +49,11 @@ function in_background(worker_fn, arg, callback) {
 		}
 
 		const res = JSON.parse(stdout);
+		if (! res) {
+			callback(new Error('Invalid JSON: ' + stdout));
+			return;
+		}
+
 		if (res.error) {
 			return callback(res.error);
 		}

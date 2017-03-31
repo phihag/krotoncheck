@@ -1,7 +1,9 @@
+store and link to reports
 detect date change comments
 write tests for possible date change comments
 send error email on change
 
+https://www.turnier.de/sport/teammatch.aspx?id=577D385D-6DD7-49AD-B621-AABE3D56B979&match=10653 umwertung 4. Einzel
 only store problems unless error!
 on date change comment: change mail to the other club
 

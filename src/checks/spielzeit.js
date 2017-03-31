@@ -62,6 +62,9 @@ function* check_tm(season, tm) {
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all
 	}
+	if (tm.flag_umwertung_gegen_beide) {
+		return; // Played at invalid date
+	}
 
 	const team_entered = tm.mannschaftsergebnis_eintragedatum ? utils.parse_date(tm.mannschaftsergebnis_eintragedatum) : null;
 	const entered = tm.detailergebnis_eintragedatum ? utils.parse_date(tm.detailergebnis_eintragedatum) : null;

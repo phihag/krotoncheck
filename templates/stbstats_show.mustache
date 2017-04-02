@@ -1,10 +1,26 @@
 <h1>StB-Statistiken für {{#season}}{{name}}{{/season}}</h1>
 
 <table>
-<thead><tr><th>StB</th><th># Spiele</th><th>Median</th><th>95%-Quantil</th></tr></thead>
+<thead><tr>
+	<th>StB</th>
+	<th># Spiele</th>
+	<th>Bezirk</th>
+	<th>Median</th>
+{{#extended}}
+	<th>Durchschnitt</th>
+{{/extended}}
+	<th>95%-Quantil</th>
+</tr></thead>
 <tbody>
 {{#stats}}
-<tr><td>{{stb_name}}</td><td class="stbstats_count">{{count}}</td><td class="stbstats_median">{{#format_duration_float}}{{median}}{{/format_duration_float}}</td><td class="stbstats_q95">{{#format_duration_float}}{{q95}}{{/format_duration_float}}</td></tr>
+<tr><td>{{stb_name}}</td>
+	<td class="stbstats_count">{{count}}</td>
+	<td class="stbstats_regions">{{regions_str}}</td>
+	<td class="stbstats_median">{{#format_duration_float}}{{median}}{{/format_duration_float}}</td>
+{{#extended}}
+	<td class="stbstats_avg">{{#format_duration_float}}{{avg}}{{/format_duration_float}}</td>
+{{/extended}}
+	<td class="stbstats_q95">{{#format_duration_float}}{{q95}}{{/format_duration_float}}</td></tr>
 {{/stats}}
 
 </tbody>

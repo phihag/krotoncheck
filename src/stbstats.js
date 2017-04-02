@@ -21,6 +21,14 @@ function quantile(ar, q) {
 	}
 }
 
+function average(ar) {
+	let sum = 0;
+	for (const el of ar) {
+		sum += el;
+	}
+	return sum / ar.length;
+}
+
 function show_handler(req, res, next) {
 	const season_key = req.params.season_key;
 	const worker_fn = path.join(__dirname, 'stbstats_worker.js');
@@ -34,6 +42,7 @@ function show_handler(req, res, next) {
 			render(req, res, next, 'stbstats_show', {
 				season,
 				stats: wr.stats,
+				extended: req.query.hasOwnProperty('extended') || req.query.hasOwnProperty('e'),
 			});
 		});
 	});
@@ -80,14 +89,19 @@ function calc_ms(data, tm, stb_name, now) {
 	return handled - entered;
 }
 
-function calc_stats(durations_by_stb) {
+function calc_stats(durations_by_stb, regions_by_stb) {
 	const res = [];
 	for (const [stb_name, durs] of durations_by_stb.entries()) {
+		const regions_ar = Array.from(regions_by_stb.get(stb_name));
+		regions_ar.sort();
+		const regions_str = regions_ar.join(',');
 		res.push({
 			stb_name,
 			median: quantile(durs, 0.5),
 			q95: quantile(durs, 0.95),
+			avg: average(durs),
 			count: durs.length,
+			regions_str,
 		});
 	}
 	res.sort(utils.cmp_key('median'));
@@ -102,10 +116,15 @@ function run_calc(season, cb) {
 
 		const data = season.data;
 		const durations_by_stb = new Map();
+		const regions_by_stb = new Map();
 		const now = Date.now();
 		for (const tm of data.teammatches) {
 			const stb = data.get_stb(tm);
 			const stb_name = stb.firstname + ' ' + stb.lastname;
+
+			const region = data.get_region(tm.eventname);
+			const stb_regions = utils.setdefault(regions_by_stb, stb_name, () => new Set());
+			stb_regions.add(region);
 
 			const duration = calc_ms(data, tm, stb_name, now);
 			if (duration === undefined) {
@@ -116,7 +135,7 @@ function run_calc(season, cb) {
 			stb_durations.push(duration);
 		}
 
-		const stats = calc_stats(durations_by_stb);
+		const stats = calc_stats(durations_by_stb, regions_by_stb);
 		cb(null, stats);
 	});
 }

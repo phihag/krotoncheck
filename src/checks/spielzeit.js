@@ -5,7 +5,7 @@ const data_utils = require('../data_utils');
 
 
 function has_late_note(data, tm) {
-	return !! data.get_stb_note(tm.matchid, ntext => /.*F(?:04|24)-[0-9]{1,5}-/.test(ntext));
+	return !! data.get_stb_note(tm.matchid, ntext => /.*[fF](?:04|24)-[0-9]{1,5}-/.test(ntext));
 }
 
 function* check_tm(season, tm) {

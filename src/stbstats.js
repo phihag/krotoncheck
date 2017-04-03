@@ -92,7 +92,8 @@ function calc_ms(data, tm, stb_name, now) {
 function calc_stats(durations_by_stb, regions_by_stb) {
 	const res = [];
 	for (const [stb_name, durs] of durations_by_stb.entries()) {
-		const regions_ar = Array.from(regions_by_stb.get(stb_name));
+		const stb_regions = regions_by_stb.get(stb_name) || [];
+		const regions_ar = Array.from(stb_regions);
 		regions_ar.sort();
 		const regions_str = regions_ar.join(',');
 		res.push({
@@ -133,6 +134,9 @@ function run_calc(season, cb) {
 
 			let stb_durations = utils.setdefault(durations_by_stb, stb_name, () => []);
 			stb_durations.push(duration);
+
+			let region_durations = utils.setdefault(durations_by_stb, region, () => []);
+			region_durations.push(duration);
 		}
 
 		const stats = calc_stats(durations_by_stb, regions_by_stb);

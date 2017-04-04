@@ -87,6 +87,10 @@ function player_str(player) {
 	return player.vorname + ' ' + player.name + ' (' + player.spielerid + ')';
 }
 
+function player_name(player) {
+	return player.vorname + ' ' + player.name;
+}
+
 function match_name(pm) {
 	let res = pm.disziplin;
 	if (pm.matchtypeno) {
@@ -118,6 +122,7 @@ module.exports = {
 	parse_bool,
 	parse_int,
 	player_str,
+	player_name,
 	team2num,
 	teamid2clubid,
 	tm_str,

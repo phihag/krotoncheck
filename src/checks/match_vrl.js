@@ -5,7 +5,12 @@ const assert = require('assert');
 const data_utils = require('../data_utils');
 const laws = require('../laws');
 
-function* check_min_count(league_type, tm, team, valid_players_by_gender) {
+function player_names(data, player_ids) {
+	const players = Array.from(player_ids).map(pid => data.get_player(pid, true));
+	return players.map(data_utils.player_name).join(', ');
+}
+
+function* check_min_count(data, league_type, tm, team, valid_players_by_gender) {
 	const f_count = valid_players_by_gender.F.size;
 	const m_count = valid_players_by_gender.M.size;
 
@@ -29,17 +34,37 @@ function* check_min_count(league_type, tm, team, valid_players_by_gender) {
 	}
 
 	if (/^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname)) {
-		if ((m_count < 4) || (f_count < 2)) {
+		if (m_count === 0) {
 			yield {
 				teammatch_id: tm.matchid,
-				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§58.1 SpO)',
+				message: 'Keine spielberechtigten Spieler von ' + team.name + ' aufgestellt (§58.1 SpO)',
+			};
+		} else if (m_count < 4) {
+			const names = player_names(data, valid_players_by_gender.M);
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Nicht genügend spielberechtigte Spieler von ' + team.name + ' aufgestellt (§58.1 SpO). Spielberechtigt waren ' + names,
+			};
+		}
+		if (f_count === 0) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Keine spielberechtigten Spielerinnen von ' + team.name + ' aufgestellt (§58.1 SpO)',
+			};
+		} else if (f_count < 2) {
+			const names = player_names(data, valid_players_by_gender.F);
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Nicht genügend spielberechtigte Spielerinnen von ' + team.name + ' aufgestellt (§58.1 SpO). Spielberechtigt war ' + names,
 			};
 		}
 	} else if (league_type === 'Mini') {
 		if (f_count + m_count < 3) {
+			const player_ids = new Set([...valid_players_by_gender.M, ...valid_players_by_gender.F]);
+			const names = player_names(data, player_ids);
 			yield {
 				teammatch_id: tm.matchid,
-				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§15.4 JSpO)',
+				message: 'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§15.4 JSpO). Spielberechtigt waren ' + names,
 			};
 		}
 	} else {
@@ -52,9 +77,15 @@ function* check_min_count(league_type, tm, team, valid_players_by_gender) {
 		}
 
 		if ((m_count < 2) || ((m_count === 2) && (f_count < 2)) || ((m_count === 3) && (f_count < 1))) {
+			const names_m = player_names(data, valid_players_by_gender.M);
+			const names_f = player_names(data, valid_players_by_gender.F);
+			const message = (
+				'Nicht genügend spielberechtigte SpielerInnen von ' + team.name + ' aufgestellt (§57.4 SpO). ' +
+				'Spielberechtigte Herren waren ' + names_m + ', spielberechtigte Damen ' + names_f
+			);
 			yield {
 				teammatch_id: tm.matchid,
-				message: 'Nicht genügend spielberechtigte Spieler von ' + team.name + ' aufgestellt (§57.4 SpO)',
+				message,
 			};
 		}
 	}
@@ -263,7 +294,7 @@ function* check_all(data, tm, pms, team_idx) {
 	}
 
 	// Check that enough non-blacklisted players
-	yield* check_min_count(league_type, tm, team, valid_players_by_gender);
+	yield* check_min_count(data, league_type, tm, team, valid_players_by_gender);
 
 	// Check that all ratings match
 	for (const discipline in pm_ratings_by_discipline) {
@@ -302,11 +333,11 @@ function* check_all(data, tm, pms, team_idx) {
 				const message = (
 					'Doppel falsch aufgestellt: ' +
 					data_utils.match_name(mr1.pm) + ' ' +
-						data.player_name(p1a) + ' DVRL #' + mr1.ratings[0] + '' + ' / ' +
-						data.player_name(p1b) + ' DVRL #' + mr1.ratings[1] + '.\n' +
+						data_utils.player_name(p1a) + ' DVRL #' + mr1.ratings[0] + '' + ' / ' +
+						data_utils.player_name(p1b) + ' DVRL #' + mr1.ratings[1] + '.\n' +
 					data_utils.match_name(mr2.pm) + ' ' +
-						data.player_name(p2a) + ' DVRL #' + mr2.ratings[0] + '' + ' / ' +
-						data.player_name(p2b) + ' DVRL #' + mr2.ratings[1] + '.'
+						data_utils.player_name(p2a) + ' DVRL #' + mr2.ratings[0] + '' + ' / ' +
+						data_utils.player_name(p2b) + ' DVRL #' + mr2.ratings[1] + '.'
 				);
 				yield {
 					teammatch_id: tm.matchid,

@@ -330,9 +330,6 @@ function enrich(season) {
 		}
 		return res.get(player_id);
 	};
-	data.player_name = function(p) {
-		return p.vorname + ' ' + p.name;
-	};
 	data.get_stb = function(tm) {
 		// Careful: May not be present for old leagues
 		const res = stbs_by_league_code.get(tm.staffelcode);

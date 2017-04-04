@@ -385,6 +385,9 @@ function* check_all(data, tm, pms, team_idx) {
 				if (pm.flag_keinspiel_keinespieler && !pm[`team${3 - team_idx}spieler1spielerid`]) {
 					continue; // Opposing teams had no players
 				}
+				if (pm[`flag_keinspiel_keinspieler_team${team_idx}`] && !pm[`team${team_idx}spieler1spielerid`]) {
+					continue; // Incorrectly set up team had no players
+				}
 
 				const message = (
 					tm[`team${team_idx}name`] + ' hat im ' +
@@ -392,6 +395,7 @@ function* check_all(data, tm, pms, team_idx) {
 					'muss auch das ' + data_utils.match_name(pm) + ' umgewertet werden (§59.1d SpO)'
 				);
 				yield {
+					match_id: pm.matchid,
 					teammatch_id: tm.matchid,
 					message,
 				};

@@ -120,6 +120,14 @@ module.exports = function*(season) {
 			continue;
 		}
 
+		const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
+		if (backup_players) {
+			const bp_names = data_utils.extract_names(backup_players);
+			if (bp_names.some(bpn => resigned.includes(bpn))) {
+				continue; // a backup player played
+			}
+		}
+
 		const pms = data.get_playermatches_by_teammatch_id(tm.matchid);
 		if (! pms.some(pm => (
 				pm.flag_aufgabe_team1 ||

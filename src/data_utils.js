@@ -103,7 +103,13 @@ function matches_by_disciplines(pms) {
 	return res;
 }
 
+function extract_names(backup_str) {
+	const player_backup_str = backup_str.replace(/\([^()]*\)/g, '');
+	return player_backup_str.split(/[\s,./\\]+/).filter(name => !!name);
+}
+
 module.exports = {
+	extract_names,
 	league_type,
 	match_name,
 	matches_by_disciplines,

@@ -55,6 +55,7 @@ function enrich(season, found) {
 }
 
 function store(db, season, found, cb) {
+	assert(Array.isArray(found));
 	db.problems.update({key: season.key}, {key: season.key, found: found}, {upsert: true}, cb);
 }
 
@@ -150,7 +151,7 @@ function colorize_problem(problem) {
 }
 
 function color_render(problems_struct) {
-	const problems = problems_struct ? problems_struct.found : [];
+	const problems = problems_struct ? (problems_struct.found ? problems_struct.found : []) : [];
 
 	problems.forEach(colorize_problem);
 

@@ -61,7 +61,9 @@ function annotate(data) {
 		tm.ts = utils.parse_date(tm.spieldatum);
 	}
 	for (const tm of data.buli_teammatches) {
-		tm.ts = utils.parse_date(tm.spieldatum);
+		if (tm.spieldatum) {
+			tm.ts = utils.parse_date(tm.spieldatum);
+		}
 	}
 	for (const pm of data.playermatches) {
 		for (const int_key of [
@@ -145,6 +147,9 @@ function enrich(season) {
 		const tm = buli_teammatch_by_id.get(pm.teammatchid);
 		if (!tm) {
 			continue; // Cancelled team and therefore teammatch
+		}
+		if (!tm.ts) {
+			continue; // In the future, not yet scheduled
 		}
 		pm.is_buli = true;
 		pm.tm = tm;

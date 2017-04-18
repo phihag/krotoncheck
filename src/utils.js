@@ -203,7 +203,7 @@ function weekday_destr(ts) {
 function parse_date(dstr) {
 	const m = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})(?: ([0-9]{2}:[0-9]{2}:[0-9]{2}))?$/.exec(dstr);
 	if (!m) {
-		throw new Error('Cannot parse date ' + dstr);
+		throw new Error('Cannot parse date ' + JSON.stringify(dstr));
 	}
 	const time_str = m[4] ? m[4] : '00:00:00';
 	return german_tz(m[3] + '-' + pad(m[2], 2) + '-' + pad(m[1], 2) + ' ' + time_str, TZ_ID);

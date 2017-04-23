@@ -10,6 +10,7 @@ const root = require('./root');
 const seasons = require('./seasons');
 const show = require('./show');
 const stbstats = require('./stbstats');
+const bulifinals = require('./bulifinals');
 const users = require('./users');
 
 function setup(app) {
@@ -45,6 +46,7 @@ function setup(app) {
 	app.post('/s/:season_key/autorun/:autorun_id/receiver_delete', users.need_permission('any', autoruns.receiver_delete_handler));
 
 	app.get('/s/:season_key/stbstats', users.need_permission('any', stbstats.show_handler));
+	app.get('/s/:season_key/bulifinals', users.need_permission('any', bulifinals.show_handler));
 
 	app.get('/s/:season_key/show/', users.need_permission('any', show.season_handler));
 	app.get('/s/:season_key/show/player/:player_id', users.need_permission('any', show.player_handler));

@@ -28,9 +28,9 @@ function* check_tm(season, tm) {
 			teammatch_id: tm.matchid,
 			message,
 		};
-	} else if (((league_type === 'Mini') || (league_type === 'U19')) && ((original_weekday != 6) || (original_timestr != '16:00:00'))) {
+	} else if (((league_type === 'Mini') || (league_type === 'U19')) && ((original_weekday != 6) || (original_timestr != '15:00:00'))) {
 		const message = (
-			'Verbandsansetzung nicht Samstag 16:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2destr(original_ts) + ' (§45.2b SpO)'
+			'Verbandsansetzung nicht Samstag 15:00, sondern ' + utils.weekday_destr(original_ts) + ' ' + utils.ts2destr(original_ts) + ' (§45.2b SpO)'
 		);
 		yield {
 			teammatch_id: tm.matchid,

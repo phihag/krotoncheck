@@ -117,14 +117,16 @@ function enrich(season) {
 		line_vrl.entries.push(cr);
 	}
 
+	const buli_make_index = (d, func) => (d ? utils.make_index(d, func) : null);
+
 	const club_by_id = utils.make_index(data.clubs, c => c.code);
 	const player_by_id = utils.make_index(data.players, p => p.spielerid);
-	const buli_player_by_id = utils.make_index(data.buli_players, p => p.spielerid);
+	const buli_player_by_id = buli_make_index(data.buli_players, p => p.spielerid);
 	const team_by_id = utils.make_index(data.teams, t => t.code);
-	const buli_team_by_id = utils.make_index(data.buli_teams, t => t.code);
+	const buli_team_by_id = buli_make_index(data.buli_teams, t => t.code);
 	const teams_by_club = utils.make_multi_index(data.teams, t => t.clubcode);
 	const teammatch_by_id = utils.make_index(data.teammatches, tm => tm.matchid);
-	const buli_teammatch_by_id = utils.make_index(data.buli_teammatches, tm => tm.matchid);
+	const buli_teammatch_by_id = buli_make_index(data.buli_teammatches, tm => tm.matchid);
 	const matchlogs_by_teammatchid = utils.make_multi_index(data.matchlog, ml => ml.matchid);
 	const playermatches_by_teammatchid = utils.make_multi_index(data.playermatches, pm => pm.teammatchid);
 	const locations_by_id = utils.make_index(data.locations, loc => loc.code);

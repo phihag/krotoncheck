@@ -33,14 +33,17 @@ function annotate(data) {
 		}
 	}
 
-	for (const p of data.buli_players) {
-		p.is_buli = true;
-	}
-	for (const tm of data.buli_teammatches) {
-		tm.is_buli = true;
-	}
-	for (const t of data.buli_teams) {
-		t.is_buli = true;
+	const has_buli = !! data.buli_players;
+	if (has_buli) {
+		for (const p of data.buli_players) {
+			p.is_buli = true;
+		}
+		for (const tm of data.buli_teammatches) {
+			tm.is_buli = true;
+		}
+		for (const t of data.buli_teams) {
+			t.is_buli = true;
+		}
 	}
 
 	for (const tm of data.teammatches) {
@@ -60,9 +63,11 @@ function annotate(data) {
 	for (const tm of data.teammatches) {
 		tm.ts = utils.parse_date(tm.spieldatum);
 	}
-	for (const tm of data.buli_teammatches) {
-		if (tm.spieldatum) {
-			tm.ts = utils.parse_date(tm.spieldatum);
+	if (has_buli) {
+		for (const tm of data.buli_teammatches) {
+			if (tm.spieldatum) {
+				tm.ts = utils.parse_date(tm.spieldatum);
+			}
 		}
 	}
 	for (const pm of data.playermatches) {

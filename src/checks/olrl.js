@@ -78,6 +78,10 @@ function* check_enough_players(data, team, vrl_typeid, gender) {
 }
 
 module.exports = function*(season) {
+	if (data_utils.is_preseason(season)) {
+		return;
+	}
+
 	const data = season.data;
 
 	for (const team of data.teams) {

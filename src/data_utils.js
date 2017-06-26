@@ -112,8 +112,20 @@ function extract_names(backup_str) {
 	return player_backup_str.split(/[\s,./\\]+/).filter(name => !!name);
 }
 
+function is_preseason(season) {
+	if (!season.vrldate_o19_hr) {
+		return undefined; // Don't know
+	}
+
+	const start_ts = utils.parse_date(season.vrldate_o19_hr);
+	const now = Date.now();
+	const publish_delay = 1 * 24 * 60 * 60 * 1000;
+	return (now < start_ts + publish_delay);
+}
+
 module.exports = {
 	extract_names,
+	is_preseason,
 	league_type,
 	match_name,
 	matches_by_disciplines,

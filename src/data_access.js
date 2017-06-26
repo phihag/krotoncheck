@@ -256,7 +256,7 @@ function enrich(season) {
 
 	data.get_player = function(player_id, include_buli) {
 		let res = player_by_id.get(player_id);
-		if (!res && include_buli) {
+		if (!res && include_buli && buli_player_by_id) {
 			res = buli_player_by_id.get(player_id);
 		}
 		if (!res) {
@@ -300,7 +300,7 @@ function enrich(season) {
 	};
 	data.get_team = function(team_id, include_buli) {
 		let res = team_by_id.get(team_id);
-		if (!res && include_buli) {
+		if (!res && include_buli && buli_team_by_id) {
 			res = buli_team_by_id.get(team_id);
 		}
 		if (!res) {

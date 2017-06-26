@@ -13,7 +13,13 @@ function* get_double_teams(season) {
 
 	const groups = new Map(); // Contents: Map clubCode -> array of teams
 	for (const team of season.data.teams) {
+		if (team.Status === 'Mannschaftsrückzug') {
+			continue; // Team retracted, does not matter
+		}
 		const gid = team.DrawID;
+		if (!gid) {
+			continue; // Team without draw: data error, ignore
+		}
 		const ltype = data_utils.league_type(gid);
 		if (['U19', 'Mini'].includes(ltype)) {
 			const short_gid_m = /^01-([JSM](?:[0-9]+))$/.exec(gid);
@@ -67,7 +73,7 @@ function* check_team(data, team) {
 				if (played_other) {
 					const message = (
 						'Zwei Mannschaften eines Vereins sollten immer zuerst gegeneinander spielen (§35.5 SpO). ' +
-						data_utils.tm_str(tm) + ' wurde erst am ' + utils.ts2destr(tm.ts) + ' gespielt, nach ' +
+						data_utils.tm_str(tm) + ' wird erst am ' + utils.ts2destr(tm.ts) + ' gespielt, nach ' +
 						data_utils.tm_str(played_other) + ' am ' + utils.ts2destr(played_other.ts) + '.'
 					);
 					yield {

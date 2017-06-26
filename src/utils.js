@@ -144,7 +144,7 @@ function natcmp(as, bs){
 }
 
 function escapeRegExp(string) {
-	return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+	return string.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
 function render_json(res, data) {

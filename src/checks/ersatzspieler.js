@@ -30,7 +30,7 @@ module.exports = function*(season) {
 
 		if (!backup_players) {
 			if (is_high_league) {
-				const BACKUP_PLAYER_RE = /(?:spielte?\ (?:statt|anstatt|für|aufgrund))|ersetzt/;
+				const BACKUP_PLAYER_RE = /(?:spielte? (?:statt|anstatt|für|aufgrund))|ersetzt/;
 				if (notes && BACKUP_PLAYER_RE.exec(notes)) {
 					const message = (
 						'Potenzieller Einsatz eines Ersatzspielers ohne Eintrag im Feld "vorgesehene Ersatzspieler" ' +

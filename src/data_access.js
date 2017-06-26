@@ -148,18 +148,20 @@ function enrich(season) {
 		pm.is_hr = (tm.runde === 'H');
 		all_pms.push(pm);
 	}
-	for (const pm of data.buli_playermatches) {
-		const tm = buli_teammatch_by_id.get(pm.teammatchid);
-		if (!tm) {
-			continue; // Cancelled team and therefore teammatch
+	if (data.buli_playermatches) {
+		for (const pm of data.buli_playermatches) {
+			const tm = buli_teammatch_by_id.get(pm.teammatchid);
+			if (!tm) {
+				continue; // Cancelled team and therefore teammatch
+			}
+			if (!tm.ts) {
+				continue; // In the future, not yet scheduled
+			}
+			pm.is_buli = true;
+			pm.tm = tm;
+			pm.is_hr = (tm.runde === 'H');
+			all_pms.push(pm);
 		}
-		if (!tm.ts) {
-			continue; // In the future, not yet scheduled
-		}
-		pm.is_buli = true;
-		pm.tm = tm;
-		pm.is_hr = (tm.runde === 'H');
-		all_pms.push(pm);
 	}
 
 	all_pms.sort(function(pm1, pm2) {

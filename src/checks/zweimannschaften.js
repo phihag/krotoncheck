@@ -4,12 +4,23 @@
 const data_utils = require('../data_utils');
 const utils = require('../utils');
 
+function parse_eligible_groups(season) {
+	if (! season.qualifying_youth_groups) {
+		return [];
+	}
+
+	const lines = season.qualifying_youth_groups.split(/\n/g);
+	const trimmed_lines = lines.map(s => (
+		s.replace(/#.*$/, '')
+		.replace(/^.*:/, '')
+		.trim()
+	)).filter(s => s);
+	const csv = trimmed_lines.join(',');
+	return csv.split(',');
+}
 
 function* get_double_teams(season) {
-	const eligible_groups = (
-		season.qualifying_youth_groups ?
-		season.qualifying_youth_groups.split(',').map(s => s.trim()) :
-		[]);
+	const eligible_groups = parse_eligible_groups(season);
 
 	const groups = new Map(); // Contents: Map clubCode -> array of teams
 	for (const team of season.data.teams) {

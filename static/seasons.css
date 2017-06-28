@@ -23,9 +23,13 @@
 	min-width: 14em;
 	margin-right: 0.5em;
 }
+textarea[name="qualifying_youth_groups"] {
+	font-size: 12px;
+	width: 250px;
+}
 textarea[name="sg_csv"] {
 	font-size: 8px;
-	width: 30em;
+	width: 250px;
 }
 
 .receiver_delete_form {

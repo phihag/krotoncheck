@@ -11,16 +11,20 @@ const problems = require('./problems');
 function run(config, db, ar_id) {
 	async.waterfall([
 		function(cb) {
-			db.autoruns.findOne({_id: ar_id}, cb);
+			db.autoruns.findOne({_id: ar_id}, (err, ar) => {
+				if (err) return cb(err);
+				if (!ar) return cb(new Error('Cannot find autorun ' + ar_id));
+				cb(err, ar);
+			});
 		},
 		function(ar, cb) {
-			if (!ar) return cb(new Error('Cannot find autorun ' + ar_id));
-
-			db.seasons.findOne({key: ar.season_key}, (err, season) => cb(err, ar, season));
+			db.seasons.findOne({key: ar.season_key}, (err, season) => {
+				if (err) return cb(err);
+				if (!season) return cb(new Error('Cannot find season ' + ar.season_key));
+				cb(err, ar, season);
+			});
 		},
 		function(ar, season, cb) {
-			if (!season) return cb(new Error('Cannot find season ' + ar.season_key));
-
 			const fake_app = {config, db};
 			downloads.download_job(
 				fake_app, season, () => {},

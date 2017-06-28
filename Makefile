@@ -40,7 +40,6 @@ eslint-client:
 
 install-service:
 	sed -e "s#KROTONCHECK_ROOT_DIR#$$PWD#" div/krotoncheck.service.template > /etc/systemd/system/krotoncheck.service
-	chmod +x /etc/systemd/system/krotoncheck.service
 	systemctl enable krotoncheck
 	systemctl start krotoncheck
 

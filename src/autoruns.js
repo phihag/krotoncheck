@@ -48,7 +48,7 @@ function run(config, db, ar_id) {
 			);
 		},
 		function(ar, season, dl, found, crafted, cb) {
-			db.autoruns.update({_id: ar_id}, {$set: {last_success: Date.now()}}, {}, cb);
+			db.autoruns.update({_id: ar_id}, {$set: {last_success: Date.now()}}, {}, (err) => cb(err));
 		},
 	], function(err) {
 		if (err) {

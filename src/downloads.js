@@ -200,11 +200,11 @@ function start_handler(req, res, next) {
 function download_job(app, season, cb_started, cb_finished)  {
 	download_season(app.config, season, function(err, dl) {
 		if (err) {
-			return cb_started(err, dl);
-		} else {
-			current_downloads.set(dl.id, dl);
+			cb_started(err, dl);
+			return cb_finished(err, dl);
 		}
 
+		current_downloads.set(dl.id, dl);
 		cb_started(err, dl);
 	}, function(err, dl) {
 		if (err) {
@@ -212,6 +212,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 			dl.done_timestamp = Date.now();
 			dl.error = err;
 			// TODO: clean up?
+console.error('calling cb_finished: 1')
 			cb_finished(err, dl);
 			return;
 		}
@@ -223,6 +224,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 				dl.error = err;
 				// TODO: clean up
 				cb_finished(err, dl);
+console.error('calling cb_finished: 2')
 				return;
 			}
 
@@ -234,6 +236,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 					dl.status = 'error';
 					dl.error = err;
 					cb_finished(err, dl);
+console.error('calling cb_finished: 3')
 					return;
 				}
 
@@ -244,6 +247,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 					if (!err) {
 						assert(Array.isArray(found));
 					}
+console.error('calling cb_finished: 4')
 					cb_finished(err, dl, found);
 				}, true);
 			});

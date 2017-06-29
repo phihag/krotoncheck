@@ -52,7 +52,7 @@ function run(config, db, ar_id) {
 		},
 	], function(err) {
 		if (err) {
-			console.error('Autorun ' + ar_id + ' failed: ' + err.message + ' ' + err.stack);
+			console.error('Autorun ' + ar_id + ' failed: ' + err.message + ' ' + err.stack + ' (' + err + ')');
 			return;
 		}
 	});

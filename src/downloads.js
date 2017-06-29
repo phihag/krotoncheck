@@ -212,7 +212,6 @@ function download_job(app, season, cb_started, cb_finished)  {
 			dl.done_timestamp = Date.now();
 			dl.error = err;
 			// TODO: clean up?
-console.error('calling cb_finished: 1')
 			cb_finished(err, dl);
 			return;
 		}
@@ -224,7 +223,6 @@ console.error('calling cb_finished: 1')
 				dl.error = err;
 				// TODO: clean up
 				cb_finished(err, dl);
-console.error('calling cb_finished: 2')
 				return;
 			}
 
@@ -236,7 +234,6 @@ console.error('calling cb_finished: 2')
 					dl.status = 'error';
 					dl.error = err;
 					cb_finished(err, dl);
-console.error('calling cb_finished: 3')
 					return;
 				}
 
@@ -247,7 +244,7 @@ console.error('calling cb_finished: 3')
 					if (!err) {
 						assert(Array.isArray(found));
 					}
-console.error('calling cb_finished: 4', err, dl, found)
+
 					cb_finished(err, dl, found);
 				}, true);
 			});

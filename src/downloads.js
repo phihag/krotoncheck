@@ -247,7 +247,7 @@ console.error('calling cb_finished: 3')
 					if (!err) {
 						assert(Array.isArray(found));
 					}
-console.error('calling cb_finished: 4')
+console.error('calling cb_finished: 4', err, dl, found)
 					cb_finished(err, dl, found);
 				}, true);
 			});

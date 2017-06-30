@@ -151,18 +151,33 @@ function download_season(config, season, started_cb, done_cb) {
 			return done_cb(err);
 		}
 
-		var jar = request.jar();
+		const jar = request.jar();
 		run_login(config, jar, function() {
-			var download_dir = path.join(INPROGRESS_ROOT, dl.id);
+			const download_dir = path.join(INPROGRESS_ROOT, dl.id);
 			async.each(dl.tasks, function(task_name, cb) {
-				var fn = calc_filename(download_dir, task_name);
-				var req = request({
+				const fn = calc_filename(download_dir, task_name);
+				const req = request({
 					url: calc_url(task_name, season),
 					jar: jar,
 					headers: HTTP_HEADERS,
 				});
 
-				download_file(req, fn, cb);
+				async.retry(config('retries', 3), (cb) => {
+					download_file(req, fn, (err) => {
+						if (err) return cb(err);
+
+						fs.stat(fn, (err, stats) => {
+							if (err) return cb(err);
+
+							if (stats.size === 0) {
+								console.log('Download ' + season.name + ' / ' + task_name + ' is empty');
+								return cb(new Error('Download ' + task_name + ' is empty'));
+							}
+
+							cb();
+						});
+					});
+				}, cb);
 			}, function(err) {
 				if (err) {
 					dl.done_timestamp = Date.now();

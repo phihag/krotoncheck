@@ -32,7 +32,16 @@ function worker_main(func) {
 		},
 	], function(err, res) {	
 		const response = err ? {error: err} : res;
-		const response_json = JSON.stringify(response);
+		const response_json = JSON.stringify(response, (key, obj) => {
+			if (obj instanceof Error) {
+				return {
+					message: obj.message,
+					stack: obj.stack,
+				};
+			}
+
+			return obj;
+		});
 
 		console.log(response_json);
 	});

@@ -8,6 +8,17 @@ const http = require('http');
 const timezone = require('timezone');
 
 
+function retry(attempts, func, callback) {
+	assert(attempts < 10000);
+	func((err) => {
+		if (err && (attempts > 1)) {
+			return retry(attempts - 1, func, callback);
+		}
+
+		return callback(err);
+	});
+}
+
 function gen_token() {
 	return crypto.randomBytes(32).toString('hex');
 }
@@ -369,6 +380,7 @@ module.exports = {
 	setdefault,
 	sha512,
 	find_last,
+	retry,
 	sort_by,
 	today_iso8601,
 	ts2destr,

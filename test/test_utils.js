@@ -70,4 +70,39 @@ describe('utils', function() {
 		assert.deepStrictEqual(utils.format_duration_float(55380000), '15,4 Stunden');
 	});
 
+	it('retry (successful)', function(done) {
+		var tries = 0;
+		utils.retry(4, (cb) => {
+			tries++;
+			return cb((tries === 4) ? null : 'ERROR');
+		}, (err) => {
+			assert(!err);
+			assert.strictEqual(tries, 4);
+			done();
+		});
+	});
+
+	it('retry (successful from the start)', function(done) {
+		var tries = 0;
+		utils.retry(4, (cb) => {
+			tries++;
+			return cb((tries === 1) ? null : 'ERROR');
+		}, (err) => {
+			assert(!err);
+			assert.strictEqual(tries, 1);
+			done();
+		});
+	});
+
+	it('retry (failure)', function(done) {
+		var tries = 0;
+		utils.retry(4, (cb) => {
+			tries++;
+			return cb((tries === 5) ? null : 'ERROR');
+		}, (err) => {
+			assert.strictEqual(err, 'ERROR');
+			assert.strictEqual(tries, 4);
+			done();
+		});
+	});
 });

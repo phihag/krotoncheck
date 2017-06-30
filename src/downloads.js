@@ -162,7 +162,7 @@ function download_season(config, season, started_cb, done_cb) {
 					headers: HTTP_HEADERS,
 				});
 
-				async.retry(config('retries', 3), (cb) => {
+				utils.retry(config('retries', 3), (cb) => {
 					download_file(req, fn, (err) => {
 						if (err) return cb(err);
 

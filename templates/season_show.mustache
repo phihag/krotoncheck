@@ -26,7 +26,7 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 {{/newest_download}}
 
 {{#downloads_inprogress}}
-<div class="download">Läuft seit {{#format_timestamp}}{{started_timestamp}}{{/format_timestamp}}</div>
+<div class="download">Läuft seit {{#format_timestamp}}{{started_timestamp}}{{/format_timestamp}} {{tasks_str}}</div>
 {{/downloads_inprogress}}
 
 <button class="download_button" role="button" data-season_key="{{key}}">Download starten</button>

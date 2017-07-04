@@ -117,8 +117,15 @@ function download_file(req, fn, cb) {
 	});
 }
 
-function download_task(season, jar, download_dir, task_name, cb) {
+function log_verbose(config, msg) {
+	if (config('verbose', false)) {
+		console.log(msg);
+	}
+}
+
+function download_task(config, season, jar, download_dir, task_name, cb) {
 	const fn = calc_filename(download_dir, task_name);
+	log_verbose(config, 'Downloading ' + season.name + ' / ' + task_name);
 	const req = request({
 		url: calc_url(task_name, season),
 		jar: jar,
@@ -132,8 +139,12 @@ function download_task(season, jar, download_dir, task_name, cb) {
 			if (err) return cb(err);
 
 			if (stats.size === 0) {
+				log_verbose(config, 'Download ' + season.name + ' / ' + task_name + ' is empty');
+
 				return cb(new Error('Download ' + task_name + ' is empty'));
 			}
+
+			log_verbose(config, 'Finished downloading ' + season.name + ' / ' + task_name);
 
 			cb();
 		});
@@ -155,8 +166,8 @@ function download_season(config, season, started_cb, done_cb) {
 			const tasks = data_access.ALL_TASKS.slice();
 			if (season.buli_tournament_id) {
 				const all_buli_tasks = data_access.ALL_TASKS;
-				// all_buli_tasks = all_buli_tasks.filter(t => t !== 'clubranking'); // Not needed at the moment
-				const buli_tasks = all_buli_tasks.map(t => 'buli_' + t);
+				const use_buli_tasks = all_buli_tasks.filter(t => t !== 'clubranking'); // Not needed at the moment
+				const buli_tasks = use_buli_tasks.map(t => 'buli_' + t);
 				Array.prototype.push.apply(tasks, buli_tasks);
 			}
 
@@ -165,6 +176,8 @@ function download_season(config, season, started_cb, done_cb) {
 				status: 'started',
 				started_timestamp: Date.now(),
 				tasks: tasks,
+				tasks_outstanding: tasks.slice(),
+				tasks_error: [],
 				season_key: season.key,
 			};
 			cb(err, dl);
@@ -182,8 +195,15 @@ function download_season(config, season, started_cb, done_cb) {
 			async.each(dl.tasks, (task_name, cb) => {
 				utils.retry(
 					config('retries', 3),
-					(icb) => download_task(season, jar, download_dir, task_name, icb),
-					cb);
+					(icb) => download_task(config, season, jar, download_dir, task_name, icb),
+					function(err) {
+						if (err) {
+							dl.tasks_error.push(task_name);
+						}
+
+						utils.remove(dl.tasks_outstanding, task_name);
+						cb(err);
+					});
 			}, function(err) {
 				if (err) {
 					dl.done_timestamp = Date.now();
@@ -279,8 +299,23 @@ function inprogress_by_season(season_key) {
 		current_downloads.values());
 }
 
+function annotate(dl) {
+	let res = '';
+	if (dl.tasks_outstanding.length > 0) {
+		res += 'Läuft (' + (
+			(dl.tasks_outstanding.length > 4) ?
+			(dl.tasks_outstanding.length + ' Dateien ausstehend') :
+			dl.tasks_outstanding.join(',')
+		) + ')';
+	}
+	if (dl.tasks_error.length > 0) {
+		res += (res ? ', ' : '') + 'Fehler: ' + (dl.tasks_error.join(','));
+	}
+	dl.tasks_str = res;
+}
 
 module.exports = {
+	annotate,
 	download_job,
 	BASE_URL,
 	DATA_ROOT,

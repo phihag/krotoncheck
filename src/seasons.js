@@ -67,6 +67,7 @@ function show_handler(req, res, next) {
 		query: {season_key: season_key},
 	}], function(season, problems_struct, autoruns) {
 		const downloads_inprogress = downloads.inprogress_by_season(season.key);
+		downloads_inprogress.forEach(downloads.annotate);
 		if (problems_struct) {
 			problems.prepare_render(season, problems_struct.found);
 		}

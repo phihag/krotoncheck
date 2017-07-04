@@ -350,6 +350,16 @@ function format_duration_float(duration_ms) {
 	return format_float(days) + ' Tage';
 }
 
+function remove(ar, val) {
+	for (var i = 0;i < ar.length;i++) {
+		if (ar[i] === val) {
+			ar.splice(i, 1);
+			return true;
+		}
+	}
+	return false;
+}
+
 module.exports = {
 	cmp,
 	cmp_key,
@@ -375,6 +385,7 @@ module.exports = {
 	next_day,
 	pad,
 	parse_date,
+	remove,
 	render_json,
 	same_day,
 	setdefault,

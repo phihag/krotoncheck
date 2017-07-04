@@ -117,6 +117,29 @@ function download_file(req, fn, cb) {
 	});
 }
 
+function download_task(season, jar, download_dir, task_name, cb) {
+	const fn = calc_filename(download_dir, task_name);
+	const req = request({
+		url: calc_url(task_name, season),
+		jar: jar,
+		headers: HTTP_HEADERS,
+	});
+
+	download_file(req, fn, (err) => {
+		if (err) return cb(err);
+
+		fs.stat(fn, (err, stats) => {
+			if (err) return cb(err);
+
+			if (stats.size === 0) {
+				return cb(new Error('Download ' + task_name + ' is empty'));
+			}
+
+			cb();
+		});
+	});
+}
+
 // started_cb gets called once the download job, with (err, download) as an argument
 // done_cb gets called once the download is finished, again with (err, download)
 function download_season(config, season, started_cb, done_cb) {
@@ -131,7 +154,9 @@ function download_season(config, season, started_cb, done_cb) {
 		utils.ensure_dir(download_dir, function(err) {
 			const tasks = data_access.ALL_TASKS.slice();
 			if (season.buli_tournament_id) {
-				const buli_tasks = data_access.ALL_TASKS.map(t => 'buli_' + t);
+				const all_buli_tasks = data_access.ALL_TASKS;
+				// all_buli_tasks = all_buli_tasks.filter(t => t !== 'clubranking'); // Not needed at the moment
+				const buli_tasks = all_buli_tasks.map(t => 'buli_' + t);
 				Array.prototype.push.apply(tasks, buli_tasks);
 			}
 
@@ -154,30 +179,11 @@ function download_season(config, season, started_cb, done_cb) {
 		const jar = request.jar();
 		run_login(config, jar, function() {
 			const download_dir = path.join(INPROGRESS_ROOT, dl.id);
-			async.each(dl.tasks, function(task_name, cb) {
-				const fn = calc_filename(download_dir, task_name);
-				const req = request({
-					url: calc_url(task_name, season),
-					jar: jar,
-					headers: HTTP_HEADERS,
-				});
-
-				utils.retry(config('retries', 3), (cb) => {
-					download_file(req, fn, (err) => {
-						if (err) return cb(err);
-
-						fs.stat(fn, (err, stats) => {
-							if (err) return cb(err);
-
-							if (stats.size === 0) {
-								console.log('Download ' + season.name + ' / ' + task_name + ' is empty');
-								return cb(new Error('Download ' + task_name + ' is empty'));
-							}
-
-							cb();
-						});
-					});
-				}, cb);
+			async.each(dl.tasks, (task_name, cb) => {
+				utils.retry(
+					config('retries', 3),
+					(icb) => download_task(season, jar, download_dir, task_name, icb),
+					cb);
 			}, function(err) {
 				if (err) {
 					dl.done_timestamp = Date.now();

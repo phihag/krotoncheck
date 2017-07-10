@@ -4,23 +4,8 @@
 const data_utils = require('../data_utils');
 const utils = require('../utils');
 
-function parse_eligible_groups(season) {
-	if (! season.qualifying_youth_groups) {
-		return [];
-	}
-
-	const lines = season.qualifying_youth_groups.split(/\n/g);
-	const trimmed_lines = lines.map(s => (
-		s.replace(/#.*$/, '')
-		.replace(/^.*:/, '')
-		.trim()
-	)).filter(s => s);
-	const csv = trimmed_lines.join(',');
-	return csv.split(',');
-}
-
 function* get_double_teams(season) {
-	const eligible_groups = parse_eligible_groups(season);
+	const eligible_groups = data_utils.parse_grouplist(season.qualifying_youth_groups);
 
 	const groups = new Map(); // Contents: Map clubCode -> array of teams
 	for (const team of season.data.teams) {
@@ -32,7 +17,7 @@ function* get_double_teams(season) {
 			continue; // Team without draw: data error, ignore
 		}
 		const ltype = data_utils.league_type(gid);
-		if (['U19', 'Mini'].includes(ltype)) {
+				if (['U19', 'Mini'].includes(ltype)) {
 			const short_gid_m = /^01-([JSM](?:[0-9]+))$/.exec(gid);
 			const short_gid = short_gid_m ? short_gid_m[1] : null;
 

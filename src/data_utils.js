@@ -123,6 +123,21 @@ function is_preseason(season) {
 	return (now < start_ts + publish_delay);
 }
 
+function parse_grouplist(comma_list) {
+	if (! comma_list) {
+		return [];
+	}
+
+	const lines = comma_list.split(/\n/g);
+	const trimmed_lines = lines.map(s => (
+		s.replace(/#.*$/, '')
+		.replace(/^.*:/, '')
+		.trim()
+	)).filter(s => s);
+	const csl = trimmed_lines.join(',');
+	return csl.split(',').map(s => s.trim());
+}
+
 module.exports = {
 	extract_names,
 	is_preseason,
@@ -132,9 +147,10 @@ module.exports = {
 	matches_by_round,
 	o19_is_regular,
 	parse_bool,
+	parse_grouplist,
 	parse_int,
-	player_str,
 	player_name,
+	player_str,
 	team2num,
 	teamid2clubid,
 	tm_str,

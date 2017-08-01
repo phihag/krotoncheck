@@ -119,7 +119,7 @@ function is_preseason(season) {
 
 	const start_ts = utils.parse_date(season.vrldate_o19_hr);
 	const now = Date.now();
-	const publish_delay = 1 * 24 * 60 * 60 * 1000;
+	const publish_delay = 3 * 24 * 60 * 60 * 1000;
 	return (now < start_ts + publish_delay);
 }
 

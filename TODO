@@ -1,3 +1,17 @@
+option to show all mails that would be sent by auto sending
+show mails nicer (JavaScript)
+mail target:
+	+ alle StBs
+	+ alle BWs
+	+ VRL an BW / BJW
+new message: Unbearbeitete Spiele (bis Mittwoch 12 Uhr, Spiel bestätigt oder mit Kommentar versehen, aus dem z.B. hervorgeht, dass die Vereine den Spielbericht einschicken müssen)
+
+configure
+	montags, mittwochs und freitags 12:01 Uhr -> alle StBs
+	+ alle Spiele aus Süd 2 -> Florian Brüll und Christian Deter
+	8:00 Festspieler an die BW/BJW täglich (Süd 2 Günter Wagner)
+
+
 E-Mail an StBs bei allen Kommentaren -> Andreas Rosenstock, Barbara Bub, Tomas Arnold, Horst Rosenstock
 store and link to reports
 detect date change comments

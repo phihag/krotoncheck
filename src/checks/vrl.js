@@ -485,7 +485,7 @@ function* check_vrl(season, vrl) {
 		if (line.vkz1 && !['U19E', 'SE', 'J1', 'S1', 'M1', 'N'].includes(line.vkz1)) {
 			const hint = {
 				'U19': ' (U19 statt U19E? U19-Erklärung beim Verband prüfen!)',
-				'F': ' (Festschreibung falsch eingetragen? Richtig ist "FIX" in vkz3)'
+				'F': ' (Festschreibung falsch eingetragen? Richtig ist "FIX" in vkz3)',
 			}[line.vkz1] || '';
 
 			const message = (

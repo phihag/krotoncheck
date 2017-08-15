@@ -1,8 +1,8 @@
 option to show all mails that would be sent by auto sending
 show mails nicer (JavaScript)
 mail target:
-	+ alle StBs
-	+ alle BWs
+	+ betreffende StBs
+	+ betreffende BWs (normale Matches)
 	+ VRL an BW / BJW
 new message: Unbearbeitete Spiele (bis Mittwoch 12 Uhr, Spiel bestätigt oder mit Kommentar versehen, aus dem z.B. hervorgeht, dass die Vereine den Spielbericht einschicken müssen)
 

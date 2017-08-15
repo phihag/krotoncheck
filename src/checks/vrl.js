@@ -482,6 +482,27 @@ function* check_vrl(season, vrl) {
 			}
 		}
 
+		if (line.vkz1 && !['U19E', 'SE', 'J1', 'S1', 'M1', 'N'].includes(line.vkz1)) {
+			const hint = {
+				'U19': ' (U19 statt U19E? U19-Erklärung beim Verband prüfen!)',
+				'F': ' (Festschreibung falsch eingetragen? Richtig ist "FIX" in vkz3)'
+			}[line.vkz1] || '';
+
+			const message = (
+				'Ungültiges Kennzeichen ' + JSON.stringify(line.vkz1) +
+				' in der ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' ' +
+				' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+				hint
+			);
+
+			yield {
+				type: 'vrl',
+				vrl_typeid: vrl.typeid,
+				clubcode: vrl.clubcode,
+				message,
+			};
+		}
+
 		// Youth players in O19 with correct designations
 		if (is_o19) {
 			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);

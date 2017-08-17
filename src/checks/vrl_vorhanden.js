@@ -35,7 +35,7 @@ module.exports = function*(season) {
 		for (const typeid of expected_types) {
 			if (! club_vrl_ids.includes(typeid)) {
 				const message = (
-					`VRL ${data.vrl_name(typeid)} von (${club.code}) ${club.name} fehlt`
+					`${data.vrl_name(typeid)} von (${club.code}) ${club.name} fehlt`
 				);
 
 				yield {

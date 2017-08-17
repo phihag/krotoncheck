@@ -24,6 +24,7 @@ spielerid;clubid;clubname;name;vorname;gebdatum;sex;nat;akl;jkz1;kz;privacystatu
 01-bcf-yf1;01-1001;BC Feder;Last-yf1;First-yf1;;M;;;;;
 01-bcf-yf2;01-1001;BC Feder;Last-yf2;First-yf2;;F;;;;;
 01-bcf-yf3;01-1001;BC Feder;Last-yf3;First-yf3;;F;;;;;
+01-bcf-yf4;01-1001;BC Feder;Last-yf4;First-yf4;;F;;;;;
 01-fcs-male1;01-1002;FC Shuttle;FCS_lastname1;Martin;;M;;;;;
 01-fcs-male2;01-1002;FC Shuttle;FCS_lastname2;Martin;;M;;;;;
 01-fcs-male3;01-1002;FC Shuttle;FCS_lastname3;Martin;;M;;;;;

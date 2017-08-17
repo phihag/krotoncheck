@@ -553,6 +553,23 @@ function* check_vrl(season, vrl) {
 					message,
 				};
 			}
+		} else {
+			// U19
+			if (line.jkz1 === 'U19E') {
+				const message = (
+					((line.sex === 'F') ? 'Spielerin' : 'Spieler') +
+					' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+					' mit U19-Erklärung in Jugendmannschaft gemeldet' +
+					' in ' + data.vrl_name(line.typeid) + ' von ' + line.clubname +
+					' (Position ' + line.position + ')'
+				);
+				yield {
+					type: 'vrl',
+					clubcode: line.clubcode,
+					vrl_typeid: line.typeid,
+					message: message,
+				};
+			}
 		}
 
 		// Invalid start dates

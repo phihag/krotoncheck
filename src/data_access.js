@@ -99,6 +99,7 @@ function enrich(season) {
 	annotate(data);
 
 	const vrls_by_clubs = new Map();
+	data.vrls_by_clubs = vrls_by_clubs;
 	for (let cr of data.clubranking) {
 		let club_vrls = vrls_by_clubs.get(cr.clubcode);
 		if (!club_vrls) {
@@ -362,6 +363,9 @@ function enrich(season) {
 			throw new Error('Unknown club code ' + JSON.stringify(club_code));
 		}
 		return res;
+	};
+	data.try_get_teams_by_club = function(club_code) {
+		return teams_by_club.get(club_code) || [];
 	};
 	data.all_vrlinfos = function*() {
 		for (const [clubcode, club_vrls] of vrls_by_clubs.entries()) {

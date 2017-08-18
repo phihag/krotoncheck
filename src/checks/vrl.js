@@ -526,7 +526,7 @@ function* check_vrl(season, vrl) {
 						clubcode: vrl.clubcode,
 						message: message,
 					};
-				} else {
+				} else if (!line.vkz1) { // Invalid vkz1 is handled elsewhere
 					const message = (
 						'Jugendkennzeichen fehlt in ' + data.vrl_name(vrl.typeid) +
 						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +

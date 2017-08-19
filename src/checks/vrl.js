@@ -420,7 +420,7 @@ function* check_vrl(season, vrl) {
 			};
 		}
 
-		const position = parseInt(line.teamposition);
+		const position = parseInt(line.position);
 		if (isNaN(position)) {
 			yield {
 				type: 'vrl',

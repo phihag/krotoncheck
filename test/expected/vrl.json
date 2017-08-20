@@ -22,7 +22,7 @@
 {
 	"clubcode": "01-1005",
 	"vrl_typeid": 9,
-	"message": "Ungültige VRL 9[Hinrunde Herren O19] von (01-1005) Chaos VRL: position (8008) != teamposition (8) bei Spieler (01-cv-m5) first5 last5",
+	"message": "Ungültige VRL 9[Hinrunde Herren O19] von (01-1005) Chaos VRL: position (8) != teamposition (8008) bei Spieler (01-cv-m5) first5 last5",
 	"type": "vrl"
 },
 {

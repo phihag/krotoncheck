@@ -76,7 +76,7 @@ clubcode,clubname,typeid,position,memberid,lastname,middlename,firstname,sex,nat
 01-1005,Chaos VRL,9,5,01-cv-m2,,,,M,,,,,,,,01-1005,,01-1005-1,,5,6,,,true,,,True,
 01-1005,Chaos VRL,9,6,01-cv-m3,,,,M,,,,,,,,01-1005,,01-1005-1,,6,5,,,true,,,True,
 01-1005,Chaos VRL,9,7,01-cv-m4,,,,M,,,,,,,,01-1005,,01-1005-1,,7,,,,true,,,True,
-01-1005,Chaos VRL,9,8008,01-cv-m5,last5,,first5,M,,,,,,,,01-1005,,01-1005-1,,8,,,,true,,,True,
+01-1005,Chaos VRL,9,8,01-cv-m5,last5,,first5,M,,,,,,,,01-1005,,01-1005-1,,8008,,,,true,,,True,
 01-1005,Chaos VRL,9,9,01-cv-m6,last6,,frst6,M,,,,,,,,01-1005,,,,9,8,,,true,,,True,
 01-1005,Chaos VRL,9,10,01-cv-m7,last7,,first7,M,,,,,,,,01-1005,,01-1005-1,,10,,,,true,,,True,
 01-1005,Chaos VRL,9,11,01-cv-m8,last8,,first8,M,,,,,,,,01-1005,,01-1005-2,,11,,,,true,,,True,

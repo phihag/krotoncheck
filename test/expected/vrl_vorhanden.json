@@ -1,3 +1,16 @@
 [
 
+{
+	"clubcode": "01-1023",
+	"message": "VRL 9[Hinrunde Herren O19] von (01-1023) NoVRL fehlt",
+	"type": "vrl",
+	"vrl_typeid": 9
+},
+{
+	"clubcode": "01-1023",
+	"message": "VRL 10[Hinrunde Damen O19] von (01-1023) NoVRL fehlt",
+	"type": "vrl",
+	"vrl_typeid": 10
+}
+
 ]

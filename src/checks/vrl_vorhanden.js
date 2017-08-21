@@ -16,6 +16,10 @@ module.exports = function*(season) {
 
 		const expected_types = new Set();
 		for (const team of teams) {
+			if (team.Status) { // Retreated
+				continue;
+			}
+
 			const league_type = data_utils.league_type(team.DrawID);
 			if (league_type === 'O19') {
 				expected_types.add(9);

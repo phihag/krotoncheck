@@ -355,7 +355,7 @@ function enrich(season) {
 		if (!tm_matchfields) {
 			return null;
 		}
-		return tm_matchfields.get(label);
+		return tm_matchfields.get(label) || tm_matchfields.get(label + ':');
 	};
 	data.get_teams_by_club = function(club_code) {
 		const res = teams_by_club.get(club_code);

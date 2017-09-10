@@ -5,7 +5,7 @@ const data_utils = require('../data_utils');
 
 
 function has_late_note(data, tm) {
-	return !! data.get_stb_note(tm.matchid, ntext => /.*[fF](?:04|24)-[0-9]{1,5}-/.test(ntext));
+	return !! data.get_stb_note(tm.matchid, ntext => /[fF](?:04|24|38)/.test(ntext));
 }
 
 function* check_tm(season, tm) {
@@ -68,7 +68,6 @@ function* check_tm(season, tm) {
 
 	const team_entered = tm.mannschaftsergebnis_eintragedatum ? utils.parse_date(tm.mannschaftsergebnis_eintragedatum) : null;
 	const entered = tm.detailergebnis_eintragedatum ? utils.parse_date(tm.detailergebnis_eintragedatum) : null;
-	const first_entered = team_entered ? team_entered : entered;
 	if (team_entered !== null) {
 		if (team_entered < played) {
 			const message = (
@@ -112,12 +111,12 @@ function* check_tm(season, tm) {
 	}
 
 	if (is_olrl) {
-		if (first_entered) {
-			if (played + REPORT_TEAM_RLOL < team_entered) {
+		if (entered) {
+			if (played + REPORT_TEAM_RLOL < entered) {
 				const message = (
-					'Mannschaftsergebnis zu spät eingetragen: ' +
+					'[F38] Detailergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
-					'aber erst eingetragen um ' + utils.ts2destr(first_entered) +
+					'aber erst eingetragen um ' + utils.ts2destr(entered) +
 					' (vgl. §4.1 Anlage 6 SpO)');
 				yield {
 					teammatch_id: tm.matchid,
@@ -127,7 +126,7 @@ function* check_tm(season, tm) {
 		} else {
 			if (played + REPORT_TEAM_RLOL < now) {
 				const message = (
-					'Mannschaftsergebnis zu spät eingetragen: ' +
+					'[F38] Detailergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
 					'aber immer noch nicht eingetragen' +
 					' (vgl. §4.1 Anlage 6 SpO)');

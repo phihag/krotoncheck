@@ -6,8 +6,8 @@
 <p style="margin-bottom: 1em">
 <span style="display: block; font-weight: bold; background: {{#lookup_color}}{{color}}{{/lookup_color}};">{{header}}{{#teammatch}}
 {{#hrt}}{{team2name}} - {{team1name}}{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} {{#ergebnisbestaetigt_datum}}(bestätigt){{/ergebnisbestaetigt_datum}}
-{{/teammatch}}<br/></span>
-<a href="{{turnier_url}}">{{turnier_url}}</a><br/>
+{{/teammatch}}{{#header_email}}, <a href="mailto:{{header_email}}?subject={{header_mail_subject}}&body={{header_mail_body}}">{{header_email}}</a>{{/header_email}}<br/></span>
+{{#turnier_url}}<a href="{{turnier_url}}">{{turnier_url}}</a><br/>{{/turnier_url}}
 
 {{#problems}}
 {{#turnier2_url}}<a href="{{turnier2_url}}">{{turnier2_url}}</a><br/>{{/turnier2_url}}

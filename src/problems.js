@@ -7,6 +7,8 @@ const data_utils = require('./data_utils.js');
 const downloads = require('./downloads.js');
 
 
+const COLOR_ORDER = ['black', 'lightgray', 'red', 'yellow', 'violet', 'green'];
+
 function enrich(season, found) {
 	const data = season.data;
 
@@ -36,6 +38,9 @@ function enrich(season, found) {
 				p.region = 'VRL ' + data.get_club_region(p.clubcode);
 			}
 		} else if (p.teammatch_id) {
+			if (p.type === 'latenote') {
+				p.tournament_id = season.tournament_id;
+			}
 			p.teammatch = data.get_teammatch(p.teammatch_id);
 			p.teammatch_url = downloads.BASE_URL + 'sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch_id;
 			p.turnier_url = p.teammatch_url;
@@ -135,6 +140,8 @@ function colorize_problem(problem) {
 		problem.color = 'lightgray';
 	} else if (problem.type === 'fixed') {
 		problem.color = 'lightblue';
+	} else if (problem.type === 'latenote') {
+		problem.color = 'violet';
 	} else {
 		const tm = problem.teammatch;
 		if (tm) {
@@ -210,6 +217,20 @@ function color_render(problems_struct) {
 				reg.groups_map[key] = by_group;
 				reg.groups.push(by_group);
 			}
+		} else if (problem.type === 'latenote') {
+			assert(problem.stb);
+			const stb_name = problem.stb.firstname + ' ' + problem.stb.lastname;
+			const key = stb_name;
+			by_group = reg.groups_map[key];
+			if (!by_group) {
+				by_group = {
+					header: stb_name,
+					problems: [],
+					header_stb: problem.stb,
+				};
+				reg.groups_map[key] = by_group;
+				reg.groups.push(by_group);
+			}
 		} else {
 			const tm = problem.teammatch;
 			if (!tm.matchid) {
@@ -240,6 +261,35 @@ function color_render(problems_struct) {
 	for (const region of utils.values(by_color)) {
 		for (const groups of utils.values(region.regions_map)) {
 			for (const g of utils.values(groups.groups_map)) {
+				if (g.header_stb) {
+					g.header_email = g.header_stb.email;
+					g.header_mail_subject = encodeURIComponent(
+						(g.problems.length === 1) ?
+						data_utils.tm_str(g.problems[0].teammatch) :
+						'Unbearbeitete Spiele'
+					);
+					g.header_mail_body = encodeURIComponent(
+						'Hallo ' + g.header_stb.firstname + ',\n\n' +
+						(
+							(g.problems.length > 1) ?
+							'bei den folgenden Spielen fehlt noch eine Bestätigung von Dir:' :
+							'beim folgenden Spiel fehlt noch eine Bestätigung von Dir:'
+						) +
+						'\n\n' +
+						g.problems.map(p => {
+							const tm = p.teammatch;
+							return (
+								data_utils.tm_str(tm) +
+								' (' + utils.weekday_destr(utils.parse_date(tm.spieldatum)) + ', ' + tm.spieldatum + ')\n' +
+								p.teammatch_url
+							);
+						}).join('\n\n') +
+						'\n\n' +
+						'Alle Deine Spiele findest Du übrigens unter https://www.turnier.de/sport/membermatches.aspx?id=' +  g.problems[0].tournament_id + '\n\n' +
+						'Viele Grüße\n'
+				);
+				}
+
 				if (!g.stb || !g.teammatch) {
 					continue;
 				}
@@ -291,6 +341,12 @@ function color_render(problems_struct) {
 
 		color_list.push(col);
 	}
+
+	color_list.sort((c1, c2) => {
+		const idx1 = COLOR_ORDER.indexOf(c1.color);
+		const idx2 = COLOR_ORDER.indexOf(c2.color);
+		return idx1 - idx2;
+	});
 
 	return color_list;
 }

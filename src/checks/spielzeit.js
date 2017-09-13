@@ -8,6 +8,10 @@ function has_late_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, ntext => /[fF](?:04|24|38)/.test(ntext));
 }
 
+function has_any_note(data, tm) {
+	return !! data.get_stb_note(tm.matchid, () => true);
+}
+
 function* check_tm(season, tm) {
 	const data = season.data;
 	const now = season.check_now;
@@ -166,6 +170,20 @@ function* check_tm(season, tm) {
 				message,
 			};
 		}
+	}
+
+	const TIMELY_REPORT = 48 * HOUR;
+	if (entered && !tm.ergebnisbestaetigt_datum && (report_until + TIMELY_REPORT < now) && !has_any_note(data, tm)) {
+		const message = (
+			data_utils.tm_str(tm) + ' noch nicht vom StB bearbeitet' +
+			' (Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ')'
+		);
+		yield {
+			message,
+			teammatch_id: tm.matchid,
+			teammatch2_id: tm.matchid,
+			type: 'latenote',
+		};
 	}
 }
 

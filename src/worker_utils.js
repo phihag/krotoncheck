@@ -50,7 +50,7 @@ function worker_main(func) {
 function in_background(worker_fn, arg, callback) {
 	// node.js IPC does not seem suitable to extremely large structures like the whole season right now.
 	// Therefore, run a child program.
-	const child = child_process.execFile('nice', ['node', worker_fn], {maxBuffer: 10 * 1024 * 1024}, (err, stdout, stderr) => {
+	const child = child_process.execFile('nice', ['node', worker_fn], {maxBuffer: 100 * 1024 * 1024}, (err, stdout, stderr) => {
 		if (err) return callback(err);
 
 		if (stderr) {

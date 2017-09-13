@@ -117,7 +117,7 @@ function mustache_lookup_color() {
 			black: '#888',
 			lightgray: '#eee',
 			lightblue: '#d6e0ff',
-			violet: '#dda2d4',
+			violet: '#f9cfff',
 		}[color_name.trim()];
 
 		return res ? res : 'auto';

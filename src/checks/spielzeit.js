@@ -118,7 +118,7 @@ function* check_tm(season, tm) {
 		if (entered) {
 			if (played + REPORT_TEAM_RLOL < entered) {
 				const message = (
-					'[F38] Detailergebnis zu spät eingetragen: ' +
+					'Detailergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
 					'aber erst eingetragen um ' + utils.ts2destr(entered) +
 					' (vgl. §4.1 Anlage 6 SpO)');
@@ -130,7 +130,7 @@ function* check_tm(season, tm) {
 		} else {
 			if (played + REPORT_TEAM_RLOL < now) {
 				const message = (
-					'[F38] Detailergebnis zu spät eingetragen: ' +
+					'Detailergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
 					'aber immer noch nicht eingetragen' +
 					' (vgl. §4.1 Anlage 6 SpO)');

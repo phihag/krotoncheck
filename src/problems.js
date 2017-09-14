@@ -78,7 +78,7 @@ function prepare_render(season, problems) {
 		p.ignored = ignore.includes(p.id);
 	}
 
-	problems.sort(function(f1, f2) {
+	problems.sort((f1, f2) => {
 		if (!f1.ignored && f2.ignored) {
 			return -1;
 		}

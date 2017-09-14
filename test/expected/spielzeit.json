@@ -20,7 +20,12 @@
 {
 	"message": "Verbandsansetzung nicht Samstag 18:00, sondern So 07.08.2016 18:00:00 (§45.2a SpO)",
 	"teammatch_id": "18"
+},
+
+{
+	"message": "BC Feder 1 - FV 1 noch nicht vom StB bearbeitet (Spiel am Fr, 09.12.2016 18:00:00, Detailergebnis eingetragen am Fr, 09.12.2016 21:00:00)",
+	"teammatch_id": "28",
+	"teammatch2_id": "28",
+	"type": "latenote"
 }
-
-
 ]

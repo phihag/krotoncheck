@@ -87,7 +87,23 @@ function run_recheck(season, callback) {
 
 		data_access.enrich(season);
 
-		var found = Array.from(check(season));
+		let found = Array.from(check(season));
+
+		// Strip out late notes when there are other messages about this match
+		const problems_about = new Set();
+		for (const p of found) {
+			if (p.teammatch_id && (p.type !== 'latenote')) {
+				problems_about.add(p.teammatch_id);
+			}
+		}
+		found = found.filter(p => {
+			if (p.type !== 'latenote') {
+				return true;
+			}
+			assert(p.teammatch_id);
+			return !problems_about.has(p.teammatch_id);
+		});
+
 		problems.enrich(season, found);
 
 		callback(null, found);

@@ -22,6 +22,7 @@ function setup_test(callback) {
 		const season = {
 			key: 'testseason',
 			data,
+			check_now: 1489078800000,
 		};
 		data_access.enrich(season);
 		callback(err, season);

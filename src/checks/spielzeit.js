@@ -172,11 +172,12 @@ function* check_tm(season, tm) {
 		}
 	}
 
-	const TIMELY_REPORT = 48 * HOUR;
+	const TIMELY_REPORT = (is_olrl ? 24 : 48) * HOUR;
 	if (entered && !tm.ergebnisbestaetigt_datum && (report_until + TIMELY_REPORT < now) && !has_any_note(data, tm)) {
 		const message = (
 			data_utils.tm_str(tm) + ' noch nicht vom StB bearbeitet' +
-			' (Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ')'
+			' (Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum +
+			', Detailergebnis eingetragen am ' + utils.weekday_destr(entered) + ', ' + utils.ts2destr(entered) + ')'
 		);
 		yield {
 			message,

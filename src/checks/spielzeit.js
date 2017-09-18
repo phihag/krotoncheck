@@ -12,6 +12,21 @@ function has_any_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, () => true);
 }
 
+function has_stb_comment_after(data, tm, after) {
+	const comments = data.get_comments(tm.matchid);
+	const stb = data.get_stb(tm);
+	const stb_name = stb.firstname + ' ' + stb.lastname;
+
+	return comments.some(c => {
+		if (! c.benutzer.startsWith(stb_name)) {
+			return false;
+		}
+		const comment_date = utils.parse_date(c.zeitpunkt);
+
+		return comment_date >= after;
+	});
+}
+
 function* check_tm(season, tm) {
 	const data = season.data;
 	const now = season.check_now;
@@ -173,7 +188,11 @@ function* check_tm(season, tm) {
 	}
 
 	const TIMELY_REPORT = (is_olrl ? 24 : 48) * HOUR;
-	if (entered && !tm.ergebnisbestaetigt_datum && (report_until + TIMELY_REPORT < now) && !has_any_note(data, tm)) {
+	if (entered
+			&& !tm.ergebnisbestaetigt_datum &&
+			(report_until + TIMELY_REPORT < now) &&
+			!has_any_note(data, tm) &&
+			!has_stb_comment_after(data, tm, entered)) {
 		const message = (
 			data_utils.tm_str(tm) + ' noch nicht vom StB bearbeitet' +
 			' (Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum +

@@ -15,6 +15,9 @@ function has_any_note(data, tm) {
 function has_stb_comment_after(data, tm, after) {
 	const comments = data.get_comments(tm.matchid);
 	const stb = data.get_stb(tm);
+	if (!stb) {
+		return;
+	}
 	const stb_name = stb.firstname + ' ' + stb.lastname;
 
 	return comments.some(c => {

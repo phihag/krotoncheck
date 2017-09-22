@@ -33,7 +33,8 @@
     "nodemailer": "*",
     "nedb": "*",
     "request": "*",
-    "timezone": "*"
+    "timezone": "*",
+    "supervisor": "*"
   },
   "devDependencies": {
     "mocha": "*",

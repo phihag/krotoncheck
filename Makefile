@@ -26,7 +26,7 @@ clean:
 	@npm clean
 
 run-server:
-	node-supervisor src/krotoncheck.js
+	node_modules/.bin/node-supervisor src/krotoncheck.js
 
 lint: eslint ## Verify source code quality
 

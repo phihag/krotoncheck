@@ -18,8 +18,8 @@ module.exports = function*(season) {
 				(tm.flag_ok_gegen_team1 ? 'Heimmannschaft (' + tm.team1name + ')' : 'Gastmannschaft (' + tm.team2name + ')')
 				+ ' fehlt.' +
 				(contains_o ? ' (F01 mit o statt Null geschrieben?)' : '') +
-				(contains_og ? ' (Ordnungsgebühr-Kennung F01/F37 vergessen?)' : '') +
-				(contains_f13 ? ' (Ordnungsgebühr-Kennung F13 verhängt)' : '')
+				((contains_og && !contains_f13) ? ' (Ordnungsgebühr-Kennung F01/F37 vergessen?)' : '') +
+				(contains_f13 ? ' (Ordnungsgebühr F13 verhängt)' : '')
 			);
 			yield {
 				teammatch_id: tm.matchid,

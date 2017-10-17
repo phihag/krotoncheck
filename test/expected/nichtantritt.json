@@ -1,18 +1,18 @@
 [
 {
-	"message": "Mannschaftsspiel ohne Kampf, aber Ordnungsgebühr F01 oder F37 gegen Gastmannschaft (FV 1) fehlt.",
+	"message": "Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen Gastmannschaft (FV 1) fehlt.",
 	"teammatch_id": "6"
 }, {
-	"message": "Mannschaftsspiel ohne Kampf, aber Ordnungsgebühr F01 oder F37 gegen Heimmannschaft (BC Feder 1) fehlt.",
+	"message": "Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen Heimmannschaft (BC Feder 1) fehlt.",
 	"teammatch_id": "7"
 }, {
-	"message": "Mannschaftsspiel ohne Kampf, aber Ordnungsgebühr F01 oder F37 gegen Gastmannschaft (NeverPlay 1) fehlt.",
+	"message": "Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen Gastmannschaft (NeverPlay 1) fehlt.",
 	"teammatch_id": "22"
 }, {
-	"message": "Mannschaftsspiel ohne Kampf, aber Ordnungsgebühr F01 oder F37 gegen Heimmannschaft (NeverPlay 1) fehlt.",
+	"message": "Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen Heimmannschaft (NeverPlay 1) fehlt.",
 	"teammatch_id": "23"
 }, {
-	"message": "Mannschaftsspiel ohne Kampf, aber Ordnungsgebühr F01 oder F37 gegen Gastmannschaft (NeverPlay 1) fehlt.",
+	"message": "Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen Gastmannschaft (NeverPlay 1) fehlt.",
 	"teammatch_id": "24"
 }
 ]

@@ -501,6 +501,19 @@ function* check_vrl(season, vrl) {
 				clubcode: vrl.clubcode,
 				message,
 			};
+		} else if ((line.vkz1 === 'U19E') && (line.jkz1 !== 'U19E')) {
+			const message = (
+				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+				' ist als U19E in ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' ' +
+				' eingetragen, aber U19-Erklärung beim Verband fehlt'
+			);
+
+			yield {
+				type: 'vrl',
+				vrl_typeid: vrl.typeid,
+				clubcode: vrl.clubcode,
+				message,
+			};
 		}
 
 		// Youth players in O19 with correct designations

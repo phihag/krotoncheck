@@ -1,5 +1,8 @@
 [
 {
+	"message": "OG F01 verhängt, aber Mannschaftsspiel ist nicht als ohne Kampf markiert. (Falsche OG-ID?)",
+	"teammatch_id": "2"
+}, {
 	"message": "Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen Gastmannschaft (FV 1) fehlt.",
 	"teammatch_id": "6"
 }, {

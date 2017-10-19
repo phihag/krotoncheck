@@ -2,13 +2,32 @@
 
 module.exports = function*(season) {
 	const data = season.data;
+	const F_RE = /F(?:01|13|14|15|37|40)/;
 
 	for (const tm of data.teammatches) {
+		const nichtantritt_og = data.get_stb_note(tm.matchid, note_text => F_RE.test(note_text));
+
 		if (!tm.flag_ok_gegen_team1 && !tm.flag_ok_gegen_team2) {
+			if (tm.flag_umwertung_gegen_team1 || tm.flag_flag_umwertung_gegen_team2 || tm.flag_umwertung_gegen_beide) {
+				continue;
+			}
+
+			if (nichtantritt_og) {
+				const f_m = F_RE.exec(nichtantritt_og.nachricht);
+				const message = (
+					'OG ' + f_m[0] + ' verhängt, aber Mannschaftsspiel ist nicht als ohne Kampf markiert. ' +
+					'(Falsche OG-ID?)'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			}
+
 			continue;
 		}
 
-		if (! data.get_stb_note(tm.matchid, note_text => /F(?:01|13|14|15|37|40)/.test(note_text))) {
+		if (! nichtantritt_og) {
 			const contains_o = !!data.get_stb_note(tm.matchid, note_text => /FO1/.test(note_text));
 			const contains_og = !!data.get_stb_note(tm.matchid, note_text => /OG|Ordnungsgebühr/.test(note_text));
 

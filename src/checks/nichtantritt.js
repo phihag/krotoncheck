@@ -8,11 +8,14 @@ module.exports = function*(season) {
 		const nichtantritt_og = data.get_stb_note(tm.matchid, note_text => F_RE.test(note_text));
 
 		if (!tm.flag_ok_gegen_team1 && !tm.flag_ok_gegen_team2) {
+			const umw = tm.flag_umwertung_gegen_team1 || tm.flag_flag_umwertung_gegen_team2 || tm.flag_umwertung_gegen_beide;
+
 			if (nichtantritt_og) {
 				const f_m = F_RE.exec(nichtantritt_og.nachricht);
 				const message = (
 					'OG ' + f_m[0] + ' verhängt, aber Mannschaftsspiel ist nicht als ohne Kampf markiert. ' +
-					'(Falsche OG-ID?)'
+					'(Falsche OG-ID?)' +
+					(umw ? ' (Fälschlich als Umwertung eingetragen?)' : '')
 				);
 				yield {
 					teammatch_id: tm.matchid,

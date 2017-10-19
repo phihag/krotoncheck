@@ -8,10 +8,6 @@ module.exports = function*(season) {
 		const nichtantritt_og = data.get_stb_note(tm.matchid, note_text => F_RE.test(note_text));
 
 		if (!tm.flag_ok_gegen_team1 && !tm.flag_ok_gegen_team2) {
-			if (tm.flag_umwertung_gegen_team1 || tm.flag_flag_umwertung_gegen_team2 || tm.flag_umwertung_gegen_beide) {
-				continue;
-			}
-
 			if (nichtantritt_og) {
 				const f_m = F_RE.exec(nichtantritt_og.nachricht);
 				const message = (

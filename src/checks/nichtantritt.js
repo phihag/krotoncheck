@@ -2,7 +2,7 @@
 
 module.exports = function*(season) {
 	const data = season.data;
-	const F_RE = /F(?:01|13|14|15|37|40)/;
+	const F_RE = /F(?:01|13|14|15|37|40|46)/;
 
 	for (const tm of data.teammatches) {
 		const nichtantritt_og = data.get_stb_note(tm.matchid, note_text => F_RE.test(note_text));

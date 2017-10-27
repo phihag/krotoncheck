@@ -35,13 +35,15 @@ module.exports = function*(season) {
 		if (! nichtantritt_og) {
 			const contains_o = !!data.get_stb_note(tm.matchid, note_text => /FO1/.test(note_text));
 			const contains_og = !!data.get_stb_note(tm.matchid, note_text => /OG|Ordnungsgebühr/.test(note_text));
+			const contains_wrong = !!data.get_stb_note(tm.matchid, note_text => /F04/.test(note_text));
 
 			const message = (
 				'Mannschaftsspiel ohne Kampf, aber dementsprechende Ordnungsgebühr (z.B. F01 oder F37) gegen ' +
 				(tm.flag_ok_gegen_team1 ? 'Heimmannschaft (' + tm.team1name + ')' : 'Gastmannschaft (' + tm.team2name + ')')
 				+ ' fehlt.' +
 				(contains_o ? ' (F01 mit o statt Null geschrieben?)' : '') +
-				(contains_og ? ' (Ordnungsgebühr-Kennung (z.B. F01 oder F37) vergessen?)' : '')
+				(contains_og ? ' (Ordnungsgebühr-Kennung (z.B. F01 oder F37) vergessen?)' : '') +
+				(contains_wrong ? ' (Falsche Ordnungsgebühr verhängt?)' : '')
 			);
 			yield {
 				teammatch_id: tm.matchid,

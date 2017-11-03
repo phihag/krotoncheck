@@ -124,6 +124,29 @@ function* check_u19e(data, vrl, line) {
 	}
 }
 
+function* check_not_in_youth_team(data, is_hr, line) {
+	const look_in = is_hr ? [14, 17] : [16, 18];
+	const clubcode = line.clubcode;
+	for (const vrl_type of look_in) {
+		const ve = data.try_get_vrl_entry(clubcode, vrl_type, line.memberid);
+		if (ve) {
+			const message = (
+				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ') ' +
+				'steht mit Kennzeichen ' + line.vkz1 + ' in der ' +
+				data.vrl_name(line.typeid) + ' von ' +
+				'(' + clubcode + ') ' + line.clubname + ', ist aber in der ' + data.vrl_name(vrl_type) +
+				' an Position ' + ve.position + ' aufgeführt.'
+			);
+			yield {
+				type: 'vrl',
+				clubcode: clubcode,
+				vrl_typeid: line.typeid,
+				message: message,
+			};
+		}
+	}
+}
+
 function* check_in_youth_team(season, is_hr, line) {
 	const data = season.data;
 	let vrl_type;
@@ -520,13 +543,15 @@ function* check_vrl(season, vrl) {
 		if (is_o19) {
 			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);
 			if (m) {
-				if ((line.jkz1 === 'U19E') && (m[1] == '19')) {
+				if (((line.jkz1 === 'U19E') || (line.vkz1 === 'U19E')) && (m[1] == '19')) {
 					yield* check_u19e(data, vrl, line);
+					yield* check_not_in_youth_team(data, is_hr, line);
 				} else if ((line.vkz1 === 'J1') || (line.vkz1 === 'M1')) {
 					yield* check_in_youth_team(season, is_hr, line);
 				} else if (line.jkz1 === 'SE') {
 					// Special excemption by federation
-				} else if(line.jkz1) {
+					yield* check_not_in_youth_team(data, is_hr, line);
+				} else if (line.jkz1) {
 					const message = (
 						'Falsches Jugendkennzeichen ' + JSON.stringify(line.jkz1) +
 						' in ' + data.vrl_name(vrl.typeid) +

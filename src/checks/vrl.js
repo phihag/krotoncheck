@@ -132,7 +132,7 @@ function* check_not_in_youth_team(data, is_hr, line) {
 		if (ve) {
 			const message = (
 				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ') ' +
-				'steht mit Kennzeichen ' + line.vkz1 + ' in der ' +
+				'steht mit Kennzeichen ' + (line.vkz1 || line.jkz1) + ' in der ' +
 				data.vrl_name(line.typeid) + ' von ' +
 				'(' + clubcode + ') ' + line.clubname + ', ist aber in der ' + data.vrl_name(vrl_type) +
 				' an Position ' + ve.position + ' aufgeführt.'

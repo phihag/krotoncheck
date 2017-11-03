@@ -81,6 +81,13 @@
 	"vrl_typeid": 9
 },
 
+{
+	"message": "  (01-ry-m5) steht mit Kennzeichen U19E in der VRL 9[Hinrunde Herren O19] von (01-1008) RetractYouth, ist aber in der VRL 17[Hinrunde Jungen+Mini U19] an Position 1 aufgeführt.",
+	"type": "vrl",
+	"vrl_typeid": 9,
+	"clubcode": "01-1008"
+},
+
 
 {
 	"clubcode": "01-1008",

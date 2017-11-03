@@ -1,7 +1,6 @@
-spielaufgabe https://www.turnier.de/sport/teammatch.aspx?id=3AE85140-FD7F-4D47-8BEE-575B0334E9D8&match=172
-
 option to show all mails that would be sent by auto sending
 show mails nicer (JavaScript)
+
 mail target:
 	+ betreffende StBs
 	+ betreffende BWs (normale Matches)
@@ -13,6 +12,7 @@ configure
 	8:00 Festspieler an die BW/BJW täglich (Süd 2 Günter Wagner)
 
 
+spielaufgabe https://www.turnier.de/sport/teammatch.aspx?id=3AE85140-FD7F-4D47-8BEE-575B0334E9D8&match=172
 E-Mail an StBs bei allen Kommentaren -> Andreas Rosenstock, Barbara Bub, Tomas Arnold, Horst Rosenstock
 store and link to reports
 detect date change comments

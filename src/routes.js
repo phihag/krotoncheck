@@ -44,6 +44,7 @@ function setup(app) {
 	app.post('/s/:season_key/autorun/:autorun_id/delete', users.need_permission('any', autoruns.delete_handler));
 	app.post('/s/:season_key/autorun/:autorun_id/receiver_add', users.need_permission('any', autoruns.receiver_add_handler));
 	app.post('/s/:season_key/autorun/:autorun_id/receiver_delete', users.need_permission('any', autoruns.receiver_delete_handler));
+	app.get('/s/:season_key/autorun/:autorun_id/preview', users.need_permission('any', autoruns.preview_handler));
 
 	app.get('/s/:season_key/stbstats', users.need_permission('any', stbstats.show_handler));
 	app.get('/s/:season_key/bulifinals', users.need_permission('any', bulifinals.show_handler));

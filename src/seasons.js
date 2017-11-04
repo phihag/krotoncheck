@@ -210,6 +210,7 @@ function email_preview(req, res, next) {
 				rendered,
 				message,
 				season,
+				enable_sendnow_form: true,
 			});
 		});
 	});

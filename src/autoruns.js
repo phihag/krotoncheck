@@ -7,6 +7,7 @@ const cron = require('cron');
 const downloads = require('./downloads');
 const kc_email = require('./kc_email');
 const problems = require('./problems');
+const render = require('./render');
 
 function run(config, db, ar_id) {
 	async.waterfall([
@@ -180,6 +181,54 @@ function receiver_delete_handler(req, res, next) {
 	});
 }
 
+function preview_handler(req, res, next) {
+	const ar_id = req.params.autorun_id;
+	if (!ar_id) {
+		return next(new Error('Missing field autorun_id'));
+	}
+
+	const db = req.app.db;
+	async.waterfall([
+		(cb) => {
+			db.autoruns.findOne({_id: ar_id}, (err, ar) => {
+				if (err) return cb(err);
+				if (!ar) return cb(new Error('Cannot find autorun ' + ar_id));
+				cb(err, ar);
+			});
+		},
+		(ar, cb) => {
+			req.app.db.fetch_all([{
+				queryFunc: '_findOne',
+				collection: 'seasons',
+				query: {key: ar.season_key},
+			}, {
+				queryFunc: 'findOne',
+				collection: 'problems',
+				query: {key: ar.season_key},
+			}], (err, season, problems_struct) => cb(err, ar, season, problems_struct));
+		},
+		(ar, season, problems_struct, cb) => {
+			const found = problems_struct.found;
+			assert(Array.isArray(found));
+			problems.prepare_render(season, problems_struct.found);
+
+			const message_bottom = 'Automatisch verschickte E-Mail. Job-ID: ' + ar.name + ', schedule ' + ar.schedule;
+			kc_email.craft_emails(
+				season, ar.receivers, problems_struct,
+				null, message_bottom,
+				(err, rendered) => cb(err, ar, season, found, rendered)
+			);
+		},
+	], (err, ar, season, found, rendered) => {
+		if (err) return next(err);
+
+		render(req, res, next, 'email_previews', {
+			rendered,
+			season,
+		});
+	});
+}
+
 
 module.exports = {
 	init,
@@ -187,4 +236,5 @@ module.exports = {
 	delete_handler,
 	receiver_add_handler,
 	receiver_delete_handler,
+	preview_handler,
 };

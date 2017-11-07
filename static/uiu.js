@@ -88,16 +88,105 @@ function create_el(parent, tagName, attrs, text) {
 	return el;
 }
 
+function attr(el, init_attrs) {
+	if (init_attrs) {
+		for (var k in init_attrs) {
+			el.setAttribute(k, init_attrs[k]);
+		}
+	}
+}
+
+function el(parent, tagName, init_attrs, text) {
+	var doc = parent ? parent.ownerDocument : document;
+	var el = doc.createElement(tagName);
+	if (typeof init_attrs === 'string') {
+		init_attrs = {
+			'class': init_attrs,
+		};
+	}
+	attr(el, init_attrs);
+	if ((text !== undefined) && (text !== null)) {
+		el.appendChild(doc.createTextNode(text));
+	}
+	if (parent) {
+		parent.appendChild(el);
+	}
+	return el;
+}
+
+// From https://plainjs.com/javascript/attributes/adding-removing-and-testing-for-classes-9/
+var hasClass, addClass, removeClass;
+if (typeof document != 'undefined') {
+	if ('classList' in document.documentElement) {
+		hasClass = function(el, className) {
+			return el.classList.contains(className);
+		};
+		addClass = function(el, className) {
+			el.classList.add(className);
+		};
+		removeClass = function(el, className) {
+			el.classList.remove(className);
+		};
+	} else {
+		hasClass = function (el, className) {
+			return new RegExp('\\b'+ className+'\\b').test(el.className);
+		};
+		addClass = function (el, className) {
+			if (!hasClass(el, className)) {
+				el.className += ' ' + className;
+			}
+		};
+		removeClass = function (el, className) {
+			el.className = el.className.replace(new RegExp('\\b' + className + '\\b', 'g'), '');
+		};
+	}
+}
+
+function is_hidden(el) {
+	// Fast track: look if style is set
+	if (el.style.display === 'none') return true;
+	if (el.style.display) return false;
+
+	var cs = window.getComputedStyle(el);
+	return (cs.display === 'none');
+}
+
+function hide(el) {
+	var style = el.style;
+	if (! is_hidden(el)) {
+		if (style.display) {
+			el.setAttribute('data-uiu-display', style.display);
+		}
+		style.display = 'none';
+	}
+}
+
+function show(el) {
+	var style = el.style;
+	removeClass(el, 'default-invisible');
+	if (is_hidden(el)) {
+		style.display = el.getAttribute('data-uiu-display');
+		el.removeAttribute('data-uiu-display');
+	}
+}
+
+
 return {
+	addClass: addClass,
 	create_el: create_el,
+	el: el,
 	empty: empty,
+	hasClass: hasClass,
+	hide: hide,
 	on_click: on_click,
 	on_click_qs: on_click_qs,
 	on_click_qsa: on_click_qsa,
-	remove: remove,
-	remove_qsa: remove_qsa,
 	qs: qs,
 	qsEach: qsEach,
+	remove: remove,
+	remove_qsa: remove_qsa,
+	removeClass: removeClass,
+	show: show,
 	text: text,
 	text_qs: text_qs,
 };

@@ -2,10 +2,6 @@
 <div class="autorun_container">
 <h3 class="autorun_entry" id="autorun_{{_id}}">{{name}} <span class="autorun_schedule">{{schedule}}</span> <form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/delete" class="autorun_delete_form">{{{csrf_field}}}<button role="submit">-</button></form><a href="{{root_path}}s/{{season_key}}/autorun/{{_id}}/preview" style="display:inline-block;margin-left:3em;">Vorschau</a></h3>
 {{{csrf_field}}}
-<label>Mail: <input type="mail" name="email" required="required" /></label>
-<label>Bezirk: <input type="text" name="region_filter" /></label>
-<label>StB: <input type="text" name="stb_filter" /></label>
-<button type="submit">Empfänger hinzufügen</button>
 </form>
 </h3>
 <div>Letzte erfolgreiche Überprüfung: {{#last_success}}{{#format_timestamp}}{{last_success}}{{/format_timestamp}}{{/last_success}}{{^last_success}}(noch nie){{/last_success}}</div>
@@ -22,6 +18,15 @@
 <label>Bezirk: <input type="text" name="region_filter" /></label>
 <label>StB: <input type="text" name="stb_filter" /></label>
 <button type="submit">Empfänger hinzufügen</button>
+</form>
+
+<form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/edit">
+{{{csrf_field}}}
+{{#add_receivers}}
+<label><input type="checkbox" name="all_stbs" {{#all_stbs}}checked="checked"{{/all_stbs}}/> alle StBs</label>
+<label><input type="checkbox" name="all_bws" {{#all_bws}}checked="checked"{{/all_bws}}/> Bezirks(jugend)warte (funktioniert noch nicht)</label>
+{{/add_receivers}}
+<button type="submit">Ändern</button>
 </form>
 </div>
 

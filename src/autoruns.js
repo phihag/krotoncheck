@@ -40,6 +40,7 @@ function run(config, db, ar_id) {
 			kc_email.craft_emails(
 				season, ar.receivers, problems_struct,
 				null, message_bottom,
+				ar.add_receivers,
 				(err, crafted) => cb(err, ar, season, dl, found, crafted)
 			);
 		}, function(ar, season, dl, found, crafted, cb) {
@@ -146,6 +147,33 @@ function delete_handler(req, res, next) {
 	});
 }
 
+function edit_handler(req, res, next) {
+	const season_key = req.params.season_key;
+	if (!season_key) {
+		return next(new Error('Missing field season_key'));
+	}
+	const ar_id = req.params.autorun_id;
+	if (!ar_id) {
+		return next(new Error('Missing field autorun_id'));
+	}
+
+	const add_receivers = {
+		all_stbs: !! req.body.all_stbs,
+		all_bws: !! req.body.all_bws,
+	};
+
+	async.waterfall([
+		(cb) => {
+			req.app.db.autoruns.update({_id: ar_id}, {$set: {
+				add_receivers,
+			}}, cb);
+		},
+	], (err) => {
+		if (err) next(err);
+		res.redirect(req.app.root_path + 's/' + encodeURIComponent(season_key));
+	});
+}
+
 function receiver_add_handler(req, res, next) {
 	if (!req.body.email) {
 		return next(new Error('Missing field email'));
@@ -216,6 +244,7 @@ function preview_handler(req, res, next) {
 			kc_email.craft_emails(
 				season, ar.receivers, problems_struct,
 				null, message_bottom,
+				ar.add_receivers,
 				(err, rendered) => cb(err, ar, season, found, rendered)
 			);
 		},
@@ -225,6 +254,7 @@ function preview_handler(req, res, next) {
 		render(req, res, next, 'email_previews', {
 			rendered,
 			season,
+			rendered_json: JSON.stringify(rendered),
 		});
 	});
 }
@@ -234,6 +264,7 @@ module.exports = {
 	init,
 	create_handler,
 	delete_handler,
+	edit_handler,
 	receiver_add_handler,
 	receiver_delete_handler,
 	preview_handler,

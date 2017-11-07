@@ -107,20 +107,23 @@ function mustache_format_duration_float() {
 	};
 }
 
+function lookup_color(color_name) {
+	const res = {
+		red: '#ffacac',
+		green: '#acffac',
+		yellow: '#ffff96',
+		black: '#888',
+		lightgray: '#eee',
+		lightblue: '#d6e0ff',
+		violet: '#f9cfff',
+	}[color_name];
+	return res ? res : 'auto';
+}
+
 function mustache_lookup_color() {
 	return function format_timestamp(text, renderfunc) {
-		const color_name = renderfunc(text);
-		const res = {
-			red: '#ffacac',
-			green: '#acffac',
-			yellow: '#ffff96',
-			black: '#888',
-			lightgray: '#eee',
-			lightblue: '#d6e0ff',
-			violet: '#f9cfff',
-		}[color_name.trim()];
-
-		return res ? res : 'auto';
+		const color_name = renderfunc(text).trim();
+		return lookup_color(color_name);
 	};
 }
 
@@ -160,4 +163,5 @@ function render(req, res, next, template_id, data) {
 
 module.exports = render;
 render.render_standalone = render_standalone;
+render.lookup_color = lookup_color;
 

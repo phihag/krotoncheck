@@ -41,11 +41,36 @@ function filter_receiver(problems_struct, receiver) {
 	return res;
 }
 
-function craft_emails(season, receivers, problems_struct, message_top, message_bottom, callback) {
+function craft_emails(season, default_receivers, problems_struct, message_top, message_bottom, add_receivers, callback) {
+	const receivers = default_receivers.slice();
+	add_receivers = add_receivers || {};
+	if (add_receivers.all_stbs) {
+		// TODO load receiver data here
+	}
+
 	async.map(
 		receivers,
 		(r, cb) => craft_single_email(season, problems_struct, r, message_top, message_bottom, cb),
 		callback);
+}
+
+function count_colors(colors) {
+	const res = [];
+	for (const c of colors) {
+		let count = 0;
+		for (const r of c.regions) {
+			for (const g of r.groups) {
+				count += g.problems.length;
+			}
+		}
+
+		res.push({
+			color: c.color,
+			count,
+			css_color: render.lookup_color(c.color),
+		});
+	}
+	return res;
 }
 
 function craft_single_email(season, problems_struct, receiver, message_top, message_bottom, cb) {
@@ -68,6 +93,7 @@ function craft_single_email(season, problems_struct, receiver, message_top, mess
 			to: receiver.email,
 			body_html,
 			empty: (important_problems_struct.found.length === 0),
+			color_counts: count_colors(colors),
 		};
 		render.render_standalone('mail_scaffold', res, function(err, mail_html) {
 			if (err) return cb(err);

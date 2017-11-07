@@ -1,3 +1,9 @@
+<script src="{{root_path}}static/cpreview.js"></script>
+<div class="email_previews" data-rendered-json="{{rendered_json}}">
+
+</div>
+
+<noscript>
 {{#rendered}}
 <h2>To: {{to}}</h2>
 
@@ -15,6 +21,7 @@ Keine Probleme - daher wird auch keine E-Mail verschickt.
 {{/empty}}
 
 {{/rendered}}
+</noscript>
 
 {{#enable_sendnow_form}}
 <form method="post" action="{{root_path}}s/{{#season}}{{key}}{{/season}}/send" style="margin-top: 2em">

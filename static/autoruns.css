@@ -20,3 +20,32 @@
 {
 	display: inline-block;
 }
+
+
+.jspreview {
+	margin: 0.8em 0;
+}
+.jspreview .problems_maillist {
+	background: #fafafa;
+	padding: 0.1em 0.5em;
+}
+.jsplaintext_preview {
+	font-family: monospace;
+	white-space: pre-wrap;
+	padding: 1.5em 0.5em;
+	font-size: 70%;
+	background: #fafafa;
+}
+
+.jspreview_show_link {
+	color: #00e;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+	margin-left: 0.8em;
+	user-select: none;
+}
+.jspreview_show_link:hover {
+	text-decoration: underline;
+}
+

@@ -1,3 +1,5 @@
+implement colors_filter
+
 mail target:
 	+ betreffende StBs
 
@@ -9,7 +11,10 @@ configure
 	montags, mittwochs und freitags 12:01 Uhr -> alle StBs
 	+ alle Spiele aus Süd 2 -> Florian Brüll und Christian Deter
 	8:00 Festspieler an die BW/BJW täglich (Süd 2 Günter Wagner)
+
+do away with JSON cache?
 check CSRF token - keeps changing!?
+
 
 
 spielaufgabe https://www.turnier.de/sport/teammatch.aspx?id=3AE85140-FD7F-4D47-8BEE-575B0334E9D8&match=172

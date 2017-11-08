@@ -10,6 +10,19 @@ const Baby = require('babyparse');
 const downloads = require('./downloads');
 
 
+function load_season_table(season, table_name, callback) {
+	const dl = season.newest_download;
+	if (!dl) {
+		return callback(new Error('No downloads available'));
+	}
+	const dirname = path.join(downloads.DATA_ROOT, dl.id);
+	load_data(dirname, [table_name], (err, loaded) => {
+		if (err) return callback(err);
+
+		return callback(err, loaded[table_name]);
+	});
+}
+
 function load_season_data(season, callback) {
 	async.waterfall([function(cb) {
 		load_files(season, function(err, data) {
@@ -62,41 +75,42 @@ function load_data_cached(dirname, tasks, callback) {
 }
 
 function load_files(season, callback) {
-    var dl = season.newest_download;
-    if (!dl) {
-        return callback(new Error('No downloads available'));
-    }
+	var dl = season.newest_download;
+	if (!dl) {
+		return callback(new Error('No downloads available'));
+	}
 
-    var dirname = path.join(downloads.DATA_ROOT, dl.id);
-    load_data_cached(dirname, dl.tasks, callback);
+	var dirname = path.join(downloads.DATA_ROOT, dl.id);
+	load_data_cached(dirname, dl.tasks, callback);
 }
 
 function parse_csv(fcontents, fn, cb) {
 	fcontents = fcontents.trim();
 
-    Baby.parse(fcontents, {
-        header: true,
-        complete: function(res) {
-            if (res.errors.length > 0) {
-                return cb(new Error('Failed to parse ' + fn + ': ' + JSON.stringify(res.errors)));
-            }
-            const lines = res.data;
-            cb(null, lines);
-        },
-    });
+	Baby.parse(fcontents, {
+		header: true,
+		complete: function(res) {
+			if (res.errors.length > 0) {
+				return cb(new Error('Failed to parse ' + fn + ': ' + JSON.stringify(res.errors)));
+			}
+			const lines = res.data;
+			cb(null, lines);
+		},
+	});
 }
 
 function parse_csv_fn(fn, cb) {
-    // It seems crazily inefficient to read the file into memory,
-    // but that seems to be the fastest way
-    // See https://github.com/phihag/csv-speedtest for speed test
-    fs.readFile(fn, {encoding: 'binary'}, function(err, fcontents) {
-        if (err) return cb(err);
-        parse_csv(fcontents, fn, cb);
-    });
+	// It seems crazily inefficient to read the file into memory,
+	// but that seems to be the fastest way
+	// See https://github.com/phihag/csv-speedtest for speed test
+	fs.readFile(fn, {encoding: 'binary'}, function(err, fcontents) {
+		if (err) return cb(err);
+		parse_csv(fcontents, fn, cb);
+	});
 }
 
 module.exports = {
+	load_season_table,
 	load_season_data,
 	load_data, // testing only
 };

@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const html_entities = require('html-entities');
 
 
+const loader = require('./loader');
 const render = require('./render');
 const problems = require('./problems');
 
@@ -14,6 +15,12 @@ function filter_receiver(problems_struct, receiver) {
 	res.found = problems_struct.found.filter(function(problem) {
 		if (problem.ignored) {
 			return false;
+		}
+
+		if (receiver.colors_filter) {
+			if (!receiver.colors_filter.includes(problem.color)) {
+				return false;
+			}
 		}
 
 		if (receiver.stb_filter) {
@@ -41,17 +48,49 @@ function filter_receiver(problems_struct, receiver) {
 	return res;
 }
 
+function stb_receivers(season, callback) {
+	loader.load_season_table(season, 'users', (err, user_table) => {
+		if (err) return callback(err);
+
+		const got = new Set();
+		const receivers = [];
+		for (const u of user_table) {
+			if (u.rolename !== 'Staffelbetreuer') continue;
+			if (got.has(u.email)) continue;
+
+			got.add(u.email);
+			
+			receivers.push({
+				stb_filter: u.firstname + ' ' + u.lastname,
+				email: u.email,
+				colors_filter: ['red', 'yellow'],
+			});
+		}
+		callback(err, receivers);
+	});
+}
+
 function craft_emails(season, default_receivers, problems_struct, message_top, message_bottom, add_receivers, callback) {
 	const receivers = default_receivers.slice();
-	add_receivers = add_receivers || {};
-	if (add_receivers.all_stbs) {
-		// TODO load receiver data here
+
+	function do_craft() {
+		async.map(
+			receivers,
+			(r, cb) => craft_single_email(season, problems_struct, r, message_top, message_bottom, cb),
+			callback);
 	}
 
-	async.map(
-		receivers,
-		(r, cb) => craft_single_email(season, problems_struct, r, message_top, message_bottom, cb),
-		callback);
+	add_receivers = add_receivers || {};
+	if (add_receivers.all_stbs) {
+		stb_receivers(season, (err, stb_receivers) => {
+			if (err) return callback(err);
+
+			Array.prototype.push.apply(receivers, stb_receivers);
+			do_craft();
+		});
+	} else {
+		do_craft();
+	}
 }
 
 function count_colors(colors) {

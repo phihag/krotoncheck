@@ -19,6 +19,7 @@
 	display: block;
 }
 .season_info > label > span {
+	vertical-align: top;
 	display: inline-block;
 	min-width: 14em;
 	margin-right: 0.5em;
@@ -26,6 +27,10 @@
 textarea[name="qualifying_youth_groups"] {
 	font-size: 12px;
 	width: 250px;
+}
+textarea[name="bws"] {
+	font-size: 12px;
+	width: 600px;
 }
 textarea[name="sg_csv"] {
 	font-size: 8px;

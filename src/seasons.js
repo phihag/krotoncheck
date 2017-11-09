@@ -165,6 +165,7 @@ function change_handler(req, res, next) {
 			'tournament_id',
 			'buli_tournament_id',
 			'qualifying_youth_groups',
+			'bws',
 			]) {
 		fields[field_name] = req.body[field_name];
 	}

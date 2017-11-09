@@ -1,12 +1,3 @@
-implement colors_filter
-
-mail target:
-	+ betreffende StBs
-
-mail to betreffende BWs (normale Matches)
-	configure BWs
-	+ VRL an BW / BJW
-
 configure
 	montags, mittwochs und freitags 12:01 Uhr -> alle StBs
 	+ alle Spiele aus Süd 2 -> Florian Brüll und Christian Deter

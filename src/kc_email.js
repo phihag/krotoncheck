@@ -43,6 +43,16 @@ function filter_receiver(problems_struct, receiver) {
 			}
 		}
 
+		if (receiver.regions_filter) {
+			if (!problem.region) {
+				return false;
+			}
+
+			if (!receiver.regions_filter.some(region => problem.region.includes(region))) {
+				return false;
+			}
+		}
+
 		return true;
 	});
 	return res;
@@ -70,27 +80,48 @@ function stb_receivers(season, callback) {
 	});
 }
 
-function craft_emails(season, default_receivers, problems_struct, message_top, message_bottom, add_receivers, callback) {
-	const receivers = default_receivers.slice();
+function bw_receivers(season, callback) {
+	const bw_str = season.bws;
+	const lines = bw_str.split('\n');
+	const receivers = [];
+	for (let line of lines) {
+		line = line.trim();
+		if (!line) continue;
 
-	function do_craft() {
+		const [regions_str, emails_str] = line.split(':');
+		const regions_filter = regions_str.split('+').map(s => s.trim()).filter(s => s);
+		const emails = emails_str.split(' ').map(s => s.trim()).filter(s => s);
+		for (const email of emails) {
+			receivers.push({
+				email,
+				regions_filter,
+			});
+		}
+	}
+	callback(null, receivers);
+}
+
+function craft_emails(season, default_receivers, problems_struct, message_top, message_bottom, add_receivers, callback) {
+	const tasks = [
+		cb => cb(null, default_receivers),
+	];
+	if (add_receivers.all_stbs) {
+		tasks.push(cb => stb_receivers(season, cb));
+	}
+	if (add_receivers.all_bws) {
+		tasks.push(cb => bw_receivers(season, cb));
+	}
+
+	async.series(tasks, (err, receiver_lists) => {
+		if (err) return callback(err);
+
+		const receivers = [].concat(...receiver_lists);
+
 		async.map(
 			receivers,
 			(r, cb) => craft_single_email(season, problems_struct, r, message_top, message_bottom, cb),
 			callback);
-	}
-
-	add_receivers = add_receivers || {};
-	if (add_receivers.all_stbs) {
-		stb_receivers(season, (err, stb_receivers) => {
-			if (err) return callback(err);
-
-			Array.prototype.push.apply(receivers, stb_receivers);
-			do_craft();
-		});
-	} else {
-		do_craft();
-	}
+	});
 }
 
 function count_colors(colors) {

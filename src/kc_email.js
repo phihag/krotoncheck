@@ -95,6 +95,7 @@ function bw_receivers(season, callback) {
 			receivers.push({
 				email,
 				regions_filter,
+				regions_filter_present: true,
 			});
 		}
 	}

@@ -4,14 +4,15 @@
 
 {{>problems_maillist}}
 
-<p style="color: #333;">{{#message_bottom}}{{message_bottom}}<br/>
-{{/message_bottom}}{{#receiver}}
-Kroton-Report
+<p style="color: #333;">{{#receiver}}
+Kroton-Report 
 {{#region_filter}}für Bezirk {{region_filter}},{{/region_filter}}
-{{#stb_filter}}für {{stb_filter}},{{/stb_filter}}
-{{#regions_filter_present}}für Bezirke |{{#regions_filter}}{{.}}|{{/regions_filter}}  in {{/regions_filter_present}}
+{{#stb_filter}}für StB {{stb_filter}},{{/stb_filter}}
+{{#regions_filter_present}}für Bezirkswart von |{{#regions_filter}}{{.}}|{{/regions_filter}} {{#u19o19}}(nur {{u19o19}}){{/u19o19}} in {{/regions_filter_present}}
 {{^region_filter}}{{^regions_filter_present}}{{^stb_filter}}(alle Bezirke),{{/stb_filter}}{{/regions_filter_present}}{{/region_filter}}
 {{/receiver}}
 {{#season}}{{name}}, Stand {{#newest_download}}{{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}}{{/newest_download}}{{/season}}.<br />
+{{#message_bottom}}{{message_bottom}}<br/>
+{{/message_bottom}}
 
 Darstellungsprobleme, Fehler und Verbesserungsvorschläge können gerne bei <a href="mailto:philipp.hagemeister@badminton-nrw.de?subject=Feedback%20Kroton-Report">Philipp Hagemeister</a> gemeldet werden.</p>

@@ -9,6 +9,10 @@ const kc_email = require('./kc_email');
 const problems = require('./problems');
 const render = require('./render');
 
+function calc_bottom_msg(ar) {
+	return 'Automatisch verschickte E-Mail. Job-ID: ' + ar.name + ', schedule ' + ar.schedule + '.';
+}
+
 function run(config, db, ar_id) {
 	async.waterfall([
 		function(cb) {
@@ -35,7 +39,7 @@ function run(config, db, ar_id) {
 			assert(Array.isArray(found));
 			problems.prepare_render(season, found);
 			const problems_struct = {found};
-			const message_bottom = 'Automatisch verschickte E-Mail. Job-ID: ' + ar.name + ', schedule ' + ar.schedule;
+			const message_bottom = calc_bottom_msg(ar);
 
 			kc_email.craft_emails(
 				season, ar.receivers, problems_struct,
@@ -240,7 +244,7 @@ function preview_handler(req, res, next) {
 			assert(Array.isArray(found));
 			problems.prepare_render(season, problems_struct.found);
 
-			const message_bottom = 'Automatisch verschickte E-Mail. Job-ID: ' + ar.name + ', schedule ' + ar.schedule;
+			const message_bottom = calc_bottom_msg(ar);
 			kc_email.craft_emails(
 				season, ar.receivers, problems_struct,
 				null, message_bottom,

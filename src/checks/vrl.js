@@ -412,7 +412,7 @@ function* check_startend(season, is_hr, vrl_date, line) {
 
 function* check_vrl(season, vrl) {
 	const data = season.data;
-	const is_o19 = [9, 11, 10, 12].includes(vrl.typeid);
+	const is_o19 = data_utils.vrlid_is_o19(vrl.typeid);
 	const is_hr = [9, 10, 14, 17].includes(vrl.typeid);
 	const date_key = 'vrldate_' + (is_o19 ? 'o19' : 'u19') + '_' + (is_hr ? 'hr' : 'rr');
 	const vrl_date = season[date_key] ? utils.parse_date(season[date_key]) : null;

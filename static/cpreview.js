@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		var div = uiu.el(previews, 'div', 'jspreview');
+		if (r.receiver_class) {
+			uiu.el(div, 'span', {}, r.receiver_class + ' ');
+		}
 		uiu.el(div, 'span', {}, r.to);
 		var colors = uiu.el(div, 'div', {
 			style: 'display: inline-block;',

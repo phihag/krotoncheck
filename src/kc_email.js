@@ -5,9 +5,21 @@ const nodemailer = require('nodemailer');
 const html_entities = require('html-entities');
 
 
+const data_utils = require('./data_utils');
 const loader = require('./loader');
 const render = require('./render');
 const problems = require('./problems');
+
+function determine_u19o19(problem) {
+	if (problem.teammatch) {
+		const fine_type = data_utils.league_type(problem.teammatch.staffelcode);
+		return ['U19', 'Mini'].includes(fine_type) ? 'U19' : 'O19';
+	}
+	if (problem.vrl_typeid) {
+		return data_utils.vrlid_is_o19(problem.vrl_typeid) ? 'O19' : 'U19';
+	}
+	console.error('unable to determine age group of ' + JSON.stringify(problem));
+}
 
 
 function filter_receiver(problems_struct, receiver) {
@@ -53,6 +65,13 @@ function filter_receiver(problems_struct, receiver) {
 			}
 		}
 
+		if (receiver.u19o19) {
+			const problem_agegroup = determine_u19o19(problem);
+			if (problem_agegroup !== receiver.u19o19) {
+				return false;
+			}
+		}
+
 		return true;
 	});
 	return res;
@@ -88,7 +107,11 @@ function bw_receivers(season, callback) {
 		line = line.trim();
 		if (!line) continue;
 
-		const [regions_str, emails_str] = line.split(':');
+		const [age_group_str, regions_str, emails_str] = line.split(':');
+		if (!emails_str) {
+			console.error('Invalid bw_receivers configuration: ' + JSON.stringify(line) + '. Skipping');
+			continue;
+		}
 		const regions_filter = regions_str.split('+').map(s => s.trim()).filter(s => s);
 		const emails = emails_str.split(' ').map(s => s.trim()).filter(s => s);
 		for (const email of emails) {
@@ -96,6 +119,7 @@ function bw_receivers(season, callback) {
 				email,
 				regions_filter,
 				regions_filter_present: true,
+				u19o19: (age_group_str ? age_group_str.trim() : undefined),
 			});
 		}
 	}
@@ -159,12 +183,19 @@ function craft_single_email(season, problems_struct, receiver, message_top, mess
 	render.render_standalone('mail_basic', data, function(err, body_html) {
 		if (err) return cb(err);
 
+		const receiver_class = (receiver.stb_filter ? 'StB' : (
+			receiver.regions_filter ? (
+				(receiver.u19o19 === 'U19') ? 'BJW' : 'BW'
+			) : ''
+		));
+
 		const res = {
 			subject: 'Kroton-Report',
 			to: receiver.email,
 			body_html,
 			empty: (important_problems_struct.found.length === 0),
 			color_counts: count_colors(colors),
+			receiver_class,
 		};
 		render.render_standalone('mail_scaffold', res, function(err, mail_html) {
 			if (err) return cb(err);

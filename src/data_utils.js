@@ -138,6 +138,10 @@ function parse_grouplist(comma_list) {
 	return csl.split(',').map(s => s.trim());
 }
 
+function vrlid_is_o19(vrl_typeid) {
+	return [9, 11, 10, 12].includes(vrl_typeid);
+}
+
 module.exports = {
 	extract_names,
 	is_preseason,
@@ -154,4 +158,5 @@ module.exports = {
 	team2num,
 	teamid2clubid,
 	tm_str,
+	vrlid_is_o19,
 };

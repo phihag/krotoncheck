@@ -9,6 +9,7 @@ const data_utils = require('./data_utils');
 const loader = require('./loader');
 const render = require('./render');
 const problems = require('./problems');
+const utils = require('./utils');
 
 function determine_u19o19(problem) {
 	if (problem.teammatch) {
@@ -213,24 +214,39 @@ function craft_single_email(season, problems_struct, receiver, message_top, mess
 	});
 }
 
+// Callback gets two arguments: 1. internal error while sending 2. an array of errors
 function sendall(config, crafted, callback) {
 	const smtp_config = config('smtp');
 	const transporter = nodemailer.createTransport(smtp_config);
-	async.map(crafted, function(c, cb) {
-		if (c.empty) {
-			return cb();
-		}
-
-		const mailOptions = {
+	const crafted_nonempty = crafted.filter(c => !c.empty);
+	const mails = crafted_nonempty.map(c => {
+		return {
 			from: config('mail_from'),
 			to: c.to,
 			subject: c.subject,
 			text: c.mail_text,
 			html: c.mail_html,
 		};
+	});
 
-		transporter.sendMail(mailOptions, cb);
-	}, callback);
+	const errors = [];
+	const got = mails.map(() => false);
+
+	mails.map((mail, i) => {
+		transporter.sendMail(mail, (err) => {
+			got[i] = true;
+			if (err) {
+				errors.push({
+					mail,
+					err,
+				});
+			}
+
+			if (utils.all(got)) {
+				callback(null, errors);
+			}
+		});
+	});
 }
 
 module.exports = {

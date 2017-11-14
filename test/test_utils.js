@@ -105,4 +105,10 @@ describe('utils', function() {
 			done();
 		});
 	});
+
+	it('all', () => {
+		assert(! utils.all([true, false, true]));
+		assert(utils.all([true, true, true]));
+		assert(utils.all([]));
+	});
 });

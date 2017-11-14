@@ -235,8 +235,11 @@ function email_send(req, res, next) {
 		kc_email.craft_emails(season, season.receivers, problems_struct, message, null, null, function(err, crafted) {
 			if (err) return next(err);
 
-			kc_email.sendall(req.app.config, crafted, function(err) {
+			kc_email.sendall(req.app.config, crafted, (err, errors) => {
 				if (err) {
+					return next(err);
+				}
+				if (errors.length > 0) {
 					return next(err);
 				}
 

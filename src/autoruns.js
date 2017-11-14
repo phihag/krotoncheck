@@ -50,11 +50,14 @@ function run(config, db, ar_id) {
 		}, function(ar, season, dl, found, crafted, cb) {
 			kc_email.sendall(
 				config, crafted,
-				err => cb(err, ar, season, dl, found, crafted)
+				(err, errors) => cb(err, ar, season, dl, found, crafted, errors)
 			);
 		},
-		function(ar, season, dl, found, crafted, cb) {
-			db.autoruns.update({_id: ar_id}, {$set: {last_success: Date.now()}}, {}, (err) => cb(err));
+		function(ar, season, dl, found, crafted, errors, cb) {
+			db.autoruns.update(
+				{_id: ar_id},
+				{$set: {last_success: Date.now(), errors}},
+				{}, (err) => cb(err));
 		},
 	], function(err) {
 		if (err) {

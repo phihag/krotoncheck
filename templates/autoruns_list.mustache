@@ -5,6 +5,9 @@
 </form>
 </h3>
 <div>Letzte erfolgreiche Überprüfung: {{#last_success}}{{#format_timestamp}}{{last_success}}{{/format_timestamp}}{{/last_success}}{{^last_success}}(noch nie){{/last_success}}</div>
+
+{{#errors}}<div style="color:#f00;">Fehler {{#email}}{{to}}{{/email}}: {{#err}}{{message}}{{/err}}</div>{{/errors}}
+
 <ul>
 {{#display_receivers}}
 <li>{{>receiver_render}} <form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/receiver_delete" class="autorun_receiver_delete_form"><input type="hidden" name="receiver_json" value="{{receiver_json}}"/>{{{csrf_field}}}<button role="submit">-</button></form>

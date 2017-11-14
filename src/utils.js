@@ -360,7 +360,12 @@ function remove(ar, val) {
 	return false;
 }
 
+function all(ar) {
+	return ar.every(x => x);
+}
+
 module.exports = {
+	all,
 	cmp,
 	cmp_key,
 	download_page,

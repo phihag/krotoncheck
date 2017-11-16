@@ -1,4 +1,8 @@
-show error/success on mails in UI
+check representation of mail sending errors
+fest in without fest ab and the other way round
+FIX in incorrect vkz (see miles email)
+check for deleted VRL entries
+
 
 do away with JSON cache?
 check CSRF token - keeps changing!?

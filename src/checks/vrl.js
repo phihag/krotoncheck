@@ -336,10 +336,25 @@ function* check_invalid_date(season, is_o19, line) {
 }
 
 function* check_startend(season, is_hr, vrl_date, line) {
-	// Special excemption for club move
-	if ((season.key === 'nrw2016') && ['01-0955', '01-0971'].includes(line.clubcode)) {
-		return;
+	// Test end before vrl_date
+	if (line.enddate) {
+		const enddate = utils.parse_date(line.enddate);
+		if (enddate < vrl_date) {
+			const message = (
+				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+				' darf nicht mehr in der ' + (is_hr ? 'Hinrunden' : 'Rückrunden') + '-VRL stehen,' +
+				' da ' + (line.sex === 'M' ? 'er' : 'sie') +
+				' vor Abgabeschluss (am ' + line.enddate + ') abgemeldet wurde.'
+			);
+			yield {
+				type: 'vrl',
+				vrl_typeid: line.typeid,
+				clubcode: line.clubcode,
+				message,
+			};
+		}
 	}
+
 
 	if (!line.kz) {
 		return;
@@ -613,7 +628,7 @@ function* check_vrl(season, vrl) {
 		// Invalid start dates
 		yield* check_invalid_date(season, is_o19, line);
 
-		// Incorrectly noted start
+		// Incorrectly noted start or end
 		yield* check_startend(season, is_hr, vrl_date, line);
 
 		// Ascending team numbers

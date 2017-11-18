@@ -131,11 +131,13 @@ function craft_emails(season, default_receivers, problems_struct, message_top, m
 	const tasks = [
 		cb => cb(null, default_receivers),
 	];
-	if (add_receivers.all_stbs) {
-		tasks.push(cb => stb_receivers(season, cb));
-	}
-	if (add_receivers.all_bws) {
-		tasks.push(cb => bw_receivers(season, cb));
+	if (add_receivers) {
+		if (add_receivers.all_stbs) {
+			tasks.push(cb => stb_receivers(season, cb));
+		}
+		if (add_receivers.all_bws) {
+			tasks.push(cb => bw_receivers(season, cb));
+		}
 	}
 
 	async.series(tasks, (err, receiver_lists) => {

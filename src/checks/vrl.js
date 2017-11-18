@@ -576,6 +576,20 @@ function* check_vrl(season, vrl) {
 		if (is_o19) {
 			const m = /^U([01][0-9])(?:-[12])?$/.exec(line.akl);
 			if (m) {
+				if (!line.vkz1) { // Invalid vkz1 is handled elsewhere
+					const message = (
+						'Jugendkennzeichen (vkz1) fehlt in ' + data.vrl_name(vrl.typeid) +
+						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
+						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
+					);
+					yield {
+						type: 'vrl',
+						vrl_typeid: vrl.typeid,
+						clubcode: vrl.clubcode,
+						message: message,
+					};
+				}
+
 				if (((line.jkz1 === 'U19E') || (line.vkz1 === 'U19E')) && (m[1] == '19')) {
 					yield* check_u19e(data, vrl, line);
 					yield* check_not_in_youth_team(data, is_hr, line);
@@ -590,18 +604,6 @@ function* check_vrl(season, vrl) {
 						' in ' + data.vrl_name(vrl.typeid) +
 						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
 						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname + ' (AKL ' + line.akl + ')'
-					);
-					yield {
-						type: 'vrl',
-						vrl_typeid: vrl.typeid,
-						clubcode: vrl.clubcode,
-						message: message,
-					};
-				} else if (!line.vkz1) { // Invalid vkz1 is handled elsewhere
-					const message = (
-						'Jugendkennzeichen fehlt in ' + data.vrl_name(vrl.typeid) +
-						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
-						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
 					);
 					yield {
 						type: 'vrl',

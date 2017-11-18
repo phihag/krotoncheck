@@ -336,7 +336,26 @@ function* check_invalid_date(season, is_o19, line) {
 }
 
 function* check_startend(season, is_hr, vrl_date, line) {
-	// Test end before vrl_date
+	// Start before vrl_date?
+	if (line.startdate) {
+		const startdate = utils.parse_date(line.startdate);
+		if (startdate < vrl_date) {
+			const message = (
+				'Startdatum ' + line.startdate + ' von ' +
+				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+				' liegt vor Abgabeschluss der ' + (is_hr ? 'Hinrunden' : 'Rückrunden') + '-VRL' +
+				', sollte gelöscht werden.'
+			);
+			yield {
+				type: 'vrl',
+				vrl_typeid: line.typeid,
+				clubcode: line.clubcode,
+				message,
+			};
+		}
+	}
+
+	// end before vrl_date?
 	if (line.enddate) {
 		const enddate = utils.parse_date(line.enddate);
 		if (enddate < vrl_date) {
@@ -354,7 +373,6 @@ function* check_startend(season, is_hr, vrl_date, line) {
 			};
 		}
 	}
-
 
 	if (!line.kz) {
 		return;

@@ -443,6 +443,22 @@ function* check_startend(season, is_hr, vrl_date, line) {
 	};
 }
 
+function* check_fixed(season, line) {
+	// TODO test this
+	if (line.vkz2.toUpperCase() === 'FIX') {
+		const message = (
+			'Ungltiges vkz2 ' + JSON.stringify(line.vkz2) +
+			' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+		);
+		yield {
+			type: 'vrl',
+			vrl_typeid: line.typeid,
+			clubcode: line.clubcode,
+			message
+		};
+	}
+}
+
 function* check_vrl(season, vrl) {
 	const data = season.data;
 	const is_o19 = data_utils.vrlid_is_o19(vrl.typeid);
@@ -460,6 +476,8 @@ function* check_vrl(season, vrl) {
 			players_by_team.set(line.teamcode, []);
 		}
 		players_by_team.get(line.teamcode).push(line);
+
+		yield* check_fixed(season, line);
 
 		if (line.position != line.teamposition) {
 			const message = (

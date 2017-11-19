@@ -102,6 +102,19 @@
 	"message": "Spieler (01-ry-m6) rym6l rym6f steht mit Kennzeichen J1 (ohne Enddatum) in der VRL 9[Hinrunde Herren O19] von (01-1008) RetractYouth, aber die Mannschaft 01-1008-J1 hat Status \"Mannschaftsrückzug\"",
 	"type": "vrl",
 	"vrl_typeid": 9
+},
+
+{
+	"clubcode": "01-1009",
+	"message": "Ungültiges Kennzeichen \"FIX\" in der VRL 9[Hinrunde Herren O19] von (01-1009) Top Team  bei 01-tt-m7 vor 01-tt-m7 nach (01-tt-m7)",
+	"type": "vrl",
+	"vrl_typeid": 9
+},
+{
+    "clubcode": "01-1009",
+    "message": "Ungltiges vkz2 \"FIX\" bei 01-tt-m8 vor 01-tt-m8 nach (01-tt-m8)",
+    "type": "vrl",
+    "vrl_typeid": 9
 }
 
 ]

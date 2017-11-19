@@ -439,7 +439,6 @@ function* check_startend(season, is_hr, vrl_date, line) {
 }
 
 function* check_fixed(season, line) {
-	// TODO test this
 	if (line.vkz2.toUpperCase() === 'FIX') {
 		const message = (
 			'Ungltiges vkz2 ' + JSON.stringify(line.vkz2) +
@@ -449,9 +448,11 @@ function* check_fixed(season, line) {
 			type: 'vrl',
 			vrl_typeid: line.typeid,
 			clubcode: line.clubcode,
-			message
+			message,
 		};
 	}
+
+	// TODO check more fixed here
 }
 
 function* check_vrl(season, vrl) {

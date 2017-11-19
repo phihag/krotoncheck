@@ -105,6 +105,13 @@
 },
 
 {
+	"clubcode": "01-1008",
+	"message": "Spielerin (01-ry-f5)   steht mit Kennzeichen J1 in der VRL 10[Hinrunde Damen O19] von (01-1008) RetractYouth, gehört aber nicht zu den Top 2 in J1, sondern ist Nr. 3 in  (VRL 14[Hinrunde Mädchen U19])",
+	"type": "vrl",
+	"vrl_typeid": 10
+},
+
+{
 	"clubcode": "01-1009",
 	"message": "Ungültiges Kennzeichen \"FIX\" in der VRL 9[Hinrunde Herren O19] von (01-1009) Top Team  bei 01-tt-m7 vor 01-tt-m7 nach (01-tt-m7)",
 	"type": "vrl",

@@ -200,11 +200,6 @@ function* check_in_youth_team(season, is_hr, line) {
 			message: message,
 		};
 	} else {
-		if (line.enddate) {
-			// Retracted or moved
-			return;
-		}
-
 		var pos = data_utils.parse_int(ve.position);
 		if (pos > top) {
 			const message = (

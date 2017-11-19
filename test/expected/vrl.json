@@ -45,7 +45,7 @@
 },
 {
 	"clubcode": "01-1005",
-	"message": "Jugendkennzeichen fehlt in VRL 9[Hinrunde Herren O19] von (01-1005) Chaos VRL bei (01-cv-m13) first13 last13",
+	"message": "Jugendkennzeichen (vkz1) fehlt in VRL 9[Hinrunde Herren O19] von (01-1005) Chaos VRL bei (01-cv-m13) first13 last13",
 	"type": "vrl",
 	"vrl_typeid": 9
 },
@@ -80,6 +80,14 @@
 	"type": "vrl",
 	"vrl_typeid": 9
 },
+
+{
+	"message": "Jugendkennzeichen (vkz1) fehlt in VRL 9[Hinrunde Herren O19] von (01-1007) No YouthA bei (01-ny-m7) firsty7 lasty7",
+	"type": "vrl",
+	"vrl_typeid": 9,
+	"clubcode": "01-1007"
+},
+
 
 {
 	"message": "  (01-ry-m5) steht mit Kennzeichen U19E in der VRL 9[Hinrunde Herren O19] von (01-1008) RetractYouth, ist aber in der VRL 17[Hinrunde Jungen+Mini U19] an Position 1 aufgeführt.",

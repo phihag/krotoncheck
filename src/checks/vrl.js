@@ -452,7 +452,48 @@ function* check_fixed(season, line) {
 		};
 	}
 
-	// TODO check more fixed here
+	if ((line.vkz3.toUpperCase() === 'FIX') && !line.fixed_in && !line.fixed_at) {
+		const message = (
+			'FIX in vkz3, aber kein [Fest ab]/[Fest in] ' +
+			' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+		);
+		yield {
+			type: 'vrl',
+			vrl_typeid: line.typeid,
+			clubcode: line.clubcode,
+			message,
+		};
+	}
+
+	if (!line.fixed_in && !line.fixed_from) {
+		return;
+	}
+
+	if (!line.fixed_from) {
+		const message = (
+			'[Fest in] ' + line.fixed_in + ' ohne [Fest ab]' +
+			' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+		);
+		yield {
+			type: 'vrl',
+			vrl_typeid: line.typeid,
+			clubcode: line.clubcode,
+			message,
+		};
+	}
+
+	if (!line.fixed_in) {
+		const message = (
+			'[Fest ab] ' + line.fixed_from + ' ohne [Fest in]' +
+			' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+		);
+		yield {
+			type: 'vrl',
+			vrl_typeid: line.typeid,
+			clubcode: line.clubcode,
+			message,
+		};
+	}
 }
 
 function* check_vrl(season, vrl) {

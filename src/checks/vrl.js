@@ -438,7 +438,7 @@ function* check_startend(season, is_hr, vrl_date, line) {
 	};
 }
 
-function* check_fixed(season, line) {
+function* check_fixed(season, is_hr, vrl_date, line) {
 	if (line.vkz2.toUpperCase() === 'FIX') {
 		const message = (
 			'Ungltiges vkz2 ' + JSON.stringify(line.vkz2) +
@@ -452,17 +452,48 @@ function* check_fixed(season, line) {
 		};
 	}
 
-	if ((line.vkz3.toUpperCase() === 'FIX') && !line.fixed_in && !line.fixed_at) {
-		const message = (
-			'FIX in vkz3, aber kein [Fest ab]/[Fest in] ' +
-			' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
-		);
-		yield {
-			type: 'vrl',
-			vrl_typeid: line.typeid,
-			clubcode: line.clubcode,
-			message,
-		};
+	if (line.vkz3.toUpperCase() === 'FIX') {
+		if (!line.fixed_in) {
+			const message = (
+				'FIX in vkz3, aber kein [Fest in] ' +
+				' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+			);
+			yield {
+				type: 'vrl',
+				vrl_typeid: line.typeid,
+				clubcode: line.clubcode,
+				message,
+			};
+		}
+
+		if (line.fixed_from) {
+			const fixed_date = utils.parse_date(line.fixed_from);
+			if (fixed_date !== vrl_date) {
+				const message = (
+					'FIX am ' + line.fixed_from + ' statt zum Tag der ' +
+					(is_hr ? 'Hinrunden' : 'Rückrunden') + '-VRL-Abgabe ' +
+					'(' + utils.ts2dstr(vrl_date) + ') ' +
+					' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+				);
+				yield {
+					type: 'vrl',
+					vrl_typeid: line.typeid,
+					clubcode: line.clubcode,
+					message,
+				};	
+			}
+		} else {
+			const message = (
+				'FIX in vkz3, aber kein [Fest ab] ' +
+				' bei ' + line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')'
+			);
+			yield {
+				type: 'vrl',
+				vrl_typeid: line.typeid,
+				clubcode: line.clubcode,
+				message,
+			};
+		}
 	}
 
 	if (!line.fixed_in && !line.fixed_from) {
@@ -514,7 +545,7 @@ function* check_vrl(season, vrl) {
 		}
 		players_by_team.get(line.teamcode).push(line);
 
-		yield* check_fixed(season, line);
+		yield* check_fixed(season, is_hr, vrl_date, line);
 
 		if (line.position != line.teamposition) {
 			const message = (

@@ -133,6 +133,13 @@
 
 {
 	"clubcode": "01-1009",
+	"message": "FIX in vkz3, aber kein [Fest ab]  bei 01-tt-m9 vor 01-tt-m9 nach (01-tt-m9)",
+	"type": "vrl",
+	"vrl_typeid": 9
+},
+
+{
+	"clubcode": "01-1009",
 	"message": "[Fest in] 3 ohne [Fest ab] bei 01-tt-m9 vor 01-tt-m9 nach (01-tt-m9)",
 	"type": "vrl",
 	"vrl_typeid": 9

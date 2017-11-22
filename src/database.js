@@ -16,7 +16,7 @@ function init(callback) {
 		fs.mkdirSync(db_dir);
 	}
 
-	['users', 'sessions', 'seasons', 'problems', 'autoruns'].forEach(function(key) {
+	['users', 'sessions', 'seasons', 'problems', 'autoruns', 'max_vrls'].forEach(function(key) {
 		db[key] = new Datastore({filename: db_dir + '/' + key, autoload: true});
 	});
 
@@ -24,6 +24,8 @@ function init(callback) {
 	db.sessions.ensureIndex({fieldName: 'key', unique: true});
 	db.seasons.ensureIndex({fieldName: 'key', unique: true});
 	db.problems.ensureIndex({fieldName: 'key', unique: true});
+	db.max_vrls.ensureIndex({fieldName: 'season_key', unique: false});
+	db.max_vrls.ensureIndex({fieldName: 'season_club_vrl_key', unique: true});
 
 	const admin_email = 'krotoncheck@aufschlagwechsel.de';
 	db.users.find({email: admin_email}, function(err, docs) {

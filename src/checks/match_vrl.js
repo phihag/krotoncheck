@@ -437,7 +437,7 @@ function* check(data, tm) {
 
 	if ((problems1.length === 0) && (problems2.length === 0) &&
 			(data.get_stb_note(tm.matchid, text => /^\s*"?\s*Umwertung\s+U(?:14|16)/.test(text))) &&
-			(!data.get_stb_note(tm.matchid, text => /Um(?:be)wertung\s+zurück\s*genommen|Rücknahme\s+der\s+Umwertung/.test(text)))) {
+			(!data.get_stb_note(tm.matchid, text => /Um(?:be)?wertung\s+zurück\s*genommen|Rücknahme\s+der\s+Umwertung/.test(text)))) {
 		const message = (
 			'Umwertungsgrund kann nicht gefunden werden.'
 		);

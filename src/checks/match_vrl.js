@@ -10,6 +10,14 @@ function player_names(data, player_ids) {
 	return players.map(data_utils.player_name).join(', ');
 }
 
+function is_flagged(pm, team_idx) {
+	return pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler;
+}
+
+function is_handled(pm, team_idx) {
+	return is_flagged(pm, team_idx) || pm['flag_keinspiel_keinspieler_team' + (3 - team_idx)];
+}
+
 function* check_min_count(data, league_type, tm, team, valid_players_by_gender) {
 	const f_count = valid_players_by_gender.F.size;
 	const m_count = valid_players_by_gender.M.size;
@@ -114,7 +122,7 @@ function contains_backup_player(data, tm, players) {
 	return false;
 }
 
-function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx, flagged) {
+function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx) {
 	const pm_is_doubles = laws.is_doubles(pm.disziplin);
 
 	if (!pm_ratings_by_discipline[pm.disziplin]) {
@@ -248,7 +256,7 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 	}
 
 	const expected_players = pm_is_doubles ? 2 : 1;
-	if ((match_ratings.ratings.length === expected_players) && !flagged) {
+	if ((match_ratings.ratings.length === expected_players)) {
 		pm_ratings_by_discipline[pm.disziplin].push(match_ratings);
 	}
 }
@@ -266,8 +274,8 @@ function* check_all(data, tm, pms, team_idx) {
 
 	// Check if everyone present in VRL
 	for (let pm of pms) {
-		const flagged = pm['flag_umwertung_gegen_team' + team_idx] || pm.flag_keinspiel_keinespieler;
-		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx, flagged));
+		const flagged = is_flagged(pm, team_idx);
+		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx));
 
 		if (problems.length > 0)  {
 			problematic.add(pm.matchid);
@@ -317,6 +325,12 @@ function* check_all(data, tm, pms, team_idx) {
 					continue;
 				}
 
+				yield 'handled';
+
+				if (is_handled(mr1.pm, team_idx) && is_handled(mr2.pm, team_idx)) {
+					continue;
+				}
+
 				if (mr1.pm.flag_keinspiel_keinespieler && mr2.pm.flag_keinspiel_keinespieler) {
 					continue; // Both sides wrong?
 				}
@@ -349,6 +363,12 @@ function* check_all(data, tm, pms, team_idx) {
 					continue;
 				}
 
+				yield 'handled';
+
+				if (is_handled(mr1.pm, team_idx) && is_handled(mr2.pm, team_idx)) {
+					continue;
+				}
+
 				if (mr1.pm.flag_keinspiel_keinespieler && mr2.pm.flag_keinspiel_keinespieler) {
 					continue; // Both sides wrong?
 				}
@@ -366,7 +386,7 @@ function* check_all(data, tm, pms, team_idx) {
 						data_utils.player_str(p2) + ' ist VRL #' + mr2.ratings[0] + ' und hat ' + data_utils.match_name(mr2.pm) + ' gespielt.');
 				yield {
 					teammatch_id: tm.matchid,
-					message: message,
+					message,
 				};
 			}
 		}
@@ -380,6 +400,7 @@ function* check_all(data, tm, pms, team_idx) {
 				missing = pm;
 			} else if (missing) {
 				if (pm[`flag_umwertung_gegen_team${team_idx}`]) { // Already handled
+					yield 'handled';
 					continue;
 				}
 				if (pm.flag_keinspiel_keinespieler && !pm[`team${3 - team_idx}spieler1spielerid`]) {
@@ -411,8 +432,23 @@ function* check(data, tm) {
 
 	let pms = data.get_playermatches_by_teammatch_id(tm.matchid);
 
-	yield* check_all(data, tm, pms, 1);
-	yield* check_all(data, tm, pms, 2);
+	const problems1 = Array.from(check_all(data, tm, pms, 1));
+	const problems2 = Array.from(check_all(data, tm, pms, 2));
+
+	if ((problems1.length === 0) && (problems2.length === 0) &&
+			(data.get_stb_note(tm.matchid, text => /^\s*"?\s*Umwertung\s+U(?:14|16)/.test(text))) &&
+			(!data.get_stb_note(tm.matchid, text => /Umwertung\s+zurückgenommen|Rücknahme\s+der\s+Umwertung/.test(text)))) {
+		const message = (
+			'Umwertungsgrund kann nicht gefunden werden.'
+		);
+		yield {
+			teammatch_id: tm.matchid,
+			message,
+		};
+	}
+
+	yield* problems1.filter(p => p !== 'handled');
+	yield* problems2.filter(p => p !== 'handled');
 }
 
 

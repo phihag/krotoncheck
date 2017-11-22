@@ -1,5 +1,7 @@
-check representation of mail sending errors
+save all VRL entries
 check for deleted VRL entries
+
+check representation of mail sending errors
 
 
 do away with JSON cache?

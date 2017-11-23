@@ -10,7 +10,14 @@ const utils = require('../utils');
 
 const calc_idx = line => line.clubcode + '_' + line.typeid + '_' + line.memberid;
 
+const DISABLED = true;
+
+
 module.exports = function*(season) {
+	if (DISABLED) {
+		return;
+	}
+
 	const cr_table = season.data.clubranking;
 
 	const season_key = season.key;

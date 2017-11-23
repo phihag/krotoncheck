@@ -1,7 +1,6 @@
 fix https://www.turnier.de/sport/teammatch.aspx?id=3AE85140-FD7F-4D47-8BEE-575B0334E9D8&match=11128
 
-save all VRL entries
-check for deleted VRL entries
+max_vrls: pluck only firstname, lastname, position, memberid, clubid, vrl*
 
 check representation of mail sending errors
 stbstats: + #staffeln

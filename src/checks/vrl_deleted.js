@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert');
-const async = require('async');
 const fs = require('fs');
 const path = require('path');
 
@@ -20,7 +19,7 @@ module.exports = function*(season) {
 
 	const now = season.newest_download && season.newest_download.done_timestamp;
 	if (!now) {
-		return callback();
+		return;
 	}
 
 	let lines_json;

@@ -8,24 +8,24 @@ const path = require('path');
 const utils = require('./utils');
 const users = require('./users');
 
+const DB_DIR = path.dirname(__dirname) + '/data';
+const MAX_VRLS_DIR = path.join(DB_DIR, 'max_vrls');
+
 function init(callback) {
 	const db = {};
 
-	const db_dir = path.dirname(__dirname) + '/data';
-	if (! fs.existsSync(db_dir)) {
-		fs.mkdirSync(db_dir);
+	if (! fs.existsSync(DB_DIR)) {
+		fs.mkdirSync(DB_DIR);
 	}
 
-	['users', 'sessions', 'seasons', 'problems', 'autoruns', 'max_vrls'].forEach(function(key) {
-		db[key] = new Datastore({filename: db_dir + '/' + key, autoload: true});
+	['users', 'sessions', 'seasons', 'problems', 'autoruns'].forEach(function(key) {
+		db[key] = new Datastore({filename: DB_DIR + '/' + key, autoload: true});
 	});
 
 	db.users.ensureIndex({fieldName: 'email', unique: true});
 	db.sessions.ensureIndex({fieldName: 'key', unique: true});
 	db.seasons.ensureIndex({fieldName: 'key', unique: true});
 	db.problems.ensureIndex({fieldName: 'key', unique: true});
-	db.max_vrls.ensureIndex({fieldName: 'season_key', unique: false});
-	db.max_vrls.ensureIndex({fieldName: 'season_club_vrl_key', unique: true});
 
 	const admin_email = 'krotoncheck@aufschlagwechsel.de';
 	db.users.find({email: admin_email}, function(err, docs) {
@@ -54,10 +54,11 @@ function init(callback) {
 	};
 
 	async.waterfall([
-		function (cb) {
+		(cb) => {
 			setup_autonum(cb, db, 'autoruns');
 		},
-	], function(err) {
+		cb => utils.ensure_dir(MAX_VRLS_DIR, cb),
+	], (err) => {
 		callback(err, db);
 	});
 }
@@ -109,5 +110,6 @@ function setup_autonum(callback, db, collection, start) {
 }
 
 module.exports = {
-	init: init,
+	init,
+	MAX_VRLS_DIR,
 };

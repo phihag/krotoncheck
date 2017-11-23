@@ -364,10 +364,18 @@ function all(ar) {
 	return ar.every(x => x);
 }
 
+function deep_copy(obj) {
+	if (obj === undefined) {
+		return obj;
+	}
+	return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
 	all,
 	cmp,
 	cmp_key,
+	deep_copy,
 	download_page,
 	ensure_dir,
 	escapeRegExp,

@@ -6,7 +6,6 @@ const path = require('path');
 
 const data_access = require('./data_access');
 const loader = require('./loader');
-const max_vrl = require('./max_vrl');
 const problems = require('./problems');
 const utils = require('./utils');
 const worker_utils = require('./worker_utils');
@@ -57,13 +56,7 @@ function recheck(db, season_key, in_background, callback, store=false) {
 			}
 
 			if (store) {
-				problems.store(db, season, found, (err) => {
-					if (err) return callback(err);
-
-					max_vrl.store(db, season, (err) => {
-						callback(err, found);
-					});
-				});
+				problems.store(db, season, found, (err) => callback(err, found));
 			} else {
 				callback(null, found);
 			}

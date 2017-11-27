@@ -1,7 +1,15 @@
+check F18 without umw nicht spielberechtigt
+check umw nicht spielberechtigt without F18
+
 fix https://www.turnier.de/sport/teammatch.aspx?id=3AE85140-FD7F-4D47-8BEE-575B0334E9D8&match=11128
 
 max_vrls: pluck only firstname, lastname, position, memberid, clubid, vrl*
+max_vrl: only write if something has changed
 
+UI Aufstellungstest
+	-> dkh
+
+reply-to miles?
 check representation of mail sending errors
 stbstats: + #staffeln
 

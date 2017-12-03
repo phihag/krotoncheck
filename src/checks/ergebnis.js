@@ -1,7 +1,6 @@
 'use strict';
 
 const calc = require('../calc');
-const data_utils = require('../data_utils');
 
 
 function* check_match(data, pm) {

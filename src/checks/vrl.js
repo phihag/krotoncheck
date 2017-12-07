@@ -296,7 +296,7 @@ function* check_in_youth_team(season, is_hr, line) {
 		const message = (
 			expect_team + '-Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' wurde mehr als zweimal im O19-Bereich eingesetzt (§11.1.2 JSpO)'
+			' wurde mehr als zweimal im O19-Bereich eingesetzt (§11.2 JSpO)'
 		);
 		yield {
 			teammatch_id: o19tm.matchid,

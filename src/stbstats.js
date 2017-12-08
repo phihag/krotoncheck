@@ -51,6 +51,7 @@ function show_handler(req, res, next) {
 			render(req, res, next, 'stbstats_show', {
 				season,
 				stats,
+				region_filter,
 				extended: req.query.hasOwnProperty('extended') || req.query.hasOwnProperty('e'),
 			});
 		});

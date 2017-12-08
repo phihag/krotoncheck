@@ -31,6 +31,7 @@ function average(ar) {
 
 function show_handler(req, res, next) {
 	const season_key = req.params.season_key;
+	const region_filter = req.query.region || req.query.r;
 	const worker_fn = path.join(__dirname, 'stbstats_worker.js');
 	req.app.db.efetch_all(next, [{
 		queryFunc: '_findOne',
@@ -39,9 +40,17 @@ function show_handler(req, res, next) {
 	}], function(season) {
 		worker_utils.in_background(worker_fn, season, function(err, wr) {
 			if (err) return next(err);
+
+			let stats = wr.stats;
+			if (region_filter) {
+				stats = stats.filter(s => {
+					return !s.regions_str || s.regions_str.includes(region_filter);
+				});
+			}
+
 			render(req, res, next, 'stbstats_show', {
 				season,
-				stats: wr.stats,
+				stats,
 				extended: req.query.hasOwnProperty('extended') || req.query.hasOwnProperty('e'),
 			});
 		});
@@ -89,10 +98,11 @@ function calc_ms(data, tm, stb_name, now) {
 	return handled - entered;
 }
 
-function calc_stats(durations_by_stb, regions_by_stb) {
+function calc_stats(durations_by_stb, regions_by_stb, groups_by_stb) {
 	const res = [];
 	for (const [stb_name, durs] of durations_by_stb.entries()) {
 		const stb_regions = regions_by_stb.get(stb_name) || [];
+		const stb_groups = groups_by_stb.get(stb_name) || [];
 		const regions_ar = Array.from(stb_regions);
 		regions_ar.sort();
 		const regions_str = regions_ar.join(',');
@@ -102,6 +112,8 @@ function calc_stats(durations_by_stb, regions_by_stb) {
 			q95: quantile(durs, 0.95),
 			avg: average(durs),
 			count: durs.length,
+			groups: stb_groups,
+			group_count: stb_groups.length,
 			regions_str,
 		});
 	}
@@ -118,6 +130,7 @@ function run_calc(season, cb) {
 		const data = season.data;
 		const durations_by_stb = new Map();
 		const regions_by_stb = new Map();
+		const groups_by_stb = new Map();
 		const now = Date.now();
 		for (const tm of data.teammatches) {
 			const stb = data.get_stb(tm);
@@ -137,9 +150,19 @@ function run_calc(season, cb) {
 
 			let region_durations = utils.setdefault(durations_by_stb, region, () => []);
 			region_durations.push(duration);
+
+			const group_id = tm.staffelcode;
+			let stb_groups = utils.setdefault(groups_by_stb, stb_name, () => []);
+			if (!stb_groups.includes(group_id)) {
+				stb_groups.push(group_id);
+			}
+			let region_groups = utils.setdefault(groups_by_stb, region, () => []);
+			if (!region_groups.includes(group_id)) {
+				region_groups.push(group_id);
+			}
 		}
 
-		const stats = calc_stats(durations_by_stb, regions_by_stb);
+		const stats = calc_stats(durations_by_stb, regions_by_stb, groups_by_stb);
 		cb(null, stats);
 	});
 }

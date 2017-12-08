@@ -3,7 +3,8 @@
 <table>
 <thead><tr>
 	<th>StB</th>
-	<th># Spiele</th>
+	<th>Staffeln</th>
+	<th>Spiele</th>
 	<th>Bezirk</th>
 	<th>Median</th>
 {{#extended}}
@@ -14,6 +15,7 @@
 <tbody>
 {{#stats}}
 <tr><td>{{stb_name}}</td>
+	<td class="stbstats_group_count">{{group_count}}</td>
 	<td class="stbstats_count">{{count}}</td>
 	<td class="stbstats_regions">{{regions_str}}</td>
 	<td class="stbstats_median">{{#format_duration_float}}{{median}}{{/format_duration_float}}</td>

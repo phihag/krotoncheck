@@ -258,6 +258,15 @@ function* check_round(data, player, matches, is_hr, o19) {
 		}
 	}
 
+	if (!vrl_entry && (matches.length === 0)) {
+		// Look up VRL entry in the main club instead
+		const vrl_type = laws.get_round_vrl_type(o19 ? 'O19' : 'U19', is_hr, player.sex);
+		vrl_entry = data.try_get_vrl_entry(player.clubid, vrl_type, player.spielerid, true);
+		if (!vrl_entry && !o19) {
+			vrl_entry = data.try_get_vrl_entry(player.clubid, 'Mini', player.spielerid, true);
+		}
+	}
+
 	if (vrl_entry) {
 		yield* check_vrl_entry(data, should_fixed, vrl_entry, player);
 	}

@@ -394,8 +394,12 @@ function* check_startend(season, is_hr, vrl_date, line) {
 
 		const message = (
 			line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
-			' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
-			' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',' +
+			((line.playerclubcode === '01-8999') ?
+				' wurde am ' + m[1] + ' von der Spielberechtigungsliste gestrichen,'
+				:
+				(' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
+				' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',')
+			) +
 			' aber Enddatum fehlt' +
 			' in der ' + season.data.vrl_name(line.typeid)
 		);

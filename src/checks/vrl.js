@@ -796,6 +796,24 @@ function* check_vrl(season, vrl) {
 				};
 			}
 		}
+
+		// Comment describing fixing, but no actual fixing
+		if (line.comment) {
+			if (/fest/i.test(line.comment) && !line.fixed_in) {
+				const message = (
+					'Kommentar erwähnt Festschreibung (' + JSON.stringify(line.comment) + '), ' +
+					'aber kein [Fest in] bei ' +
+					line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
+					' in ' + vrl.clubname + ' (' + vrl.clubcode + ')'
+				);
+				yield {
+					type: 'vrl',
+					vrl_typeid: vrl.typeid,
+					clubcode: vrl.clubcode,
+					message: message,
+				};
+			}
+		}
 	}
 
 	// Check that each team has enough players

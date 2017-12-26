@@ -96,7 +96,7 @@ function run_login(config, jar, cb) {
 }
 
 function download_file(req, fn, cb) {
-	const encountered_error = false;
+	let encountered_error = false;
 	function on_error(err) {
 		if (encountered_error) {
 			return;

@@ -11,7 +11,7 @@ addons:
       - g++-4.8
 node_js:
   - node
-  - 6
+  - 8
 install:
   - make deps
 script:

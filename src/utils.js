@@ -79,14 +79,14 @@ function multilineRegExp(regs, options) {
 }
 
 function sha512(bytes) {
-	var h = crypto.createHash('sha512');
+	const h = crypto.createHash('sha512');
 	h.update(bytes, 'binary');
 	return h.digest('hex');
 }
 
 function match_all(pattern, input) {
-	var res = [];
-	var match;
+	const res = [];
+	let match;
 	while ((match = pattern.exec(input))) {
 		res.push(match);
 	}
@@ -94,8 +94,8 @@ function match_all(pattern, input) {
 }
 
 function values(obj) {
-	var res = [];
-	for (var key in obj) {
+	const res = [];
+	for (const key in obj) {
 		if (Object.prototype.hasOwnProperty.call(obj, key)) {
 			res.push(obj[key]);
 		}
@@ -129,8 +129,8 @@ function cmp_key(key) {
 }
 
 function natcmp(as, bs){
-	var a, b, a1, b1, i= 0, n, L;
-	var rx = /(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
+	let a, b, a1, b1, i= 0, n, L;
+	const rx = /(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
 	if (as=== bs) {
 		return 0;
 	}
@@ -169,7 +169,7 @@ function render_json(res, data) {
 }
 
 function update(obj, new_info) {
-	for (var k in new_info) {
+	for (const k in new_info) {
 		obj[k] = new_info[k];
 	}
 }
@@ -178,7 +178,7 @@ function update(obj, new_info) {
 function download_page(url, cb) {
 	http.get(url, function(res) {
 		res.setEncoding('utf8'); // TODO read actual page encoding
-		var body = '';
+		let body = '';
 		res.on('data', function(chunk) {
 			body += chunk;
 		});
@@ -201,7 +201,7 @@ function ensure_dir(dirname, cb) {
 }
 
 const TZ_ID = 'Europe/Berlin';
-var german_tz = timezone(require('timezone/' + TZ_ID));
+const german_tz = timezone(require('timezone/' + TZ_ID));
 function weekday(ts) {
 	return parseInt(german_tz(ts, '%w'));
 }
@@ -351,7 +351,7 @@ function format_duration_float(duration_ms) {
 }
 
 function remove(ar, val) {
-	for (var i = 0;i < ar.length;i++) {
+	for (let i = 0;i < ar.length;i++) {
 		if (ar[i] === val) {
 			ar.splice(i, 1);
 			return true;

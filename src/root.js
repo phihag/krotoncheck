@@ -1,6 +1,6 @@
 'use strict';
 
-var render = require('./render');
+const render = require('./render');
 
 
 function root_handler(req, res, next) {

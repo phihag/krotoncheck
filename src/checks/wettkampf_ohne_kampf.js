@@ -8,7 +8,7 @@ function* check_teammatch(data, tm) {
 	}
 
 	let pms = data.get_playermatches_by_teammatch_id(tm.matchid);
-	var offending = [];
+	const offending = [];
 	for (let pm of pms) {
 		if (pm.team1spieler1spielerid || pm.team2spieler1spielerid) {
 			offending.push(data_utils.match_name(pm));

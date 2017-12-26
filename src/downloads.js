@@ -18,8 +18,8 @@ const HTTP_HEADERS = {
 };
 
 
-var dl_counter = 0;
-var current_downloads = new Map();
+let dl_counter = 0;
+const current_downloads = new Map();
 
 
 function calc_url(task_name, season) {
@@ -53,7 +53,7 @@ function calc_filename(download_dir, task_name) {
 }
 
 function run_login(config, jar, cb) {
-	var login_dialog_url = BASE_URL + 'member/login.aspx';
+	const login_dialog_url = BASE_URL + 'member/login.aspx';
 
 	request.get({
 		url: login_dialog_url,
@@ -64,14 +64,14 @@ function run_login(config, jar, cb) {
 			return cb(err);
 		}
 
-		var m = /<form\s+method="post"\s+action="(\.\/login[^"]*)"([\s\S]*?)<\/form>/.exec(html);
+		const m = /<form\s+method="post"\s+action="(\.\/login[^"]*)"([\s\S]*?)<\/form>/.exec(html);
 		if (!m) {
 			return cb(new Error('Cannot find login form'));
 		}
 
-		var [, login_path, form_html] = m;
-		var input_vals = utils.match_all(/<input\s+(?:[a-z0-9-]+="[^"]*"\s+)*?name="([^"]+)"\s+(?:[a-z0-9-]+="[^"]*"\s+)*?value="([^"]*)"/g, form_html);
-		var form_data = {};
+		const [, login_path, form_html] = m;
+		const input_vals = utils.match_all(/<input\s+(?:[a-z0-9-]+="[^"]*"\s+)*?name="([^"]+)"\s+(?:[a-z0-9-]+="[^"]*"\s+)*?value="([^"]*)"/g, form_html);
+		const form_data = {};
 		for (let iv of input_vals) {
 			let [, key, value] = iv;
 			form_data[key] = value;
@@ -96,7 +96,7 @@ function run_login(config, jar, cb) {
 }
 
 function download_file(req, fn, cb) {
-	var encountered_error = false;
+	const encountered_error = false;
 	function on_error(err) {
 		if (encountered_error) {
 			return;
@@ -159,9 +159,9 @@ function download_season(config, season, started_cb, done_cb) {
 	}, function(cb) {
 		utils.ensure_dir(DATA_ROOT, cb);
 	}, function(cb) {
-		var download_id = Date.now() + '-' + process.pid + '_' + dl_counter;
+		const download_id = Date.now() + '-' + process.pid + '_' + dl_counter;
 		dl_counter++;
-		var download_dir = path.join(INPROGRESS_ROOT, download_id);
+		const download_dir = path.join(INPROGRESS_ROOT, download_id);
 		utils.ensure_dir(download_dir, function(err) {
 			const tasks = data_access.ALL_TASKS.slice();
 			if (season.buli_tournament_id) {

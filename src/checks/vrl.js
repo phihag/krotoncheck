@@ -200,7 +200,7 @@ function* check_in_youth_team(season, is_hr, line) {
 			message: message,
 		};
 	} else {
-		var pos = data_utils.parse_int(ve.position);
+		const pos = data_utils.parse_int(ve.position);
 		if (pos > top) {
 			const message = (
 				'Spieler' + (line.sex === 'F' ? 'in' : '') +

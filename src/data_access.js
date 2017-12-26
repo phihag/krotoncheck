@@ -294,7 +294,7 @@ function enrich(season) {
 		return res;
 	};
 	data.get_playermatches_by_teammatch_id = function(teammatch_id) {
-		var res = playermatches_by_teammatchid.get(teammatch_id);
+		const res = playermatches_by_teammatchid.get(teammatch_id);
 		if (!res) {
 			throw new Error('Konnte Spiele von Wettkampf ' + JSON.stringify(teammatch_id) + ' nicht finden');
 		}

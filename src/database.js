@@ -65,7 +65,7 @@ function init(callback) {
 
 function fetch_all(db, specs, callback) {
 	async.map(specs, function(spec, cb) {
-		var queryFunc = spec.queryFunc || 'find';
+		let queryFunc = spec.queryFunc || 'find';
 		if (queryFunc === '_findOne') {
 			queryFunc = 'findOne';
 		}
@@ -87,7 +87,7 @@ function fetch_all(db, specs, callback) {
 }
 
 function setup_autonum(callback, db, collection, start) {
-	var idx = (start === undefined) ? 0 : start;
+	let idx = (start === undefined) ? 0 : start;
 	db[collection].autonum = function() {
 		idx++;
 		return '' + idx;

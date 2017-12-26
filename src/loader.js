@@ -46,7 +46,7 @@ function load_season_data(season, callback) {
 function load_data(dirname, tasks, callback) {
 	let data = {};
 	async.each(tasks, function(task_name, cb) {
-		var csv_fn = path.join(dirname, task_name + '.csv');
+		const csv_fn = path.join(dirname, task_name + '.csv');
 		parse_csv_fn(csv_fn, function(err, lines) {
 			if (err) return cb(err);
 
@@ -57,7 +57,7 @@ function load_data(dirname, tasks, callback) {
 }
 
 function load_data_cached(dirname, tasks, callback) {
-	var json_fn = path.join(dirname, 'cachev1.json');
+	const json_fn = path.join(dirname, 'cachev1.json');
 	fs.readFile(json_fn, {encoding: 'utf8'}, function(err, fcontents) {
 		if (err) {
 			load_data(dirname, tasks, function(err, data) {
@@ -75,12 +75,12 @@ function load_data_cached(dirname, tasks, callback) {
 }
 
 function load_files(season, callback) {
-	var dl = season.newest_download;
+	const dl = season.newest_download;
 	if (!dl) {
 		return callback(new Error('No downloads available'));
 	}
 
-	var dirname = path.join(downloads.DATA_ROOT, dl.id);
+	const dirname = path.join(downloads.DATA_ROOT, dl.id);
 	load_data_cached(dirname, dl.tasks, callback);
 }
 

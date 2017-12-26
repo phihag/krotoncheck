@@ -69,15 +69,15 @@ function render_mustache(template_id, data, callback) {
 		if (err) {
 			return callback(err, null);
 		}
-		var html = mustache.render(partials[template_id], data, partials);
+		const html = mustache.render(partials[template_id], data, partials);
 		callback(null, html);
 	});
 }
 
 function mustache_format_timestamp() {
 	return function format_timestamp(text, renderfunc) {
-		var content = renderfunc(text);
-		var ts = parseInt(content, 10);
+		const content = renderfunc(text);
+		const ts = parseInt(content, 10);
 		if (!ts) {
 			return '(Ungültiger Zeitstempel)';
 		}
@@ -87,8 +87,8 @@ function mustache_format_timestamp() {
 
 function mustache_format_duration() {
 	return function format_duration(text, renderfunc) {
-		var content = renderfunc(text);
-		var ts = parseInt(content, 10);
+		const content = renderfunc(text);
+		const ts = parseInt(content, 10);
 		if (!ts) {
 			return '(Ungültige Zeitdauer)';
 		}
@@ -98,8 +98,8 @@ function mustache_format_duration() {
 
 function mustache_format_duration_float() {
 	return function format_duration_float(text, renderfunc) {
-		var content = renderfunc(text);
-		var ts = parseInt(content, 10);
+		const content = renderfunc(text);
+		const ts = parseInt(content, 10);
 		if (!ts) {
 			return '(Ungültige Zeitdauer)';
 		}

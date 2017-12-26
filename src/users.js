@@ -1,12 +1,12 @@
 'use strict';
 
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
-var utils = require('./utils');
-var render = require('./render');
+const utils = require('./utils');
+const render = require('./render');
 
 function hash_password(pw) {
-	var salt = bcrypt.genSaltSync(10);
+	const salt = bcrypt.genSaltSync(10);
 	return bcrypt.hashSync(pw, salt);
 }
 
@@ -41,7 +41,7 @@ function create_handler(req, res, next) {
 }
 
 function login_handler(req, res, next) {
-	var email = req.body.email;
+	const email = req.body.email;
 	req.app.db.users.findOne({email: email}, function(err, u) {
 		if (err) {
 			return next(err);
@@ -64,8 +64,8 @@ function login_handler(req, res, next) {
 			return;
 		}
 
-		var session_timeout = 400 * 24 * 60 * 60 * 1000;
-		var session = {
+		const session_timeout = 400 * 24 * 60 * 60 * 1000;
+		const session = {
 			key: utils.gen_token(),
 			user_email: u.email,
 			until: Date.now() + session_timeout,

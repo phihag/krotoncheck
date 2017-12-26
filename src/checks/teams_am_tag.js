@@ -46,7 +46,7 @@ module.exports = function*(season) {
 			const team_players = all_players(data, tm, team_idx).values();
 
 			for (const player_id of team_players) {
-				var already_played = today.get(player_id);
+				const already_played = today.get(player_id);
 				if (already_played) {
 					if (already_played.team_id !== team_id) {
 						const p = data.get_player(player_id);

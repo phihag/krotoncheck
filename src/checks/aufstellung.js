@@ -137,7 +137,7 @@ function* check(data, tm) {
 
 
 module.exports = function*(season) {
-	for (var tm of season.data.active_teammatches) {
+	for (const tm of season.data.active_teammatches) {
 		yield* check(season.data, tm);
 	}
 };

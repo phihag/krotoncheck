@@ -81,7 +81,20 @@ function* check_tm(season, tm) {
 	}
 
 	// Before season start
-	
+	const firstdate_str = season['vrldate_' + ((league_type === 'O19') ? 'o19' : 'u19') + '_hr'];
+	if (firstdate_str) {
+		const first_ts = utils.parse_date(firstdate_str);
+		if (played < first_ts) {
+			const message = (
+				'Spiel auf ' + tm.spieldatum + ' verlegt, vor der VRL-Prüfung der Hinrunde ' + utils.ts2dstr(first_ts) +
+				' (Jahreszahl verwechselt?)'
+			);
+			yield {
+				teammatch_id: tm.matchid,
+				message,
+			};
+		}
+	}
 
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all

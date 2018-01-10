@@ -467,13 +467,15 @@ function enrich(season) {
 
 		return null;
 	};
-	data.get_comments = function(tm_id) {
+	data.get_comments = function(tm_id, textfilter) {
 		const comments = matchcomments_by_tmid.get(tm_id);
 		if (!comments) {
 			return [];
 		}
-
-		return comments.filter(c => c['Comment type'] === 'Spielkommentar');
+		return comments.filter(c => (
+			(c['Comment type'] === 'Spielkommentar') &&
+			(!textfilter || textfilter(c.nachricht))
+		));
 	};
 	data.vrl_name = function(vrl_id) {
 		const name = {

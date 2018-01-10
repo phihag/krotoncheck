@@ -2,6 +2,7 @@
 
 const calc = require('../calc');
 const data_utils = require('../data_utils');
+const utils = require('../utils');
 
 
 function* check_comment(data, pm) {
@@ -16,20 +17,33 @@ function* check_comment(data, pm) {
 	}
 
 	// Look for a comment - not quite correct, but still close
-	const comment = data.get_comment(pm.teammatchid, text => /krank|verletz|aufgegeben|Aufgabe/i.test(text));
-	if (comment) {
-		return;
+	let late_comment = false;
+	const comments = data.get_comments(pm.teammatchid, text => /krank|verletz|aufgegeben|Aufgabe/i.test(text));
+	for (const c of comments) {
+		// Only accept when the comment was in time
+		const deadline = data_utils.reporting_deadline(pm.tm);
+		const comment_ts = utils.parse_date(c.zeitpunkt);
+		if (comment_ts <= deadline) {
+			return;
+		}
+		late_comment = true;
 	}
 
 	// Already handled?
-	if (data.get_stb_note(pm.teammatchid, text => /F(?:20|28)-/.test(text))) {
+	if (data.get_stb_note(pm.teammatchid, text => /OGeb\s+F(?:20|28)/.test(text))) {
 		return;
 	}
 
 	yield {
 		teammatch_id: pm.teammatchid,
 		match_id: pm.matchid,
-		message: 'Spielaufgabe im ' + data_utils.match_name(pm) + ', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1 SpO)',
+		message: (
+			'Spielaufgabe im ' + data_utils.match_name(pm) +
+			', aber kein Eintrag im Feld "Spielaufgabe" (§65.7.1 SpO)' +
+			(late_comment ?
+				' (Verspäteter Kommentar? In Feld "Spielaufgabe" übertragen und OG F28 verhängen)'
+				: '')
+		),
 	};
 }
 

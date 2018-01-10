@@ -3,6 +3,7 @@
 const utils = require('../utils');
 const data_utils = require('../data_utils');
 
+const HOUR = 3600000;
 
 function has_late_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, ntext => /[fF](?:04|24|38)/.test(ntext));
@@ -33,9 +34,7 @@ function has_stb_comment_after(data, tm, after) {
 function* check_tm(season, tm) {
 	const data = season.data;
 	const now = season.check_now;
-	const HOUR = 3600000;
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
-	const REPORT_TEAM_RLOL = 6 * HOUR;
 
 	const league_type = data_utils.league_type(tm.staffelcode);
 	const original_ts = utils.parse_date(tm.datum_verbandsansetzung);
@@ -80,6 +79,9 @@ function* check_tm(season, tm) {
 			};
 		}
 	}
+
+	// Before season start
+	
 
 	if (tm.flag_ok_gegen_team1 || tm.flag_ok_gegen_team2) {
 		return; // Not played at all
@@ -132,9 +134,10 @@ function* check_tm(season, tm) {
 		return;
 	}
 
+	const report_until = data_utils.reporting_deadline(tm);
 	if (is_olrl) {
 		if (entered) {
-			if (played + REPORT_TEAM_RLOL < entered) {
+			if (report_until < entered) {
 				const message = (
 					'Detailergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
@@ -146,7 +149,7 @@ function* check_tm(season, tm) {
 				};
 			}
 		} else {
-			if (played + REPORT_TEAM_RLOL < now) {
+			if (report_until < now) {
 				const message = (
 					'Detailergebnis zu spät eingetragen: ' +
 					'Spiel um ' + tm.spieldatum + ', ' +
@@ -158,35 +161,30 @@ function* check_tm(season, tm) {
 				};
 			}
 		}
-	}
-
-	const GRACE_MINUTE = 60 * 1000 - 1; // The regulations just say 12:00, not 12:00:00
-	const report_until = (
-		[6, 0].includes(utils.weekday(played)) ?
-		(utils.monday_1200(played) + GRACE_MINUTE)
-		: (played + 48 * HOUR));
-	if (entered) {
-		if (report_until < entered) {
-			const message = (
-				'Detailergebnis zu spät eingetragen: ' +
-				'Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
-				'aber erst eingetragen am ' + utils.weekday_destr(entered) + ', ' + utils.ts2destr(entered));
-			yield {
-				teammatch_id: tm.matchid,
-				message,
-			};
-		}
 	} else {
-		if (report_until < now) {
-			const message = (
-				'Detailergebnis zu spät eingetragen: ' +
-				'Spiel um ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
-				'aber noch nicht eingetragen' +
-				' (Termin nicht aktuell, Nachverlegung oder Spiel endgültig ausgefallen?)');
-			yield {
-				teammatch_id: tm.matchid,
-				message,
-			};
+		if (entered) {
+			if (report_until < entered) {
+				const message = (
+					'Detailergebnis zu spät eingetragen: ' +
+					'Spiel am ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
+					'aber erst eingetragen am ' + utils.weekday_destr(entered) + ', ' + utils.ts2destr(entered));
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			}
+		} else {
+			if (report_until < now) {
+				const message = (
+					'Detailergebnis zu spät eingetragen: ' +
+					'Spiel um ' + utils.weekday_destr(played) + ', ' + tm.spieldatum + ', ' +
+					'aber noch nicht eingetragen' +
+					' (Termin nicht aktuell, Nachverlegung oder Spiel endgültig ausgefallen?)');
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			}
 		}
 	}
 

@@ -6,12 +6,24 @@ const utils = require('../utils');
 const data_utils = require('../data_utils');
 
 
-function* check_conflicts(team_id, sorted_teammatches) {
+function* check_conflicts(data, team_id, sorted_teammatches) {
 	for (let i = 0;i < sorted_teammatches.length - 1;i++) {
 		const tm1 = sorted_teammatches[i];
 		const tm2 = sorted_teammatches[i + 1];
 		assert(tm1.ts <= tm2.ts);
-		if (tm1.ts + 2 * utils.HOUR <= tm2.ts) {
+		if (tm1.ts + 3 * utils.HOUR <= tm2.ts) {
+			continue;
+		}
+
+		const teams = [
+			data.get_team(tm1.team1id),
+			data.get_team(tm1.team2id),
+			data.get_team(tm2.team1id),
+			data.get_team(tm2.team2id),
+		];
+		const clubcodes = teams.map(team => team.clubcode);
+		if ((new Set(clubcodes)).size === 1) {
+			// All teams belong to the same club
 			continue;
 		}
 
@@ -36,7 +48,9 @@ function* check_conflicts(team_id, sorted_teammatches) {
 
 
 module.exports = function*(season) {
-	for (const [team_id, sorted_teammatches] of season.data.get_all_team_teammatches()) {
-		yield* check_conflicts(team_id, sorted_teammatches);
+	const data = season.data;
+
+	for (const [team_id, sorted_teammatches] of data.get_all_team_teammatches()) {
+		yield* check_conflicts(data, team_id, sorted_teammatches);
 	}
 };

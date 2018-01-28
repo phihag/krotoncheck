@@ -11,7 +11,7 @@ function* check_conflicts(data, team_id, sorted_teammatches) {
 		const tm1 = sorted_teammatches[i];
 		const tm2 = sorted_teammatches[i + 1];
 		assert(tm1.ts <= tm2.ts);
-		if (tm1.ts + 3 * utils.HOUR <= tm2.ts) {
+		if (tm1.ts + 5 * utils.HOUR < tm2.ts) {
 			continue;
 		}
 
@@ -21,27 +21,40 @@ function* check_conflicts(data, team_id, sorted_teammatches) {
 			data.get_team(tm2.team1id),
 			data.get_team(tm2.team2id),
 		];
+
 		const clubcodes = teams.map(team => team.clubcode);
 		if ((new Set(clubcodes)).size === 1) {
 			// All teams belong to the same club
 			continue;
 		}
 
-		const message = (
+		const home1 = tm1.hrt ? tm1.team2id : tm1.team1id;
+		const home2 = tm2.hrt ? tm2.team2id : tm2.team1id;
+		if ((home1 === home2) && ((tm2.ts - tm1.ts) >= 2.5 * utils.HOUR)) {
+			// Same home teams, 2.5+ hours difference
+			continue;
+		}
+
+		const message1 = (
 			'Terminkonflikt zwischen ' +
 			data_utils.tm_str(tm1) + '(' + utils.ts2destr(tm1.ts) + ') und ' +
 			data_utils.tm_str(tm2) + '(' + utils.ts2destr(tm2.ts) + ')'
 		);
-		// Report for both
 		yield {
 			teammatch_id: tm1.matchid,
 			teammatch2_id: tm2.matchid,
-			message,
+			message: message1,
 		};
+
+		const message2 = (
+			'Terminkonflikt zwischen ' +
+			data_utils.tm_str(tm2) + '(' + utils.ts2destr(tm2.ts) + ') und ' +
+			data_utils.tm_str(tm1) + '(' + utils.ts2destr(tm1.ts) + ')'
+		);
 		yield {
 			teammatch_id: tm2.matchid,
 			teammatch2_id: tm1.matchid,
-			message,
+			message: message2,
 		};
 	}
 }

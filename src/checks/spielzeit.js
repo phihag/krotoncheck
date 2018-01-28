@@ -3,8 +3,6 @@
 const utils = require('../utils');
 const data_utils = require('../data_utils');
 
-const HOUR = 3600000;
-
 function has_late_note(data, tm) {
 	return !! data.get_stb_note(tm.matchid, ntext => /[fF](?:04|24|38)/.test(ntext));
 }
@@ -201,7 +199,7 @@ function* check_tm(season, tm) {
 		}
 	}
 
-	const TIMELY_REPORT = (is_olrl ? 24 : 48) * HOUR;
+	const TIMELY_REPORT = (is_olrl ? 24 : 48) * utils.HOUR;
 	if (entered
 			&& !tm.ergebnisbestaetigt_datum &&
 			(report_until + TIMELY_REPORT < now) &&

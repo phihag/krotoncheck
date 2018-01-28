@@ -286,6 +286,7 @@ function enrich(season) {
 		}
 		return res;
 	};
+	data.get_all_team_teammatches = () => teammatch_by_team_id.entries();
 	data.get_match = function(match_id) {
 		const res = playermatch_by_id.get(match_id);
 		if (!res) {

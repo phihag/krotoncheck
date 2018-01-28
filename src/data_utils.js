@@ -142,21 +142,19 @@ function vrlid_is_o19(vrl_typeid) {
 	return [9, 11, 10, 12].includes(vrl_typeid);
 }
 
-const HOUR = 3600000;
 function reporting_deadline(tm) {
-//	console.error(tm);
 	const GRACE_MINUTE = 60 * 1000 - 1; // The regulations just say 12:00, not 12:00:00
 	const is_olrl = /^01-00[123]$/.test(tm.staffelcode);
 	const played = utils.parse_date(tm.spieldatum);
 
 	if (is_olrl) {
-		return played + 6 * HOUR;
+		return played + 6 * utils.HOUR;
 	}
 
 	return (
 		[6, 0].includes(utils.weekday(played)) ?
 		(utils.monday_1200(played) + GRACE_MINUTE)
-		: (played + 48 * HOUR));
+		: (played + 48 * utils.HOUR));
 }
 
 module.exports = {

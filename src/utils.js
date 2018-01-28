@@ -8,6 +8,8 @@ const http = require('http');
 const timezone = require('timezone');
 
 
+const HOUR = 3600000;
+
 function retry(attempts, func, callback) {
 	assert(attempts < 10000);
 	func((err) => {
@@ -386,6 +388,7 @@ module.exports = {
 	format_iso8601,
 	gen_token,
 	get,
+	HOUR,
 	make_key,
 	make_index,
 	make_multi_index,

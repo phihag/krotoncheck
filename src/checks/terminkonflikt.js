@@ -22,6 +22,11 @@ function* check_conflicts(data, team_id, sorted_teammatches) {
 			data.get_team(tm2.team2id),
 		];
 
+		if (teams.some(t => t.Status === 'Mannschaftsrückzug')) {
+			// Team was retracted
+			continue;
+		}
+
 		const clubcodes = teams.map(team => team.clubcode);
 		if ((new Set(clubcodes)).size === 1) {
 			// All teams belong to the same club

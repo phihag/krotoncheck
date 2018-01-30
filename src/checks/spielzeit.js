@@ -61,20 +61,38 @@ function* check_tm(season, tm) {
 	const played = utils.parse_date(tm.spieldatum);
 	const lastdate_str = season['lastdate_' + (is_olrl ? 'olrl' : ((league_type === 'O19') ? 'o19' : 'u19'))];
 	if (lastdate_str) {
-		let last_ts = utils.parse_date(lastdate_str);
-		if (utils.ts2timestr(last_ts) === '00:00:00') {
-			// Entered the day, let's take nearly one day more
-			last_ts += 24 * 60 * 60 * 1000 - 1;
-		}
-		if (played > last_ts) {
-			const message = (
-				'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(last_ts) +
-				' (§46.1e SpO)'
-			);
-			yield {
-				teammatch_id: tm.matchid,
-				message,
-			};
+		const lastdate_ts = utils.parse_date(lastdate_str);
+		if (utils.ts2timestr(lastdate_ts) !== '00:00:00') {
+			if (played > last_ts) {
+				const message = (
+					'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(last_ts) +
+					' (§46.1e SpO)'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			}
+		} else {
+			// Entered the day: Within this day?
+			if (played >= lastdate_ts + 24 * utils.HOUR) {
+				const message = (
+					'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(last_ts) +
+					' (§46.1e SpO)'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			} else if ((played > (league_type === 'O19')) && (played > lastdate_ts + 12 * utils.HOUR)) {
+				const message = (
+					'Spiel auf ' + tm.spieldatum + ' verlegt, nach 12:00 am letztem Spieltag (§46.2c SpO)'
+				);
+				yield {
+					teammatch_id: tm.matchid,
+					message,
+				};
+			}
 		}
 	}
 

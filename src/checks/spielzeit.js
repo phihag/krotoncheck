@@ -63,9 +63,9 @@ function* check_tm(season, tm) {
 	if (lastdate_str) {
 		const lastdate_ts = utils.parse_date(lastdate_str);
 		if (utils.ts2timestr(lastdate_ts) !== '00:00:00') {
-			if (played > last_ts) {
+			if (played > lastdate_ts) {
 				const message = (
-					'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(last_ts) +
+					'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(lastdate_ts) +
 					' (§46.1e SpO)'
 				);
 				yield {
@@ -77,7 +77,7 @@ function* check_tm(season, tm) {
 			// Entered the day: Within this day?
 			if (played >= lastdate_ts + 24 * utils.HOUR) {
 				const message = (
-					'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(last_ts) +
+					'Spiel auf ' + tm.spieldatum + ' verlegt, nach letztem Spieltag ' + utils.ts2destr(lastdate_ts) +
 					' (§46.1e SpO)'
 				);
 				yield {

@@ -20,6 +20,15 @@ function* check_teammatch(data, tm) {
 			teammatch_id: tm.matchid,
 			message: 'Wettkampf ohne Kampf, aber Spieler in ' + offending.join(', '),
 		};
+		return;
+	}
+
+	// Look for teammatches without players but with detail report
+	if (tm.detailergebnis_eintragedatum) {
+		yield {
+			teammatch_id: tm.matchid,
+			message: 'Wettkampf ohne Kampf, aber mit Detailergebnis (muss von BW/BJW/RWO19 gelöscht werden)',
+		};
 	}
 }
 

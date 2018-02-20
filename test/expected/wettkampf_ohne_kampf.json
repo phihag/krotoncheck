@@ -7,6 +7,19 @@
 {
   "message": "Wettkampf ohne Kampf, aber Spieler in 1. HD, 2. HD, DD, 1. HE, 2. HE, 3. HE, DE, GD",
   "teammatch_id": "7"
+},
+
+{
+	"message": "Wettkampf ohne Kampf, aber mit Detailergebnis (muss von BW/BJW/RWO19 gelöscht werden)",
+	"teammatch_id": "22"
+},
+{
+	"message": "Wettkampf ohne Kampf, aber mit Detailergebnis (muss von BW/BJW/RWO19 gelöscht werden)",
+	"teammatch_id": "23"
+},
+{
+	"message": "Wettkampf ohne Kampf, aber mit Detailergebnis (muss von BW/BJW/RWO19 gelöscht werden)",
+	"teammatch_id": "24"
 }
 
 ]

@@ -59,7 +59,12 @@ module.exports = function*(season) {
 						yield {
 							teammatch_id: tm.matchid,
 							teammatch2_id: already_played.tm.matchid,
-							message: message,
+							message,
+						};
+						yield {
+							teammatch_id: already_played.tm.matchid,
+							teammatch2_id: tm.matchid,
+							message,
 						};
 					}
 				} else {

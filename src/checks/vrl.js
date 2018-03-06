@@ -330,7 +330,7 @@ function* check_invalid_date(season, is_o19, line) {
 	}
 }
 
-function* check_startend(season, is_hr, vrl_date, line) {
+function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 	// Start before vrl_date?
 	if (line.startdate) {
 		const startdate = utils.parse_date(line.startdate);
@@ -388,6 +388,15 @@ function* check_startend(season, is_hr, vrl_date, line) {
 			const left_date = utils.parse_date(m[1]);
 			const l_hr = utils.parse_date(season.lastdate_hr);
 			if (left_date > l_hr) {
+				return;
+			}
+		}
+
+		const ld_str = season['lastdate_' + (is_o19 ? 'o19' : 'u19')];
+		if (ld_str) {
+			const left_date = utils.parse_date(m[1]);
+			const season_end = utils.parse_date(ld_str);
+			if (left_date > season_end) {
 				return;
 			}
 		}
@@ -739,7 +748,7 @@ function* check_vrl(season, vrl) {
 		yield* check_invalid_date(season, is_o19, line);
 
 		// Incorrectly noted start or end
-		yield* check_startend(season, is_hr, vrl_date, line);
+		yield* check_startend(season, is_hr, vrl_date, is_o19, line);
 
 		// Ascending team numbers
 		if (line.teamcode) {

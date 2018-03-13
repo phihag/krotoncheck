@@ -68,9 +68,13 @@ input,textarea,button {
 }
 .stbstats_median,
 .stbstats_avg,
-.stbstats_q95 {
+.stbstats_q95,
+.stbstats_email {
 	padding-left: 1em;
 }
 .stbstats_regions {
 	text-align: right;
+}
+.stbstats_email {
+	text-align: left;
 }

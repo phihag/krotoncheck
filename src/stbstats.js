@@ -32,6 +32,8 @@ function average(ar) {
 function show_handler(req, res, next) {
 	const season_key = req.params.season_key;
 	const region_filter = req.query.region || req.query.r;
+	const show_emails = !! (req.query.show_emails || req.query.emails);
+	const hide_regions = !! req.query.hide_regions;
 	const worker_fn = path.join(__dirname, 'stbstats_worker.js');
 	req.app.db.efetch_all(next, [{
 		queryFunc: '_findOne',
@@ -48,10 +50,15 @@ function show_handler(req, res, next) {
 				});
 			}
 
+			if (hide_regions) {
+				stats = stats.filter(s => !!s.regions_str);
+			}
+
 			render(req, res, next, 'stbstats_show', {
 				season,
 				stats,
 				region_filter,
+				show_emails,
 				extended: req.query.hasOwnProperty('extended') || req.query.hasOwnProperty('e'),
 			});
 		});
@@ -99,7 +106,7 @@ function calc_ms(data, tm, stb_name, now) {
 	return handled - entered;
 }
 
-function calc_stats(durations_by_stb, regions_by_stb, groups_by_stb) {
+function calc_stats(durations_by_stb, regions_by_stb, groups_by_stb, emails_by_stb) {
 	const res = [];
 	for (const [stb_name, durs] of durations_by_stb.entries()) {
 		const stb_regions = regions_by_stb.get(stb_name) || [];
@@ -109,6 +116,7 @@ function calc_stats(durations_by_stb, regions_by_stb, groups_by_stb) {
 		const regions_str = regions_ar.join(',');
 		res.push({
 			stb_name,
+			stb_email: emails_by_stb.get(stb_name),
 			median: quantile(durs, 0.5),
 			q95: quantile(durs, 0.95),
 			avg: average(durs),
@@ -132,10 +140,12 @@ function run_calc(season, cb) {
 		const durations_by_stb = new Map();
 		const regions_by_stb = new Map();
 		const groups_by_stb = new Map();
+		const emails_by_stb = new Map();
 		const now = Date.now();
 		for (const tm of data.teammatches) {
 			const stb = data.get_stb(tm);
 			const stb_name = stb.firstname + ' ' + stb.lastname;
+			emails_by_stb.set(stb_name, stb.email);
 
 			const region = data.get_region(tm.eventname);
 			const stb_regions = utils.setdefault(regions_by_stb, stb_name, () => new Set());
@@ -163,7 +173,7 @@ function run_calc(season, cb) {
 			}
 		}
 
-		const stats = calc_stats(durations_by_stb, regions_by_stb, groups_by_stb);
+		const stats = calc_stats(durations_by_stb, regions_by_stb, groups_by_stb, emails_by_stb);
 		cb(null, stats);
 	});
 }

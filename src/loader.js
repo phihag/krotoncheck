@@ -8,6 +8,7 @@ const atomic_write = require('atomic-write');
 const Baby = require('babyparse');
 
 const downloads = require('./downloads');
+const CREATE_CACHE = false;
 
 
 function load_season_table(season, table_name, callback) {
@@ -63,9 +64,13 @@ function load_data_cached(dirname, tasks, callback) {
 			load_data(dirname, tasks, function(err, data) {
 				if (err) return callback(err);
 
-				atomic_write.writeFile(json_fn, JSON.stringify(data), {encoding: 'utf8'}, function(err) {
+				if (CREATE_CACHE) {
+					atomic_write.writeFile(json_fn, JSON.stringify(data), {encoding: 'utf8'}, function(err) {
+						callback(err, data);
+					});
+				} else {
 					callback(err, data);
-				});
+				}
 			});
 		} else {
 			const data = JSON.parse(fcontents);

@@ -3,6 +3,7 @@
 const path = require('path');
 
 const data_access = require('./data_access');
+const data_utils = require('./data_utils');
 const loader = require('./loader');
 const render = require('./render');
 const utils = require('./utils');
@@ -40,23 +41,42 @@ function show_handler(req, res, next) {
 		collection: 'seasons',
 		query: {key: season_key},
 	}], function(season) {
-		worker_utils.in_background(worker_fn, season, function(err, wr) {
+		const params = {
+			season,
+		};
+		worker_utils.in_background(worker_fn, params, function(err, wr) {
 			if (err) return next(err);
 
-			let stats = wr.stats;
-			if (region_filter) {
-				stats = stats.filter(s => {
-					return !s.regions_str || s.regions_str.includes(region_filter);
-				});
+			// Filter stats
+			for (const stats_key in wr) {
+				let stats = wr[stats_key];
+
+				if (region_filter) {
+					stats = stats.filter(s => {
+						return !s.regions_str || s.regions_str.includes(region_filter);
+					});
+				}
+
+				if (hide_regions) {
+					stats = stats.filter(s => !!s.regions_str);
+				}
+
+				wr[stats_key] = stats;
 			}
 
-			if (hide_regions) {
-				stats = stats.filter(s => !!s.regions_str);
-			}
+			const stats_ar = [{
+				stats: wr.all_stats,
+			}, {
+				xlabel: 'O19',
+				stats: wr.o19_stats,
+			}, {
+				xlabel: 'U19',
+				stats: wr.u19_stats,
+			}];
 
 			render(req, res, next, 'stbstats_show', {
 				season,
-				stats,
+				stats_ar,
 				region_filter,
 				show_emails,
 				extended: req.query.hasOwnProperty('extended') || req.query.hasOwnProperty('e'),
@@ -106,7 +126,54 @@ function calc_ms(data, tm, stb_name, now) {
 	return handled - entered;
 }
 
-function calc_stats(durations_by_stb, regions_by_stb, groups_by_stb, emails_by_stb) {
+function calc_stats(season, limit_age) {
+	const data = season.data;
+
+	const durations_by_stb = new Map();
+	const regions_by_stb = new Map();
+	const groups_by_stb = new Map();
+	const emails_by_stb = new Map();
+	const now = Date.now();
+	for (const tm of data.teammatches) {
+		if (limit_age) {
+			const fine_type = data_utils.league_type(tm.staffelcode);
+			const league_type = (['U19', 'Mini'].includes(fine_type) ? 'U19' : 'O19');
+			if (league_type !== limit_age) {
+				continue;
+			}
+		}
+
+		const stb = data.get_stb(tm);
+		const stb_name = stb.firstname + ' ' + stb.lastname;
+
+		emails_by_stb.set(stb_name, stb.email);
+
+		const region = data.get_region(tm.eventname);
+		const stb_regions = utils.setdefault(regions_by_stb, stb_name, () => new Set());
+		stb_regions.add(region);
+
+		const duration = calc_ms(data, tm, stb_name, now);
+		if (duration === undefined) {
+			continue;
+		}
+
+		let stb_durations = utils.setdefault(durations_by_stb, stb_name, () => []);
+		stb_durations.push(duration);
+
+		let region_durations = utils.setdefault(durations_by_stb, region, () => []);
+		region_durations.push(duration);
+
+		const group_id = tm.staffelcode;
+		let stb_groups = utils.setdefault(groups_by_stb, stb_name, () => []);
+		if (!stb_groups.includes(group_id)) {
+			stb_groups.push(group_id);
+		}
+		let region_groups = utils.setdefault(groups_by_stb, region, () => []);
+		if (!region_groups.includes(group_id)) {
+			region_groups.push(group_id);
+		}
+	}
+
 	const res = [];
 	for (const [stb_name, durs] of durations_by_stb.entries()) {
 		const stb_regions = regions_by_stb.get(stb_name) || [];
@@ -130,51 +197,18 @@ function calc_stats(durations_by_stb, regions_by_stb, groups_by_stb, emails_by_s
 	return res;
 }
 
-function run_calc(season, cb) {
+function run_calc(params, cb) {
+	const {season} = params;
 	loader.load_season_data(season, (err) => {
 		if (err) return cb(err);
 
 		data_access.enrich(season);
 
-		const data = season.data;
-		const durations_by_stb = new Map();
-		const regions_by_stb = new Map();
-		const groups_by_stb = new Map();
-		const emails_by_stb = new Map();
-		const now = Date.now();
-		for (const tm of data.teammatches) {
-			const stb = data.get_stb(tm);
-			const stb_name = stb.firstname + ' ' + stb.lastname;
-			emails_by_stb.set(stb_name, stb.email);
-
-			const region = data.get_region(tm.eventname);
-			const stb_regions = utils.setdefault(regions_by_stb, stb_name, () => new Set());
-			stb_regions.add(region);
-
-			const duration = calc_ms(data, tm, stb_name, now);
-			if (duration === undefined) {
-				continue;
-			}
-
-			let stb_durations = utils.setdefault(durations_by_stb, stb_name, () => []);
-			stb_durations.push(duration);
-
-			let region_durations = utils.setdefault(durations_by_stb, region, () => []);
-			region_durations.push(duration);
-
-			const group_id = tm.staffelcode;
-			let stb_groups = utils.setdefault(groups_by_stb, stb_name, () => []);
-			if (!stb_groups.includes(group_id)) {
-				stb_groups.push(group_id);
-			}
-			let region_groups = utils.setdefault(groups_by_stb, region, () => []);
-			if (!region_groups.includes(group_id)) {
-				region_groups.push(group_id);
-			}
-		}
-
-		const stats = calc_stats(durations_by_stb, regions_by_stb, groups_by_stb, emails_by_stb);
-		cb(null, stats);
+		cb(null, {
+			all_stats: calc_stats(season),
+			o19_stats: calc_stats(season, 'O19'),
+			u19_stats: calc_stats(season, 'U19'),
+		});
 	});
 }
 

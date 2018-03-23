@@ -3,9 +3,9 @@
 const stbstats = require('./stbstats');
 const worker_utils = require('./worker_utils');
 
-worker_utils.worker_main((season, cb) => {
-	stbstats.run_calc(season, (err, stats) => {
+worker_utils.worker_main((params, cb) => {
+	stbstats.run_calc(params, (err, stats) => {
 		if (err) return cb(err);
-		return cb(null, {stats});
+		return cb(null, stats);
 	});
 });

@@ -90,7 +90,7 @@ function calc_ms(data, tm, stb_name, now) {
 		return; // Not entered yet
 	}
 
-	if (/\(A\)/.test(tm.detailergebnis_user) || (tm.detailergebnis_user === tm.ergebnisbestaetigt_user)) {
+	if (/\([ABC]\)/.test(tm.detailergebnis_user) || (tm.detailergebnis_user === tm.ergebnisbestaetigt_user)) {
 		return; // Entered by StB/admin
 	}
 

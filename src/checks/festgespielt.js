@@ -218,10 +218,17 @@ function* check_round(data, player, matches, is_hr, o19) {
 			const club_id = team.clubcode;
 			const vrl_type = laws.get_vrl_type(match_league_type, tm, player.sex);
 			let ve = data.try_get_vrl_entry(club_id, vrl_type, player.spielerid);
+
+
 			if ((! ve) && (! o19) && (match_league_type === 'U19')) {
 				const mini_vrl_type = laws.get_vrl_type('Mini', tm, player.sex);
 				ve = data.try_get_vrl_entry(club_id, mini_vrl_type, player.spielerid);
 			}
+			if ((! ve) && (! o19) && (match_league_type === 'Mini')) {
+				const mini_vrl_type = laws.get_vrl_type('U19', tm, player.sex);
+				ve = data.try_get_vrl_entry(club_id, mini_vrl_type, player.spielerid);
+			}
+
 			if (! ve) {
 				continue; // Handled otherwise
 			}

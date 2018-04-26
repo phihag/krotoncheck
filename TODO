@@ -1,5 +1,12 @@
+download should fail if 404
+allow never as chrome schedule
 download league comments
 
+Mannschaftsrückzug für nicht gespielt: nur ignorieren wenn nach Rückzugszeit
+	parse league comments for that
+
+send vrl warnings to clubs
+Heim XOR gast
 
 
 festgeschrieben ohne fest ab (Dirk Nötzel)

@@ -11,6 +11,7 @@ const ALL_TASKS = [
     'clubs',
     'locations',
     'matchcomments',
+    'itemcomments',
     'matchfields',
     'matchlog',
     'playermatches',

@@ -36,6 +36,6 @@
 <form method="post" action="{{root_path}}s/{{key}}/autorun/create">
 {{{csrf_field}}}
 <input type="text" name="name" placeholder="Beschreibung" required="required" />
-<input type="text" pattern="(?:(?:[*]|[0-9/-]+)\s+){5}(?:(?:[*]|[0-9/-]+)|(?:(?:MON|TUE|WED|THU|FRI|SAT|SUN),)*(?:MON|TUE|WED|THU|FRI|SAT|SUN))" name="schedule" required="required" placeholder="cron schedule" title="seconds minutes hours day-of-month month day-of-week" />
+<input type="text" pattern="^never$|(?:(?:[*]|[0-9/-]+)\s+){5}(?:(?:[*]|[0-9/-]+)|(?:(?:MON|TUE|WED|THU|FRI|SAT|SUN),)*(?:MON|TUE|WED|THU|FRI|SAT|SUN))" name="schedule" required="required" placeholder="cron schedule" title="seconds minutes hours day-of-month month day-of-week" />
 <button type="submit">Überprüfung hinzufügen</button>
 </form>

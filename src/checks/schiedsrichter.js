@@ -4,7 +4,7 @@ module.exports = function*(season) {
 	const data = season.data;
 
 	for (const tm of data.teammatches) {
-		if (tm.eventname !== 'O19-RL') {
+		if (!['O19-RL', 'O19-GW-RL'].includes(tm.eventname)) {
 			continue;
 		}
 

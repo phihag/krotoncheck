@@ -5,7 +5,7 @@ const assert = require('assert');
 const data_utils = require('./data_utils');
 
 
-const EVENT_RE = /^(O19|U(?:09|11|13|15|17|19))-(?:RL|OL|(?:S1|S2|N1|N2)-(KK|KL|BK|BL|LL|VL|Mini))$/;
+const EVENT_RE = /^(O19|U(?:09|11|13|15|17|19))-(?:(?:(?:GW-)?(?:RL|OL))|(?:S1|S2|N1|N2)-(KK|KL|BK|BL|LL|VL|Mini))$/;
 
 
 // Implement JSpO §15. Returns a sortable 2-tuple

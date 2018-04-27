@@ -24,7 +24,7 @@ module.exports = function*(season) {
 
 	for (const tm of data.teammatches) {
 		const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
-		const is_high_league = /^O19-(?:OL|RL|[SN][12]-VL)$/.test(tm.eventname);
+		const is_high_league = /^O19-(?:(?:GW-)?OL|(?:GW-)?RL|[SN][12]-VL)$/.test(tm.eventname);
 		const notes = data.get_matchfield(tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
 		const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
 

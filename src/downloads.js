@@ -34,6 +34,7 @@ function calc_url(task_name, season) {
 	switch(task_name) {
 	case 'playermatches':
 	case 'teammatches':
+	case 'itemcomments':
 	case 'matchcomments':
 	case 'matchlog':
 		return (BASE_URL +

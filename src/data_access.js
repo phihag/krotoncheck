@@ -11,7 +11,7 @@ const ALL_TASKS = [
     'clubs',
     'locations',
     'matchcomments',
-    'itemcomments',
+//    'itemcomments',
     'matchfields',
     'matchlog',
     'playermatches',
@@ -414,7 +414,7 @@ function enrich(season) {
 		return data.get_region(max_team.eventname);
 	};
 	data.get_region = function(eventname) {
-		if (['O19-RL', 'O19-OL'].includes(eventname)) {
+		if (['O19-RL', 'O19-OL', 'O19-GW-RL', 'O19-GW-OL'].includes(eventname)) {
 			return 'NRW';
 		}
 		const m = /^[A-Z0-9]+-([A-Z0-9]+)-/.exec(eventname);

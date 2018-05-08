@@ -136,7 +136,7 @@ function calc_stats(season, limit_age) {
 	const now = Date.now();
 	for (const tm of data.teammatches) {
 		if (limit_age) {
-			const fine_type = data_utils.league_type(tm.staffelcode);
+			const fine_type = data_utils.tm_league_type(tm);
 			const league_type = (['U19', 'Mini'].includes(fine_type) ? 'U19' : 'O19');
 			if (league_type !== limit_age) {
 				continue;

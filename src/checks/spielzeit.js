@@ -34,7 +34,7 @@ function* check_tm(season, tm) {
 	const now = season.check_now;
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
 
-	const league_type = data_utils.league_type(tm.staffelcode);
+	const league_type = data_utils.tm_league_type(tm);
 	const original_ts = utils.parse_date(tm.datum_verbandsansetzung);
 	const original_weekday = utils.weekday(original_ts);
 	const original_timestr = utils.ts2timestr(original_ts);

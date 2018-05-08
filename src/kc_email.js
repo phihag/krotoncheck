@@ -13,7 +13,7 @@ const utils = require('./utils');
 
 function determine_u19o19(problem) {
 	if (problem.teammatch) {
-		const fine_type = data_utils.league_type(problem.teammatch.staffelcode);
+		const fine_type = data_utils.tm_league_type(problem.teammatch);
 		return ['U19', 'Mini'].includes(fine_type) ? 'U19' : 'O19';
 	}
 	if (problem.vrl_typeid) {

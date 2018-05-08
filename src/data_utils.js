@@ -67,6 +67,13 @@ function tm_str(tm) {
 	return tm.hrt ? (tm.team2name + ' - ' + tm.team1name) : (tm.team1name + ' - ' + tm.team2name);
 }
 
+function tm_league_type(tm) {
+	if (tm.staffelname === 'Final Four') {
+		return 'Bundesliga';
+	}
+	return league_type(tm.staffelcode);
+}
+
 function league_type(staffelcode) {
 	if (/^01-[0-9]+$/.test(staffelcode)) {
 		return 'O19';
@@ -173,6 +180,7 @@ module.exports = {
 	reporting_deadline,
 	team2num,
 	teamid2clubid,
+	tm_league_type,
 	tm_str,
 	vrlid_is_o19,
 };

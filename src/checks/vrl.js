@@ -289,7 +289,7 @@ function* check_in_youth_team(season, is_hr, line) {
 		return true;
 	}).map(pm => pm.tm));
 	const o19_tms = tms.filter(tm =>
-		data_utils.league_type(tm.staffelcode) === 'O19'
+		data_utils.tm_league_type(tm) === 'O19'
 	);
 	for (let i = 2;i < o19_tms.length;i++) {
 		const o19tm = o19_tms[i];

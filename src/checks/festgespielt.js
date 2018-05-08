@@ -172,7 +172,7 @@ function* check_round(data, player, matches, is_hr, o19) {
 
 	for (const pm of matches) {
 		const tm = pm.tm;
-		const match_league_type = data_utils.league_type(tm.staffelcode);
+		const match_league_type = data_utils.tm_league_type(tm);
 		if (((match_league_type === 'O19') || (match_league_type === 'Bundesliga')) !== (!!o19)) {
 			continue; // Check later
 		}

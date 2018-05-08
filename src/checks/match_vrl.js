@@ -263,7 +263,7 @@ function* check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, te
 
 function* check_all(data, tm, pms, team_idx) {
 	const team = data.get_team(tm['team' + team_idx + 'id']);
-	const league_type = data_utils.league_type(tm.staffelcode);
+	const league_type = data_utils.tm_league_type(tm);
 	const pm_ratings_by_discipline = {};
 
 	const valid_players_by_gender = {

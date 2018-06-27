@@ -191,7 +191,9 @@ function download_season(config, season, started_cb, done_cb) {
 		}
 
 		const jar = request.jar();
-		run_login(config, jar, function() {
+		run_login(config, jar, function(err) {
+			if (err) return done_cb(err);
+
 			const download_dir = path.join(INPROGRESS_ROOT, dl.id);
 			async.each(dl.tasks, (task_name, cb) => {
 				utils.retry(

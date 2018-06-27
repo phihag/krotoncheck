@@ -83,7 +83,7 @@ function run_login(config, jar, cb) {
 
 		let login_url = url.resolve(login_dialog_url, login_path);
 		request.post({
-			url: login_dialog_url,
+			url: login_url,
 			form: form_data,
 			jar: jar,
 			headers: HTTP_HEADERS,

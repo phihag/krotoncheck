@@ -83,6 +83,11 @@ function* check_u19e(data, vrl, line) {
 	const teams = data.get_teams_by_club(line.playerclubcode);
 	let withdrawn_all = undefined;
 	for (const t of teams) {
+		if (! t.DrawID) {
+			// team not in any league, skip for now
+			continue;
+		}
+
 		const lid = data_utils.league_type(t.DrawID);
 		if ((lid !== 'Mini') && (lid !== 'U19')) {
 			continue;

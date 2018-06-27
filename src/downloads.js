@@ -54,7 +54,7 @@ function calc_filename(download_dir, task_name) {
 }
 
 function run_login(config, jar, cb) {
-	const login_dialog_url = BASE_URL + 'member/login.aspx';
+	const login_dialog_url = BASE_URL + 'user';
 
 	request.get({
 		url: login_dialog_url,
@@ -65,30 +65,34 @@ function run_login(config, jar, cb) {
 			return cb(err);
 		}
 
-		const m = /<form\s+method="post"\s+action="(\.\/login[^"]*)"([\s\S]*?)<\/form>/.exec(html);
+		const m = /<form\s+(?:method="post"\s+)?action="(\/user[^"]*)"[^>]*>([\s\S]*?)<\/form>/.exec(html);
 		if (!m) {
 			return cb(new Error('Cannot find login form'));
 		}
 
 		const [, login_path, form_html] = m;
-		const input_vals = utils.match_all(/<input\s+(?:[a-z0-9-]+="[^"]*"\s+)*?name="([^"]+)"\s+(?:[a-z0-9-]+="[^"]*"\s+)*?value="([^"]*)"/g, form_html);
+
+		const input_vals = utils.match_all(/<input\s+(?:[a-z0-9_-]+="[^"]*"\s+)*?name="([^"]+)"\s+(?:[a-z0-9_-]+="[^"]*"\s+)*?value="([^"]*)"/g, form_html);
 		const form_data = {};
 		for (let iv of input_vals) {
 			let [, key, value] = iv;
 			form_data[key] = value;
 		}
-		form_data['ctl00$ctl00$ctl00$cphPage$cphPage$cphPage$pnlLogin$UserName'] = config('tournament_user');
-		form_data['ctl00$ctl00$ctl00$cphPage$cphPage$cphPage$pnlLogin$Password'] = config('tournament_password');
-		let login_url = url.resolve(login_dialog_url, login_path);
+		form_data['Login'] = config('tournament_user');
+		form_data['Password'] = config('tournament_password');
 
+		let login_url = url.resolve(login_dialog_url, login_path);
 		request.post({
-			url: login_url,
+			url: login_dialog_url,
 			form: form_data,
 			jar: jar,
 			headers: HTTP_HEADERS,
-		}, function(err) {
+		}, function(err, response) {
 			if (err) {
 				return cb(err);
+			}
+			if (response.statusCode != 302) {
+				return cb(new Error('Unexpected login status code ' + response.statusCode));
 			}
 
 			cb(null);
@@ -187,12 +191,12 @@ function download_season(config, season, started_cb, done_cb) {
 		started_cb(err, dl);
 
 		if (err) {
-			return done_cb(err);
+			return done_cb(err, dl);
 		}
 
 		const jar = request.jar();
-		run_login(config, jar, function(err) {
-			if (err) return done_cb(err);
+		run_login(config, jar, (err) => {
+			if (err) return done_cb(err, dl);
 
 			const download_dir = path.join(INPROGRESS_ROOT, dl.id);
 			async.each(dl.tasks, (task_name, cb) => {
@@ -250,7 +254,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 
 		current_downloads.set(dl.id, dl);
 		cb_started(err, dl);
-	}, function(err, dl) {
+	}, (err, dl) => {
 		if (err) {
 			dl.status = 'error';
 			dl.done_timestamp = Date.now();

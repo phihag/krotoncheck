@@ -78,10 +78,10 @@ function show_handler(req, res, next) {
 		}
 
 		render(req, res, next, 'season_show', {
-			display_receivers: display_receivers,
+			display_receivers,
 			season,
 			autoruns,
-			downloads_inprogress: downloads_inprogress,
+			downloads_inprogress,
 			problems: problems_struct ? problems_struct.found : [],
 		});
 	});

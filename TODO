@@ -13,6 +13,8 @@ send vrl warnings to clubs
 	store last VRL by club, only send if different
 
 
+human-readable date as dl.id
+
 Heim XOR gast
 Mannschaftsrückzug für nicht gespielt: nur ignorieren wenn nach Rückzugszeit
 	parse league comments for that

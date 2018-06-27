@@ -225,7 +225,7 @@ function start_handler(req, res, next) {
 		collection: 'seasons',
 		query: {key: req.params.season_key},
 	}], function(season) {
-		download_job(req.app, season, function(err, dl) {
+		download_job(req.app, season, (err, dl) => {
 			if (err) {
 				utils.render_json({
 					status: 'error',
@@ -304,7 +304,9 @@ function inprogress_by_season(season_key) {
 
 function annotate(dl) {
 	let res = '';
-	if (dl.tasks_outstanding.length > 0) {
+	if ((dl.status == 'error') && dl.error) {
+		res += 'Download fehlgeschlagen: ' + dl.error.message;
+	} else if (dl.tasks_outstanding.length > 0) {
 		res += 'Läuft (' + (
 			(dl.tasks_outstanding.length > 4) ?
 			(dl.tasks_outstanding.length + ' Dateien ausstehend') :

@@ -1,14 +1,25 @@
-download should fail if 404
-allow never as chrome schedule
-download league comments
+Miles
+	ab Samstag direkt
+	8:00 täglich
+	flag bearbeitung abgeschlossen sichtbar?
+	wenn verein sagt fertig dann bezirk?
+	ab dem 1.8. keine mail
 
+
+configure 2018/2019
+send vrl warnings to clubs
+	add a checkbox / setting
+	write test cases
+	store last VRL by club, only send if different
+
+
+Heim XOR gast
 Mannschaftsrückzug für nicht gespielt: nur ignorieren wenn nach Rückzugszeit
 	parse league comments for that
 
-send vrl warnings to clubs
-Heim XOR gast
-
-
+download should fail if 404
+allow never as chrome schedule
+download league comments
 
 festgeschrieben ohne fest ab (Dirk Nötzel)
 check F18 without umw nicht spielberechtigt

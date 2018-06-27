@@ -401,7 +401,10 @@ function enrich(season) {
 		for (const t of teams) {
 			let team_score = data_utils.team2num(t);
 
-			if (data.get_region(t.eventname) === 'NRW') {
+			const region = data.get_region(t.eventname);
+			if (region === 'NRW') {
+				team_score += 10000;
+			} else if (region === 'Bundesliga') {
 				team_score += 100000;
 			}
 
@@ -421,6 +424,11 @@ function enrich(season) {
 		if (m) {
 			return m[1];
 		}
+
+		if (/^[12]\.\s*Bundesliga/.test(eventname)) {
+			return 'Bundesliga';
+		}
+
 		return 'Sonstiges';
 	};
 	data.get_player_matches = function(pcode, is_hr) {

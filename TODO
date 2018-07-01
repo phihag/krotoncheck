@@ -3,17 +3,16 @@ download club emails
 link to club
 custom title "VRL-Report"
 fix tests
-
-Miles
-	flag bearbeitung abgeschlossen sichtbar?
-	wenn verein sagt fertig dann bezirk?
-
 send vrl warnings to clubs
 	add a checkbox / setting
 	write test cases
 	store last VRL by club, only send if different
 
-human-readable date as dl.id
+
+Miles
+	flag bearbeitung abgeschlossen sichtbar?
+	wenn verein sagt fertig dann bezirk?
+
 
 Heim XOR gast
 Mannschaftsrückzug für nicht gespielt: nur ignorieren wenn nach Rückzugszeit

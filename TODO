@@ -1,8 +1,10 @@
+fix tests
+
 J: check that U17/U15
 download club emails
+
 link to club
 custom title "VRL-Report"
-fix tests
 send vrl warnings to clubs
 	add a checkbox / setting
 	write test cases

@@ -670,7 +670,7 @@ function* check_vrl(season, vrl) {
 				if (((line.jkz1 === 'U19E') || (line.vkz1 === 'U19E')) && (m[1] == '19')) {
 					yield* check_u19e(data, vrl, line);
 					yield* check_not_in_youth_team(data, is_hr, line);
-				} else if ((line.vkz1 === 'J1') || (line.vkz1 === 'M1')) {
+				} else if (line.vkz1 === 'J') {
 					yield* check_in_youth_team(season, is_hr, line);
 				} else if (line.jkz1 === 'SE') {
 					// Special excemption by federation
@@ -689,7 +689,7 @@ function* check_vrl(season, vrl) {
 						message: message,
 					};
 				}
-			} else if (line.jkz1 || (line.vkz1 === 'J1') || (line.vkz1 === 'S1') || (line.vkz1 === 'M1')) {
+			} else if (line.jkz1 || (line.vkz1 === 'J')) {
 				const message = (
 					line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
 					' hat Kennzeichen ' + (line.jkz1 || line.vkz1) + ',' +

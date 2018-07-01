@@ -68,6 +68,14 @@ function format_iso8601(year, month, day) {
 	return year + '-' + pad(month, 2) + '-' + pad(day, 2);
 }
 
+function now_filestamp() {
+	const now = new Date();
+	return (
+		format_iso8601(now.getFullYear(), now.getMonth() + 1, now.getDate())
+		+ '_' + pad(now.getHours(), 2) + '-' + pad(now.getMinutes(), 2) + '-' + pad(now.getSeconds(), 2)
+	);
+}
+
 function pad(n, width, z) {
 	z = z || '0';
 	n = n + '';
@@ -399,6 +407,7 @@ module.exports = {
 	multilineRegExp,
 	natcmp,
 	next_day,
+	now_filestamp,
 	pad,
 	parse_date,
 	remove,

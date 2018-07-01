@@ -164,7 +164,7 @@ function download_season(config, season, started_cb, done_cb) {
 	}, function(cb) {
 		utils.ensure_dir(DATA_ROOT, cb);
 	}, function(cb) {
-		const download_id = Date.now() + '-' + process.pid + '_' + dl_counter;
+		const download_id = utils.now_filestamp() + '_' + process.pid + '_' + dl_counter;
 		dl_counter++;
 		const download_dir = path.join(INPROGRESS_ROOT, download_id);
 		utils.ensure_dir(download_dir, function(err) {

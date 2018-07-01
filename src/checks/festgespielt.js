@@ -232,7 +232,7 @@ function* check_round(data, player, matches, is_hr, o19) {
 			if (! ve) {
 				continue; // Handled otherwise
 			}
-			const youth_in_o19 = (match_league_type === 'O19') && ((ve.vkz1 === 'J1') || (ve.vkz1 === 'S1') || (ve.vkz1 === 'M1'));
+			const youth_in_o19 = (match_league_type === 'O19') && (ve.vkz1 === 'J');
 			if (youth_in_o19) {
 				continue; // Handled in vrl check
 			}

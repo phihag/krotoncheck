@@ -48,7 +48,7 @@ function o19_is_regular(p) {
 		return false;
 	}
 	// Jugendspieler
-	if ((p.vkz1 === 'J1') || (p.vkz1 === 'S1') || (p.vkz1 === 'M1')) {
+	if ((p.vkz1 === 'J')) {
 		return false;
 	}
 	return true;

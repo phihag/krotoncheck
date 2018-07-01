@@ -154,33 +154,25 @@ function* check_not_in_youth_team(data, is_hr, line) {
 
 function* check_in_youth_team(season, is_hr, line) {
 	const data = season.data;
-	let vrl_type;
-	let top = 4;
-	const expect_team = line.vkz1;
-	if (expect_team === 'J1') {
-		if (line.sex === 'M') {
-			vrl_type = is_hr ? 17 : 18;
-		} else if (line.sex === 'F') {
-			vrl_type = is_hr ? 14 : 16;
-			top = 2;
-		} else {
-			throw new Error('Ungültige Geschlechtsangabe: ' + JSON.stringify(line.sex));
-		}
-	} else if (expect_team === 'M1') {
-		vrl_type = is_hr ? 17 : 18;
-	} else {
-		throw new Error('Ungültiges Kennzeichen für M1/J1-Überprüfung: ' + JSON.stringify(expect_team));
+	if (line.vkz1 !== 'J') {
+		throw new Error('Ungültiges Kennzeichen für J-Überprüfung: ' + JSON.stringify(line.vkz1));
 	}
 
+	const vrl_types = is_hr ? [14, 17] : [16, 18];
+
 	const clubcode = line.clubcode;
-	const ve = data.try_get_vrl_entry(clubcode, vrl_type, line.memberid);
+	let ve;
+	for (const vt of vrl_types) {
+		ve = data.try_get_vrl_entry(clubcode, vt, line.memberid);
+		if (ve) break;
+	}
 	if (!ve) {
 		const message = (
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' steht mit Kennzeichen ' + expect_team + ' in der ' +
+			' steht mit Kennzeichen ' + line.vkz1 + ' in der ' +
 			data.vrl_name(line.typeid) + ' von ' +
-			'(' + clubcode + ') ' + line.clubname + ', fehlt aber in der ' + data.vrl_name(vrl_type)
+			'(' + clubcode + ') ' + line.clubname + ', fehlt aber in der Jugend-VRL'
 		);
 		yield {
 			type: 'vrl',
@@ -189,40 +181,6 @@ function* check_in_youth_team(season, is_hr, line) {
 			message: message,
 		};
 		return;
-	} else if (! ve.teamcode.endsWith('-' + expect_team)) {
-		const message = (
-			'Spieler' + (line.sex === 'F' ? 'in' : '') +
-			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' steht mit Kennzeichen ' + expect_team + ' in der ' +
-			data.vrl_name(line.typeid) + ' von ' +
-			'(' + clubcode + ') ' + line.clubname + ', spielt aber für ' +
-			ve.teamcode + ' statt ' + clubcode + '-' + expect_team
-		);
-		yield {
-			type: 'vrl',
-			clubcode: clubcode,
-			vrl_typeid: line.typeid,
-			message: message,
-		};
-	} else {
-		const pos = data_utils.parse_int(ve.position);
-		if (pos > top) {
-			const message = (
-				'Spieler' + (line.sex === 'F' ? 'in' : '') +
-				' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-				' steht mit Kennzeichen ' + expect_team + ' in der ' +
-				data.vrl_name(line.typeid) + ' von ' +
-				'(' + clubcode + ') ' + line.clubname + ', ' +
-				'gehört aber nicht zu den Top ' + top + ' in ' + expect_team +
-				', sondern ist Nr. ' + pos + ' in ' + ve.teamname + ' (' + data.vrl_name(ve.typeid) + ')'
-			);
-			yield {
-				type: 'vrl',
-				clubcode: clubcode,
-				vrl_typeid: line.typeid,
-				message: message,
-			};
-		}
 	}
 
 	if (line.enddate) {
@@ -235,7 +193,7 @@ function* check_in_youth_team(season, is_hr, line) {
 		const message = (
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' steht mit Kennzeichen ' + expect_team + ' in der ' +
+			' steht mit Kennzeichen ' + line.vkz1 + ' in der ' +
 			data.vrl_name(line.typeid) + ' von ' +
 			'(' + clubcode + ') ' + line.clubname + ', ' +
 			'aber die Mannschaft ' + ve.teamcode + ' kann nicht gefunden werden'
@@ -265,7 +223,7 @@ function* check_in_youth_team(season, is_hr, line) {
 		const message = (
 			'Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' steht mit Kennzeichen ' + expect_team + ' (ohne Enddatum) in der ' +
+			' steht mit Kennzeichen ' + line.vkz1 + ' (ohne Enddatum) in der ' +
 			data.vrl_name(line.typeid) + ' von ' +
 			'(' + clubcode + ') ' + line.clubname + ', ' +
 			'aber die Mannschaft ' + ve.teamcode + ' hat Status ' + JSON.stringify(team.Status)
@@ -299,7 +257,7 @@ function* check_in_youth_team(season, is_hr, line) {
 	for (let i = 2;i < o19_tms.length;i++) {
 		const o19tm = o19_tms[i];
 		const message = (
-			expect_team + '-Spieler' + (line.sex === 'F' ? 'in' : '') +
+			line.vkz1 + '-Spieler' + (line.sex === 'F' ? 'in' : '') +
 			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 			' wurde mehr als zweimal im O19-Bereich eingesetzt (§11.2 JSpO)'
 		);
@@ -654,10 +612,13 @@ function* check_vrl(season, vrl) {
 			}
 		}
 
-		if (line.vkz1 && !['U19E', 'SE', 'J1', 'S1', 'M1', 'N'].includes(line.vkz1)) {
+		if (line.vkz1 && !['U19E', 'SE', 'J', 'N'].includes(line.vkz1)) {
 			const hint = {
 				'U19': ' (U19 statt U19E? U19-Erklärung beim Verband prüfen!)',
 				'F': ' (Festschreibung falsch eingetragen? Richtig ist "FIX" in vkz3)',
+				'J1': ' (veraltete Markierung? Alle Jugendspieler werden seit 2018/2019 nur noch mit "J" gekennzeichnet)',
+				'M1': ' (veraltete Markierung? Alle Jugendspieler werden seit 2018/2019 nur noch mit "J" gekennzeichnet)',
+				'S1': ' (veraltete Markierung? Siehe §11 JSpO der Saison 2018/2019)',
 			}[line.vkz1] || '';
 
 			const message = (

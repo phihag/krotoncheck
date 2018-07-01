@@ -406,6 +406,16 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 			}
 		}
 
+		let after_start = true;
+		const start_str = season['vrldate_' + (is_o19 ? 'o19' : 'u19')];
+		if (start_str) {
+			const left_date = utils.parse_date(m[1]);
+			const season_start = utils.parse_date(start_str);
+			if (left_date < season_start) {
+				after_start = false;
+			}
+		}
+
 		const message = (
 			line.firstname + ' ' + line.lastname + ' (' + line.memberid + ')' +
 			((line.playerclubcode === '01-8999') ?
@@ -414,8 +424,10 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 				(' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
 				' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',')
 			) +
-			' aber Enddatum fehlt' +
-			' in der ' + season.data.vrl_name(line.typeid)
+			(after_start ?
+				' bitte aus der ' + season.data.vrl_name(line.typeid) + ' löschen.' :
+				' aber Enddatum fehlt in der ' + season.data.vrl_name(line.typeid)
+			)
 		);
 		yield {
 			type: 'vrl',

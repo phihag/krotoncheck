@@ -1,17 +1,17 @@
+Replace "S1"/"M1" with "J"
+Remove S1 checks
+custom title "VRL-Report"
+
+
 Miles
-	ab Samstag direkt
-	8:00 täglich
 	flag bearbeitung abgeschlossen sichtbar?
 	wenn verein sagt fertig dann bezirk?
-	ab dem 1.8. keine mail
 
-custom title "VRL-Report"
 send vrl warnings to clubs
 	add a checkbox / setting
 	write test cases
 	store last VRL by club, only send if different
 
-fix travis
 human-readable date as dl.id
 
 Heim XOR gast

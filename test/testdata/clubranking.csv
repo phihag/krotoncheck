@@ -143,6 +143,7 @@ clubcode,clubname,typeid,position,memberid,lastname,middlename,firstname,sex,nat
 01-1009,Top Team,10,3,01-ry-f1,01-ry-f1 last,,01-ry-f1 first,F,,,,,,,,01-1009,,01-1009-2,,3,,,,,,,,
 01-1009,Top Team,10,4,01-tt-f3,01-tt-f3 nach,,01-tt-f3 vor,F,,,,,,,,01-1009,,01-1009-3,,4,,,,,,,,
 01-1009,Top Team,10,5,01-tt-f4,01-tt-f4 nach,,01-tt-f4 vor,F,,,,,,,,01-1009,,01-1009-3,,5,,,,,,,,
+01-1009,Top Team,10,6,01-tt-yf-1,01-tt-yf-1_nach,,01-tt-yf-1_vor,F,,U15-1,,,J,,,01-1009,,01-1009-3,,6,,,,,,,,
 01-1009,Top Team,17,1,01-tt-m6,01-tt-m6_nach,,01-tt-m6_vor,M,,U19-1,,,,,,01-1009,,01-1009-J1,,1,,,,,,,,
 01-1009,Top Team,17,2,01-tt-m13,01-tt-m13_nach,,01-tt-m13_vor,M,,U15-1,,,,,,01-1009,,01-1009-J1,,2,,,,,,,,
 01-1009,Top Team,17,3,01-tt-m14,01-tt-m14_nach,,01-tt-m14_vor,M,,U15-1,,,,,,01-1009,,01-1009-J1,,3,,,,,,,,

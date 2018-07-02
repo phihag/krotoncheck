@@ -136,6 +136,13 @@
 	"message": "[Fest in] 2 ohne [Fest ab] bei 01-tt-m20_vor 01-tt-m20_nach (01-tt-m20)",
 	"type": "vrl",
 	"vrl_typeid": 9
+},
+{
+	"clubcode": "01-1009",
+	"message": " (01-tt-yf-1) 01-tt-yf-1_vor 01-tt-yf-1_nach steht mit J-Kennzeichen J in der VRL 10[Hinrunde Damen O19] von (01-1009) Top Team, aber benötigt des Alters (U15-1) wegen aber eine O19-Starterlaubnis (§11.1.2 JSpO ab 2018/2019)",
+	"type": "vrl",
+	"vrl_typeid": 10
 }
+
 
 ]

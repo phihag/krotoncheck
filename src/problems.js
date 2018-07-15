@@ -304,10 +304,11 @@ function color_render(problems_struct) {
 					g.header_mail_subject = encodeURIComponent('VRL-Report ' + g.header);
 					g.header_mail_body = encodeURIComponent(
 						'Hallo ' + g.problems[0].club_name + ',\n\n' +
-						'in euer ' + g.problems[0].vrl_name +
+						'in euer ' + g.problems[0].vrl_name + ' ' +
+						'auf ' + g.turnier_url + ' ' +
 						((g.problems.length === 1) ?
-							' gibt es noch ein Problem:' :
-							' gibt es ' + g.problems.length + ' Probleme:'
+							'gibt es noch ein Problem:' :
+							'gibt es ' + g.problems.length + ' Probleme:'
 						) +
 						'\n\n' +
 						g.problems.map(p => {

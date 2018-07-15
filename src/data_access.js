@@ -186,6 +186,14 @@ function enrich(season) {
 		}
 	}
 
+	const club_emails = new Map();
+	for (const line of data.users) {
+		if (line.rolename === 'Verein') {
+			club_emails.set(line.externalcode, line.email);
+		}
+	}
+	data.club_emails = club_emails;
+
 	const match_fields_map = new Map();
 	for (const line of data.matchfields) {
 		const tm_id = line.MatchID;

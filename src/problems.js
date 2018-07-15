@@ -16,7 +16,9 @@ function enrich(season, found) {
 		if ((p.type === 'vrl') || (p.type === 'fixed') || (p.type === 'vrl_generic')) {
 			const club = data.get_club(p.clubcode);
 			p.club_name = club.name;
+			p.club_email = data.club_emails.get(p.clubcode);
 			if (p.vrl_typeid) {
+				p.vrl_name = data.vrl_name(p.vrl_typeid);
 				p.header = '(' + club.code + ') ' + club.name + ' ' + data.vrl_name(p.vrl_typeid);
 			}
 			if (p.type === 'fixed') {
@@ -291,6 +293,33 @@ function color_render(problems_struct) {
 				}
 
 				if (!g.stb || !g.teammatch) {
+					const ptype = g.problems[0].type;
+					const club_email = g.problems[0].club_email;
+					if (! ['vrl', 'vrl_generic'].includes(ptype) && club_email) {
+						continue;
+					}
+
+					// VRL-Problem, craft email to club
+					g.header_email = club_email;
+					g.header_mail_subject = encodeURIComponent('VRL-Report ' + g.header);
+					g.header_mail_body = encodeURIComponent(
+						'Hallo ' + g.problems[0].club_name + ',\n\n' +
+						'in euer ' + g.problems[0].vrl_name +
+						((g.problems.length === 1) ?
+							' gibt es noch ein Problem:' :
+							' gibt es ' + g.problems.length + ' Probleme:'
+						) +
+						'\n\n' +
+						g.problems.map(p => {
+							return (
+								p.message
+							);
+						}).join('\n\n') +
+						'\n\n' +
+						'Sobald ihr die Rangliste fertiggestellt habt, bitte Durch Klick auf "Schließe Vereinsrangliste" bestätigen.\n\n' +
+						'Viele Grüße,\n' +
+						'Miles'
+					);
 					continue;
 				}
 

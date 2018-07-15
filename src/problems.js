@@ -317,7 +317,9 @@ function color_render(problems_struct) {
 							);
 						}).join('\n\n') +
 						'\n\n' +
-						'Sobald ihr die Rangliste fertiggestellt habt, bitte Durch Klick auf "Schließe Vereinsrangliste" bestätigen.\n\n' +
+						'Bitte beenden Sie nach Abschluss Ihrer Bearbeitung – wenn Sie also nichts mehr ändern möchten - die Vereinsrangliste mit dem Button „Vereinsrangliste schließen“.\n' +
+						'Dies erleichtert den Bezirken die Arbeit, da dann die inhaltliche Prüfung beginnen kann.\n' +
+						'Sollten Sie die VRL irrtümlich innerhalb er Abgabefrist geschlossen haben, können wir die Bearbeitung wieder frei schalten.\n\n' +
 						'Viele Grüße,\n' +
 						'Miles'
 					);

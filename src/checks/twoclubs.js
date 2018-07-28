@@ -28,20 +28,25 @@ function calc_multclubs(data) {
 		new Map(),
 		new Map(),
 	];
-	function _add_player(round, player_id, club_id) {
+	function _add_player(round, player_id, club_id, vrl_typeid) {
 		if (! player_id) return;
 
 		let current = round.get(player_id);
 		if (!current) {
-			current = new Set(),
+			current = [];
 			round.set(player_id, current);
 		}
-		current.add(club_id);
+		if (!current.find(e => e.club_id === club_id)) {
+			current.push({
+				club_id,
+				vrl_typeid,
+			});
+		}
 	}
 
 	for (const line of data.clubranking) {
 		const round = rounds[round_index(line.typeid)];
-		_add_player(round, line.memberid, line.clubcode);
+		_add_player(round, line.memberid, line.clubcode, line.typeid);
 	}
 
 	const multis = [
@@ -49,12 +54,11 @@ function calc_multclubs(data) {
 		new Map(),
 	];
 	for (const [r, m] of utils.zip(rounds, multis)) {
-		for (const [pcode, clubs] of r) {
-			if (clubs.size === 1) continue;
+		for (const [pcode, club_entries] of r) {
+			if (club_entries.length === 1) continue;
 
-			const club_ar = Array.from(clubs);
-			club_ar.sort();
-			m.set(pcode, club_ar);
+			club_entries.sort(utils.cmp_key('club_id'));
+			m.set(pcode, club_entries);
 		}
 	}
 
@@ -66,11 +70,11 @@ module.exports = function*(season) {
 	const multis = calc_multclubs(data);
 
 	for (const [round_idx, m] of multis.entries()) {
-		for (const [pcode, clubs] of m) {
+		for (const [pcode, club_entries] of m) {
 			const player = data.get_player(pcode);
-			const clubs_str = clubs.map(function(clubcode) {
-				const club = data.get_club(clubcode);
-				return '(' + clubcode +') ' + club.name;
+			const clubs_str = club_entries.map(function(ce) {
+				const club = data.get_club(ce.club_id);
+				return '(' + ce.club_id +') ' + club.name;
 			}).join(', ');
 			const message = (
 				((player.sex === 'M') ? 'Spieler' : 'Spielerin') + ' ' +
@@ -79,12 +83,16 @@ module.exports = function*(season) {
 				'für mehr als einen Verein: ' +
 				clubs_str
 			);
-			yield {
-				type: 'vrl_generic',
-				clubcode: player.clubid,
-				player_id: pcode,
-				message,
-			};
+
+			for (const ce of club_entries) {
+				yield {
+					type: 'vrl',
+					clubcode: ce.club_id,
+					vrl_typeid: ce.vrl_typeid,
+					player_id: pcode,
+					message,
+				};
+			}
 		}
 	}
 };

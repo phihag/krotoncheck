@@ -20,6 +20,10 @@ module.exports = function*(season) {
 				continue;
 			}
 
+			if (!team.DrawID) { // Bundesliga or so
+				continue;
+			}
+
 			const league_type = data_utils.league_type(team.DrawID);
 			if (league_type === 'O19') {
 				expected_types.add(9);

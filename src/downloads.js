@@ -41,7 +41,7 @@ function calc_url(task_name, season) {
 			'sport/admin/export' + task_name + '.aspx' +
 			'?id=' + encodeURIComponent(tournament_id) + '&ft=1&sd=20000101000000&ed=20990101000000');
 	case 'clubranking':
-		return BASE_URL + 'sport/' + task_name + '_export.aspx?id=' + encodeURIComponent(tournament_id) + '&ft=1';
+		return BASE_URL + 'sport/' + task_name + '_export.aspx?id=' + encodeURIComponent(tournament_id) + '&ft=1&cid=0';
 	case 'playerteam':
 		return BASE_URL + 'sport/admin/export_' + task_name + '.aspx?id=' + encodeURIComponent(tournament_id) + '&ft=1';
 	default:

@@ -404,8 +404,8 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 				' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',')
 			) +
 			(after_start ?
-				' bitte aus der ' + season.data.vrl_name(line.typeid) + ' löschen.' :
-				' aber Enddatum fehlt in der ' + season.data.vrl_name(line.typeid)
+				' aber Enddatum fehlt in der ' + season.data.vrl_name(line.typeid) :
+				' bitte aus der ' + season.data.vrl_name(line.typeid) + ' löschen.'
 			)
 		);
 		yield {

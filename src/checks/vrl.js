@@ -695,7 +695,8 @@ function* check_vrl(season, vrl) {
 					yield* check_in_youth_team(season, is_hr, line);
 				} else if (line.jkz1 === 'SE') {
 					// Special excemption by federation
-					yield* check_not_in_youth_team(data, is_hr, line);
+					// The NRW Verbandsjugendausschuss decided that these players
+					// - contrary to the regulations - can play in youth teams, so do not check.
 				} else if (line.jkz1) {
 					const message = (
 						'Falsches Jugendkennzeichen ' + JSON.stringify(line.jkz1) +

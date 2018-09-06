@@ -44,6 +44,8 @@ function calc_receivers_display(receivers) {
 			email: r.email,
 			stb_filter: r.stb_filter,
 			region_filter: r.region_filter,
+			mtype: r.mtype,
+			mtype_is_buli_sr: (r.mtype === 'buli_sr'),
 			receiver_json: JSON.stringify(r),
 		};
 	});
@@ -117,6 +119,7 @@ function receiver_add_handler(req, res, next) {
 		email: req.body.email,
 		region_filter: req.body.region_filter,
 		stb_filter: req.body.stb_filter,
+		mtype: req.body.mtype,
 	};
 	req.app.db.seasons.update({key: req.params.season_key},	{$addToSet: {receivers: receiver}}, {}, function(err) {
 		if (err) return next(err);

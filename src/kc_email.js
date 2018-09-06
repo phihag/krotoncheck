@@ -193,7 +193,7 @@ function craft_single_email(season, problems_struct, receiver, message_top, mess
 		));
 
 		const res = {
-			subject: 'Kroton-Report',
+			subject: 'turnier.de-Report',
 			to: receiver.email,
 			body_html,
 			empty: (important_problems_struct.found.length === 0),

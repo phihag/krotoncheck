@@ -49,6 +49,7 @@ Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button clas
 <form method="post" action="{{root_path}}s/{{key}}/receiver_add" class="receiver_add_form">
 {{{csrf_field}}}
 <label>Mail: <input type="mail" name="email" required="required" /></label>
+<label>Typ: <select name="mtype"><option value="default">turnier.de-Report</option><option value="buli_sr">BuLi-Schiedsrichter-Liste</option></select></label>
 <label>Bezirk: <input type="text" name="region_filter" /></label>
 <label>StB: <input type="text" name="stb_filter" /></label>
 <button role="submit">Empfänger hinzufügen</button>

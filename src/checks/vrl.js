@@ -589,7 +589,7 @@ function* check_vrl(season, vrl) {
 				type: 'vrl',
 				vrl_typeid: vrl.typeid,
 				clubcode: vrl.clubcode,
-				message: 'Redundanter Doppelranglisten-Nummer ' + line.teampositiondouble + ' (Einzelranglisten-Nummer ist bereits ' + position + ') ' + ' in ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
+				message: 'Redundanter Doppelranglisten-Eintrag ' + line.teampositiondouble + ' (Einzelranglisten-Nummer ist bereits ' + position + ') ' + ' in ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
 			};
 		}
 

@@ -584,6 +584,15 @@ function* check_vrl(season, vrl) {
 		}
 		const position_doubles = line.teampositiondouble ? parseInt(line.teampositiondouble) : position;
 
+		if (line.teampositiondouble && (position_doubles === position)) {
+			yield {
+				type: 'vrl',
+				vrl_typeid: vrl.typeid,
+				clubcode: vrl.clubcode,
+				message: 'Redundanter Doppelranglisten-Nummer ' + line.teampositiondouble + ' (Einzelranglisten-Nummer ist bereits ' + position + ') ' + ' in ' + data.vrl_name(vrl.typeid) + ' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname,
+			};
+		}
+
 		// No gaps in VRL
 		if (last_id !== (position - 1)) {
 			yield {

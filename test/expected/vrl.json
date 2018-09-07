@@ -1,6 +1,13 @@
 [
 
 {
+	"message": "Redundanter Doppelranglisten-Nummer 2 (Einzelranglisten-Nummer ist bereits 2)  in VRL 9[Hinrunde Herren O19] von (01-1001) BC Feder bei (01-bcf-male2)  ",
+	"type": "vrl",
+	"vrl_typeid": 9,
+	"clubcode": "01-1001"
+},
+
+{
 	"clubcode": "01-1001",
 	"message": "Spielerin (01-bcf-yf4) First-yf4 Last-yf4 mit U19-Erklärung in Jugendmannschaft gemeldet in VRL 14[Hinrunde Mädchen U19] von BC Feder (Position 4)",
 	"type": "vrl",

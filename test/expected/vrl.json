@@ -1,7 +1,7 @@
 [
 
 {
-	"message": "Redundanter Doppelranglisten-Nummer 2 (Einzelranglisten-Nummer ist bereits 2)  in VRL 9[Hinrunde Herren O19] von (01-1001) BC Feder bei (01-bcf-male2)  ",
+	"message": "Redundanter Doppelranglisten-Eintrag 2 (Einzelranglisten-Nummer ist bereits 2)  in VRL 9[Hinrunde Herren O19] von (01-1001) BC Feder bei (01-bcf-male2)  ",
 	"type": "vrl",
 	"vrl_typeid": 9,
 	"clubcode": "01-1001"

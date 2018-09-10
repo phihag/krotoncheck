@@ -169,6 +169,7 @@ function change_handler(req, res, next) {
 			'buli_tournament_id',
 			'qualifying_youth_groups',
 			'bws',
+			'umpires',
 			]) {
 		fields[field_name] = req.body[field_name];
 	}

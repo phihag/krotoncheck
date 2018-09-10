@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			uiu.el(colors, 'span', {
 				style: (
 					'display: inline-block;margin:0 0.2em;padding:0.1em 0.3em;' +
-					'background:' + cc.css_color + ';'
+					'background:' + cc.css_color + ';' +
+					(cc.css_fg ? 'color:' + cc.css_fg + ';' : '')
 				),
 			}, cc.count);
 		});

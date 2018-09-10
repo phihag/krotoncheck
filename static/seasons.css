@@ -32,7 +32,7 @@ textarea[name="bws"] {
 	font-size: 12px;
 	width: 600px;
 }
-textarea[name="sg_csv"] {
+textarea[name="sg_csv"],textarea[name="umpires"] {
 	font-size: 8px;
 	width: 250px;
 }

@@ -202,6 +202,11 @@ function* check_round(data, player, matches, is_hr, o19) {
 				continue; // Bundesliga-only player
 			}
 
+			const vrl_team = data.get_team(vrl_entry.teamcode, true);
+			if (vrl_team.eventname.includes('Bundesliga')) {
+				continue; // Bundesliga-only player
+			}
+
 			played_else.push(tm);
 			if (played_else.length === 3) {
 				should_fixed = {team, tm};

@@ -14,7 +14,7 @@ function craft_single_email(season, problem_struct, receiver, message_top, messa
 	cb(null, res);
 }
 
-function calc(season) {
+function calc(/*season*/) {
 	// TODO calc umpire table
 }
 

@@ -1,6 +1,8 @@
 'use strict';
 // Check the VRLs themselves
 
+const assert = require('assert');
+
 const data_utils = require('../data_utils');
 const utils = require('../utils');
 
@@ -748,8 +750,50 @@ function* check_vrl(season, vrl) {
 					type: 'vrl',
 					clubcode: line.clubcode,
 					vrl_typeid: line.typeid,
-					message: message,
+					message,
 				};
+			}
+
+			// Youth player playing in correct age group?
+			if (line.teamcode && line.akl) {
+				const team = data.try_get_team(line.teamcode);
+				if (team && team.Status !== 'Mannschaftsrückzug') {
+					const m = /^U([0-9]+)/.exec(line.akl);
+					if (!m) {
+						const message = (
+							'Unbekannte Altersklasse ' + JSON.stringify(line.akl) + ' von' +
+							' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+							' in ' + data.vrl_name(line.typeid) + ' von ' + line.clubname +
+							' (Position ' + line.position + ')'
+						);
+						yield {
+							type: 'vrl',
+							clubcode: line.clubcode,
+							vrl_typeid: line.typeid,
+							message,
+						};
+					} else {
+						const age = parseInt(m[1]);
+						const team_age_m = /^U([0-9]+)/.exec(team.eventname);
+						assert(team_age_m);
+						const team_age = parseInt(team_age_m[1]);
+						if (age > team_age) {
+							const message = (
+								'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+								' ist Altersklasse ' + line.akl + ', steht aber in ' +
+								' in ' + data.vrl_name(line.typeid) + ' von ' + line.clubname +
+								' (Position ' + line.position + ')' +
+								' in der Mannschaft ' + team.name + ', die ' + team.DrawName + ' spielt!'
+							);
+							yield {
+								type: 'vrl',
+								clubcode: line.clubcode,
+								vrl_typeid: line.typeid,
+								message,
+							};
+						}
+					}
+				}
 			}
 		}
 

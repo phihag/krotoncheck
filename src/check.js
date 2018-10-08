@@ -7,6 +7,7 @@ const path = require('path');
 const data_access = require('./data_access');
 const loader = require('./loader');
 const problems = require('./problems');
+const umpire_mail = require('./umpire_mail');
 const utils = require('./utils');
 const worker_utils = require('./worker_utils');
 
@@ -50,13 +51,15 @@ function recheck(db, season_key, in_background, callback, store=false) {
 		}
 
 		const func = in_background ? bg_recheck : run_recheck;
-		func(season, function(err, found) {
+		func(season, function(err, result) {
 			if (err) {
 				return callback(err);
 			}
 
+			const found = result.found;
+			assert(Array.isArray(found));
 			if (store) {
-				problems.store(db, season, found, (err) => callback(err, found));
+				problems.store(db, season, result, (err) => callback(err, found));
 			} else {
 				callback(null, found);
 			}
@@ -71,7 +74,7 @@ function bg_recheck(season, callback) {
 		if (err) return callback(err);
 		const found = res.found;
 		assert(Array.isArray(found));
-		callback(null, found);
+		callback(null, res);
 	});
 }
 
@@ -100,7 +103,9 @@ function run_recheck(season, callback) {
 
 		problems.enrich(season, found);
 
-		callback(null, found);
+		const buli_umpires = umpire_mail.calc(season);
+
+		callback(null, {found, buli_umpires});
 	});
 }
 

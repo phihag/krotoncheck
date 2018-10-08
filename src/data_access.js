@@ -4,6 +4,7 @@ const assert = require('assert');
 
 const utils = require('./utils');
 const data_utils = require('./data_utils');
+const umpire_mail = require('./umpire_mail');
 
 
 const ALL_TASKS = [
@@ -98,6 +99,7 @@ function enrich(season) {
 	const data = season.data;
 
 	annotate(data);
+	umpire_mail.annotate_umpire_index(season);
 
 	const vrls_by_clubs = new Map();
 	data.vrls_by_clubs = vrls_by_clubs;

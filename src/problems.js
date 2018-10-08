@@ -54,9 +54,9 @@ function enrich(season, found) {
 	return found;
 }
 
-function store(db, season, found, cb) {
+function store(db, season, {found, buli_umpires}, cb) {
 	assert(Array.isArray(found));
-	db.problems.update({key: season.key}, {key: season.key, found: found}, {upsert: true}, cb);
+	db.problems.update({key: season.key}, {key: season.key, found, buli_umpires}, {upsert: true}, cb);
 }
 
 function problem_id(p) {

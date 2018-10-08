@@ -26,6 +26,7 @@
     "cron": "*",
     "csurf": "*",
     "express": "*",
+    "fast-levenshtein": "*",
     "html-entities": "*",
     "serve-favicon": "*",
     "mustache": "*",

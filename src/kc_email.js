@@ -10,6 +10,7 @@ const loader = require('./loader');
 const render = require('./render');
 const problems = require('./problems');
 const utils = require('./utils');
+const umpire_mail = require('./umpire_mail');
 
 function determine_u19o19(problem) {
 	if (problem.teammatch) {
@@ -147,7 +148,13 @@ function craft_emails(season, default_receivers, problems_struct, message_top, m
 
 		async.map(
 			receivers,
-			(r, cb) => craft_single_email(season, problems_struct, r, message_top, message_bottom, cb),
+			(r, cb) => {
+				if (r.mtype === 'buli_sr') {
+					umpire_mail.craft_single_email(season, problems_struct, r, message_top, message_bottom, cb);
+				} else {
+					craft_single_email(season, problems_struct, r, message_top, message_bottom, cb);
+				}
+			},
 			callback);
 	});
 }
@@ -173,7 +180,7 @@ function count_colors(colors) {
 
 function craft_single_email(season, problems_struct, receiver, message_top, message_bottom, cb) {
 	const important_problems_struct = filter_receiver(problems_struct, receiver);
-	const colors = problems.color_render(important_problems_struct);	
+	const colors = problems.color_render(important_problems_struct);
 
 	const data = {
 		season,

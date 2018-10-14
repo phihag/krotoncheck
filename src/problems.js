@@ -55,8 +55,12 @@ function enrich(season, found) {
 }
 
 function store(db, season, {found, buli_umpires}, cb) {
+	const calc_timestamp = Date.now();
 	assert(Array.isArray(found));
-	db.problems.update({key: season.key}, {key: season.key, found, buli_umpires}, {upsert: true}, cb);
+	db.problems.update({key: season.key}, {key: season.key, found, buli_umpires}, {upsert: true}, (err, found_stored) => {
+		if (err) return cb(err);
+		db.seasons.update({key: season.key}, {$set: {calc_timestamp}}, {}, (err) => cb(err, found_stored));
+	});
 }
 
 function problem_id(p) {

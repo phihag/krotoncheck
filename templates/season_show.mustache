@@ -23,7 +23,7 @@
 {{#newest_download}}
 <form method="post" action="{{root_path}}s/{{key}}/recheck">
 {{{csrf_field}}}
-Stand: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} <button class="analyze-button" role="submit" data-season_key="{{key}}">Untersuchen</button>
+Stand Download: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} Stand Berechnung: {{#format_timestamp}}{{calc_timestamp}}{{/format_timestamp}} <button class="analyze-button" role="submit" data-season_key="{{key}}">Untersuchen</button>
 </form>
 {{/newest_download}}
 

@@ -190,19 +190,6 @@ function* check_in_youth_team(season, is_hr, line) {
 		if (ve) break;
 	}
 	if (!ve) {
-		const message = (
-			'Spieler' + (line.sex === 'F' ? 'in' : '') +
-			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' steht mit Kennzeichen ' + line.vkz1 + ' in der ' +
-			data.vrl_name(line.typeid) + ' von ' +
-			'(' + clubcode + ') ' + line.clubname + ', fehlt aber in der Jugend-VRL'
-		);
-		yield {
-			type: 'vrl',
-			clubcode: clubcode,
-			vrl_typeid: line.typeid,
-			message,
-		};
 		return;
 	}
 

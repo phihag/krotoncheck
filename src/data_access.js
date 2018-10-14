@@ -404,7 +404,10 @@ function enrich(season) {
 		return vrl_map.entries;
 	};
 	data.get_club_region = function(clubcode) {
-		const teams = data.get_teams_by_club(clubcode);
+		const teams = data.try_get_teams_by_club(clubcode);
+		if (teams.length === 0) {
+			return 'Unbekannte Region';
+		}
 
 		let max_team = null;
 		let max_num = Number.POSITIVE_INFINITY;

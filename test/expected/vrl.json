@@ -58,12 +58,6 @@
 },
 {
 	"clubcode": "01-1006",
-	"message": "Spieler (01-st-m4) first4 last4 steht mit Kennzeichen J in der VRL 9[Hinrunde Herren O19] von (01-1006) Small Team, fehlt aber in der Jugend-VRL",
-	"type": "vrl",
-	"vrl_typeid": 9
-},
-{
-	"clubcode": "01-1006",
 	"message": "Zu wenig (1) Stammspieler im Team 01-1006-1 (VRL 9[Hinrunde Herren O19] von Small Team)",
 	"type": "vrl",
 	"vrl_typeid": 9

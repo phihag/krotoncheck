@@ -236,7 +236,7 @@ function email_send(req, res, next) {
 	}], function(season, problems_struct) {
 		problems.prepare_render(season, problems_struct.found);
 
-		kc_email.craft_emails(season, season.receivers, problems_struct, message, null, null, function(err, crafted) {
+		kc_email.craft_emails(season, season.receivers, problems_struct, message, null, null, (err, crafted) => {
 			if (err) return next(err);
 
 			kc_email.sendall(req.app.config, crafted, (err, errors) => {
@@ -244,7 +244,7 @@ function email_send(req, res, next) {
 					return next(err);
 				}
 				if (errors.length > 0) {
-					return next(err);
+					return next(errors.map({err, mail} => JSON.stringify({err, to: mail.to})));
 				}
 
 				render(req, res, next, 'email_sent', {

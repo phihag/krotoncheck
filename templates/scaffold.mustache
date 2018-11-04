@@ -3,27 +3,27 @@
 <head>
 	<meta charset="utf-8" />
 	<title>krotoncheck</title>
-	<link rel="icon" href="{{root_path}}favicon.ico" />
-<link rel="stylesheet" href="{{root_path}}static/krotoncheck.css" />
-<link rel="stylesheet" href="{{root_path}}static/users.css" />
-<link rel="stylesheet" href="{{root_path}}static/seasons.css" />
-<link rel="stylesheet" href="{{root_path}}static/autoruns.css" />
-<link rel="stylesheet" href="{{root_path}}static/preview.css" />
+	<link rel="icon" href="{{{root_path}}}favicon.ico" />
+<link rel="stylesheet" href="{{{root_path}}}static/krotoncheck.css" />
+<link rel="stylesheet" href="{{{root_path}}}static/users.css" />
+<link rel="stylesheet" href="{{{root_path}}}static/seasons.css" />
+<link rel="stylesheet" href="{{{root_path}}}static/autoruns.css" />
+<link rel="stylesheet" href="{{{root_path}}}static/preview.css" />
 </head>
-<body data-csrf_token="{{csrf_token}}" data-root_path="{{root_path}}">
+<body data-csrf_token="{{csrf_token}}" data-root_path="{{{root_path}}}">
 {{#current_user}}
 <nav>
-<div class="breadcrumbs"><a href="{{root_path}}">krotoncheck</a></div>
-<div class="logged_in_as"><a href="{{root_path}}user/me">{{email}}</a></div>
+<div class="breadcrumbs"><a href="{{{root_path}}}">krotoncheck</a></div>
+<div class="logged_in_as"><a href="{{{root_path}}}user/me">{{email}}</a></div>
 </nav>
 {{/current_user}}
 {{{content}}}
 
-<script src="{{root_path}}static/uiu.js"></script>
-<script src="{{root_path}}static/report_problem.js"></script>
-<script src="{{root_path}}static/cutils.js"></script>
-<script src="{{root_path}}static/season_add_client.js"></script>
-<script src="{{root_path}}static/cdownload.js"></script>
-<script src="{{root_path}}static/init.js"></script>
+<script src="{{{root_path}}}static/uiu.js"></script>
+<script src="{{{root_path}}}static/report_problem.js"></script>
+<script src="{{{root_path}}}static/cutils.js"></script>
+<script src="{{{root_path}}}static/season_add_client.js"></script>
+<script src="{{{root_path}}}static/cdownload.js"></script>
+<script src="{{{root_path}}}static/init.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 {{#season}}
 <h1>{{name}}</h1>
 
-<form method="post" action="{{root_path}}s/{{key}}/change" class="season_info">
+<form method="post" action="{{{root_path}}}s/{{key}}/change" class="season_info">
 {{{csrf_field}}}
 <label><span>Turnier-ID</span><input name="tournament_id" value="{{tournament_id}}" /></label>
 <label><span>Turnier-ID BuLi</span><input name="buli_tournament_id" value="{{buli_tournament_id}}" /></label>
@@ -21,7 +21,7 @@
 </form>
 
 {{#newest_download}}
-<form method="post" action="{{root_path}}s/{{key}}/recheck">
+<form method="post" action="{{{root_path}}}s/{{key}}/recheck">
 {{{csrf_field}}}
 Stand Download: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} Stand Berechnung: {{#format_timestamp}}{{calc_timestamp}}{{/format_timestamp}} <button class="analyze-button" role="submit" data-season_key="{{key}}">Untersuchen</button>
 </form>
@@ -39,7 +39,7 @@ Stand Download: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} Sta
 {{#display_receivers}}
 <li>
 {{>receiver_render}}
-<form method="post" action="{{root_path}}s/{{key}}/receiver_delete" class="receiver_delete_form">
+<form method="post" action="{{{root_path}}}s/{{key}}/receiver_delete" class="receiver_delete_form">
 {{{csrf_field}}}
 <input type="hidden" name="receiver_json" value="{{receiver_json}}" />
 <button role="submit">Entfernen</button>
@@ -47,7 +47,7 @@ Stand Download: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} Sta
 </li>{{/display_receivers}}
 </ul>
 
-<form method="post" action="{{root_path}}s/{{key}}/receiver_add" class="receiver_add_form">
+<form method="post" action="{{{root_path}}}s/{{key}}/receiver_add" class="receiver_add_form">
 {{{csrf_field}}}
 <label>Mail: <input type="mail" name="email" required="required" /></label>
 <label>Typ: <select name="mtype"><option value="default">turnier.de-Report</option><option value="buli_sr">BuLi-Schiedsrichter-Liste</option></select></label>
@@ -56,7 +56,7 @@ Stand Download: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} Sta
 <button role="submit">Empfänger hinzufügen</button>
 </form>
 
-<form method="post" action="{{root_path}}s/{{key}}/preview" style="margin-top: 2em">
+<form method="post" action="{{{root_path}}}s/{{key}}/preview" style="margin-top: 2em">
 {{{csrf_field}}}
 <label>Nachricht: <textarea name="message"></textarea></label>
 <button role="submit">E-Mails vorbereiten</button>
@@ -70,6 +70,6 @@ Stand Download: {{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}} Sta
 
 {{>problems_list}}
 
-<a href="{{root_path}}s/{{key}}/problems">Nur Probleme</a>
+<a href="{{{root_path}}}s/{{key}}/problems">Nur Probleme</a>
 
 {{/season}}

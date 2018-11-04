@@ -31,14 +31,14 @@
 {{/turnier_url}}
 
 {{#ignored}}
-<form method="POST" action="{{root_path}}s/{{#season}}{{key}}/unignore{{/season}}">
+<form method="POST" action="{{{root_path}}}s/{{#season}}{{key}}/unignore{{/season}}">
 {{{csrf_field}}}
 <input type="hidden" name="problem_id" value="{{id}}" />
 <button class="ignore_button" role="submit">Nicht ignorieren</button>
 </form>
 {{/ignored}}
 {{^ignored}}
-<form method="POST" action="{{root_path}}s/{{#season}}{{key}}/ignore{{/season}}">
+<form method="POST" action="{{{root_path}}}s/{{#season}}{{key}}/ignore{{/season}}">
 {{{csrf_field}}}
 <input type="hidden" name="problem_id" value="{{id}}" />
 <button class="ignore_button" role="submit">Ignorieren</button>

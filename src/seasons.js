@@ -244,7 +244,9 @@ function email_send(req, res, next) {
 					return next(err);
 				}
 				if (errors.length > 0) {
-					return next(errors.map({err, mail} => JSON.stringify({err, to: mail.to})));
+					return next(new Error('Could not send mails: ' + JSON.stringify(errors.map(e => {
+						return {err: e.err.stack, to: e.mail.to};
+					}))));
 				}
 
 				render(req, res, next, 'email_sent', {

@@ -1,3 +1,9 @@
+O19-Rangliste: Mannschaft nur numerisch
+Keine Spieler in der Rückrunde gemeldet in Mannschaften die zurückgezogen sind 14.11.
+
+
+
+
 fix processing with umpires
 Michael Storch:  error if umpires misspelled
 
@@ -103,3 +109,6 @@ check errors in data_access.enrich (as called from checks)
 make sure 100% coverage
 remove bcrypt in favor of something else
 unberechtigte Umwertung (Umwertung ohne das was falsch ist?)
+
+Miles: Bilanzen
+

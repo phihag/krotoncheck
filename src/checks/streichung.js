@@ -21,7 +21,7 @@ module.exports = function*(season) {
 			const message = (
 				'(' + team.code + ') ' + team.name + ' hat am ' + utils.ts2dstr(forced.ts) +
 				' zum dritten Mal kampflos aufgegeben,' +
-				' ist aber nicht als zurückgezogen markiert (§68.2b SpO)'
+				' ist aber nicht als zurückgezogen markiert (§68.3b SpO)'
 			);
 			yield {
 				teammatch_id: forced.matchid,

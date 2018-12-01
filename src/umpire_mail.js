@@ -64,7 +64,7 @@ function annotate_umpire_index(season) {
 }
 
 function parse_names(str) {
-	const res = str.split(/(?:\sund\s|;|\/)/g).map(s => s.trim());
+	const res = str.split(/(?:\sund\s|;|\/|\s-\s)/g).map(s => s.trim());
 	if (res.length >= 2) {
 		return res;
 	}

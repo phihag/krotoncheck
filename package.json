@@ -20,7 +20,7 @@
   "dependencies": {
     "atomic-write": "*",
     "babyparse": "*",
-    "bcrypt": "*",
+    "bcrypt": "1.0.2",
     "body-parser": "*",
     "cookie-parser": "*",
     "cron": "*",
@@ -33,7 +33,7 @@
     "mustache-express": "*",
     "nodemailer": "*",
     "nedb": "*",
-    "request": "*",
+    "request": "2.81.0",
     "timezone": "*",
     "supervisor": "*"
   },

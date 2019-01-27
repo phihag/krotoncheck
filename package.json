@@ -34,6 +34,7 @@
     "nodemailer": "*",
     "nedb": "*",
     "request": "*",
+    "strip-bom-stream": "*",
     "timezone": "*",
     "supervisor": "*"
   },

@@ -5,7 +5,6 @@ const async = require('async');
 const fs = require('fs');
 const path = require('path');
 const request = require('request');
-const stripBomStream = require('strip-bom-stream');
 const url = require('url');
 
 const utils = require('./utils');
@@ -112,7 +111,7 @@ function download_file(req, fn, cb) {
 	}
 
 	req.on('error', on_error);
-	const pipe = req.pipe(stripBomStream()).pipe(fs.createWriteStream(fn, {
+	const pipe = req.pipe(fs.createWriteStream(fn, {
 		encoding: 'binary',
 	}));
 	pipe.on('error', on_error);

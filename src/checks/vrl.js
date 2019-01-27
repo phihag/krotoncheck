@@ -389,7 +389,7 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 			((line.playerclubcode === '01-8999') ?
 				' wurde am ' + m[1] + ' von der Spielberechtigungsliste gestrichen,'
 				:
-				(' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen' +
+				(' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
 				' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',')
 			) +
 			(after_start ?

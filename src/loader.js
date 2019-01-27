@@ -108,8 +108,9 @@ function parse_csv_fn(fn, cb) {
 	// It seems crazily inefficient to read the file into memory,
 	// but that seems to be the fastest way
 	// See https://github.com/phihag/csv-speedtest for speed test
-	fs.readFile(fn, {encoding: 'binary'}, function(err, fcontents) {
+	fs.readFile(fn, {encoding: 'utf-8'}, function(err, fcontents) {
 		if (err) return cb(err);
+
 		parse_csv(fcontents, fn, cb);
 	});
 }

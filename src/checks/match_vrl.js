@@ -107,7 +107,7 @@ function contains_backup_player(data, tm, players) {
 	}
 
 	const notes = data.get_matchfield(tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
-	const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
+	const resigned = data.get_resigned_field(tm);
 	if (!notes && !resigned) {
 		return false;
 	}

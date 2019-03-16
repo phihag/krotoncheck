@@ -6,7 +6,7 @@ const utils = require('../utils');
 
 
 function* check_comment(data, pm) {
-	const resigned = data.get_matchfield(pm.tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
+	const resigned = data.get_resigned_field(pm.tm);
 	if (resigned) {
 		return;
 	}
@@ -92,7 +92,7 @@ module.exports = function*(season) {
 	}
 
 	for (const tm of data.teammatches) {
-		const resigned = data.get_matchfield(tm, 'Spielaufgabe (Spielstand bei Aufgabe, Grund), Nichtantritt');
+		const resigned = data.get_resigned_field(tm);
 		if (!resigned) {
 			continue;
 		}

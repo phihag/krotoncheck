@@ -29,7 +29,6 @@
         "describe": true,
         "it": true,
         "run": true,
-
     },
     "parserOptions": {
         "ecmaVersion": "6",

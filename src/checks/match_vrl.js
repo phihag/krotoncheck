@@ -101,7 +101,7 @@ function* check_min_count(data, league_type, tm, team, valid_players_by_gender) 
 
 
 function contains_backup_player(data, tm, players) {
-	const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
+	const backup_players = data.get_backup_players(tm);
 	if (!backup_players) {
 		return false;
 	}

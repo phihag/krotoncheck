@@ -97,7 +97,7 @@ module.exports = function*(season) {
 			continue;
 		}
 
-		const backup_players = data.get_matchfield(tm, 'vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO)');
+		const backup_players = data.get_backup_players(tm);
 		if (backup_players) {
 			const bp_names = data_utils.extract_names(backup_players);
 			if (bp_names.some(bpn => resigned.includes(bpn))) {

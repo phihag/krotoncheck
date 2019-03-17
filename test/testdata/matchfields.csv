@@ -1,8 +1,8 @@
 TournamentID;MatchID;MatchField;ValueText;ValueInt
 1;9;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;"Klaus Hartmann; Sven Anstötz";
 1;1;vorgesehene Ersatzspieler (NUR Verbandsliga aufwärts, § 58 SpO);Some Guy (really just a normal backup player);
-1;5;Spielaufgabe (Disziplin, Namen, Spielstand bei Aufgabe, Nichtantritt):;Ganz viel aufgegeben;
+1;5;Spielaufgabe (Disziplin, Namen, Spielstand bei Aufgabe, Nichtantritt);Ganz viel aufgegeben;
 1;19;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;Benjamin Beispiel, Emil Ernst;
 1;20;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;Benjamin Beispiel, Emil Ernst;
 1;21;Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen;Benjamin Beispiel, Emil Ernst;
-1;21;Spielaufgabe (Disziplin, Namen, Spielstand bei Aufgabe, Nichtantritt):;1. HE aufgegeben (aber nicht so eingetragen);
+1;21;Spielaufgabe (Disziplin, Namen, Spielstand bei Aufgabe, Nichtantritt);1. HE aufgegeben (aber nicht so eingetragen);

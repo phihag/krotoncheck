@@ -21,24 +21,24 @@
     "atomic-write": "*",
     "babyparse": "*",
     "bcrypt": "*",
-    "body-parser": "*",
+    "body-parser": "^1.18.3",
     "cookie-parser": "*",
     "cron": "*",
     "csurf": "*",
-    "express": "*",
+    "express": "^4.16.4",
     "fast-levenshtein": "*",
     "html-entities": "*",
-    "serve-favicon": "*",
     "mustache": "*",
     "mustache-express": "*",
-    "nodemailer": "*",
     "nedb": "*",
-    "request": "*",
-    "timezone": "*",
-    "supervisor": "*"
+    "nodemailer": "*",
+    "request": "^2.88.0",
+    "serve-favicon": "^2.5.0",
+    "supervisor": "*",
+    "timezone": "*"
   },
   "devDependencies": {
-    "mocha": "*",
-    "eslint": "*"
+    "eslint": "^5.15.2",
+    "mocha": "^6.0.2"
   }
 }

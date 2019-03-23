@@ -1,13 +1,14 @@
 'use strict';
 
-var assert = require('assert');
-var async = require('async');
-var fs = require('fs');
-var path = require('path');
+const assert = require('assert');
+const async = require('async');
+const fs = require('fs');
+const path = require('path');
 
-var check = require('../src/check');
-var data_access = require('../src/data_access');
-var loader = require('../src/loader');
+const check = require('../src/check');
+const data_access = require('../src/data_access');
+const loader = require('../src/loader');
+const utils = require('../src/utils');
 
 
 const CHECKS_DIR = path.join(__dirname, 'expected');
@@ -35,13 +36,15 @@ setup_test(function(err, season) {
 	describe('checks', function() {
 		async.each(check.CHECK_NAMES, function(check_name, cb) {
 			var expected_fn = path.join(CHECKS_DIR, check_name + '.json');
-			fs.readFile(expected_fn, {encoding: 'utf8'}, function(err, expected_json) {
+			fs.readFile(expected_fn, {encoding: 'utf8'}, (err, expected_json) => {
 				if (err) return cb(err);
-				var expected = JSON.parse(expected_json);
+				const expected = JSON.parse(expected_json);
+				expected.sort(utils.cmp_key('message'));
 
-				it(check_name, function(done) {
-					var check_func = check.CHECKS_BY_NAME[check_name];
-					var results = Array.from(check_func(season));
+				it(check_name, (done) => {
+					const check_func = check.CHECKS_BY_NAME[check_name];
+					const results = Array.from(check_func(season));
+					results.sort(utils.cmp_key('message'));
 					assert.deepStrictEqual(results, expected);
 					done();
 				});

@@ -1,6 +1,6 @@
 {
 	"port": 3002,
-	"root_path": "/kc/",
+	"root_path": "/",
 
 	"check_background": true,
 	"verbose": false,

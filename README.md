@@ -15,4 +15,4 @@ You can set up a systemd service by creating a user `krotoncheck`, moving this r
 
 Copy `config.json.example` to `config.json`, and fill in the usernames and passwords.
 
-To start a development server, type `make run`.
+To start a development server, type `make run`. An admin account will be created automatically and be included in the output.

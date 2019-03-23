@@ -1,0 +1,24 @@
+{
+	"port": 3002,
+	"root_path": "/kc/",
+
+	"check_background": true,
+	"verbose": false,
+
+	"tournament_user": "v01krotoncheck",
+	"tournament_password": "turnier.de password",
+
+	"mail_from": "krotoncheck@badminton-nrw.de",
+	"smtp": {
+		"pool": true,
+		"host": "smtp.badminton-nrw.de",
+		"port": 25,
+		"auth": {
+			"user": "krotoncheck@badminton-nrw.de",
+			"pass": "smtp password"
+		},
+		"tls": {
+			"rejectUnauthorized": false
+		}
+	}
+}

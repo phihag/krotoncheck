@@ -8,7 +8,7 @@ help:
 	@echo '  deps          Download and install all dependencies (for compiling / testing / CLI operation)'
 	@echo '  compile       Create output files from source files where necessary'
 	@echo '  test          Run tests'
-	@echo '  run-server    Run the server'
+	@echo '  run           Run the krotoncheck server'
 	@echo '  clean         Remove temporary files'
 
 
@@ -25,8 +25,10 @@ test:
 clean:
 	@npm clean
 
-run-server:
+run:
 	node_modules/.bin/node-supervisor src/krotoncheck.js
+
+run-server: run
 
 lint: eslint ## Verify source code quality
 
@@ -39,6 +41,7 @@ eslint-client:
 	@node_modules/.bin/eslint -c static/.eslintrc static/*.js
 
 install-service:
+	@if id -u 2>/dev/null ; echo "Could not find user krotoncheck . Create the user and put this repository somewhere they can access"; exit 2; then fi
 	sed -e "s#KROTONCHECK_ROOT_DIR#$$PWD#" div/krotoncheck.service.template > /etc/systemd/system/krotoncheck.service
 	systemctl enable krotoncheck
 	systemctl start krotoncheck

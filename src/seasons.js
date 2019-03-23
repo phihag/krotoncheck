@@ -9,9 +9,9 @@ const kc_email = require('./kc_email');
 
 
 function add_handler(req, res, next) {
-	let m = /.*\?id=([A-Za-z0-9-]{36})$/.exec(req.body.url);
+	let m = /.*\?id=([A-Za-z0-9-]{36})(?:&|$)/.exec(req.body.url);
 	if (!m) {
-		m = /^([A-Za-z0-9-]{36})$/.exec(req.body.url);
+		m = /^([A-Za-z0-9-]{36})(?:&|$)/.exec(req.body.url);
 	}
 	if (!m) {
 		return next(new Error('cannot find tournament ID'));

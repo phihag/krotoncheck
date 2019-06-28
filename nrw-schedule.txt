@@ -1,0 +1,14 @@
+Täglich 8:00   0 0 8 * * *
+phihag@phihag.de
+miles.eggers@badminton-nrw.de
+
+Montag  0 1 12 * * MON
+phihag@phihag.de
+miles.eggers@badminton-nrw.de
+StBs
+
+Mittwoch/Freitag  0 1 12 * * WED,FRI
+phihag@phihag.de
+miles.eggers@badminton-nrw.de
+StBs
+BWs/BJWs

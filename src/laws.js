@@ -83,7 +83,7 @@ function is_doubles(discipline) {
 
 function get_vrl_type(league_type, tm, sex) {
 	if (! /^[HR]$/.test(tm.runde)) {
-		throw new Error('Ungültige Runde ' + tm.runde);
+		throw new Error('Ungültige Runde ' + JSON.strinigfy(tm.runde));
 	}
 	const is_hr = (tm.runde === 'H');
 	return get_round_vrl_type(league_type, is_hr, sex);

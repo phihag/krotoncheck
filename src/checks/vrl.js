@@ -761,8 +761,25 @@ function* check_vrl(season, vrl) {
 						};
 					} else {
 						const age = parseInt(m[1]);
+						if (/^O19/.exec(team.eventname)) {
+							const message = (
+								`(${line.memberid}) ${line.firstname} ${line.lastname} in der U19-VRL ` +
+								`${data.vrl_name(line.typeid)} ist der O19-Mannschaft ` +
+								`(${line.teamcode}) ${team.name} zugeordnet. ` +
+								'Diese Zuordnung muss stattdessen in einer O19-VRL passieren.');
+							yield {
+								type: 'vrl',
+								clubcode: line.clubcode,
+								vrl_typeid: line.typeid,
+								message,
+							};
+							// Stop here for this line
+							continue;
+						}
+
 						const team_age_m = /^U([0-9]+)/.exec(team.eventname);
-						assert(team_age_m, `Cannot parse age ${team.eventname}`);
+						assert(team_age_m,
+							`Cannot parse age from event ${team.eventname} (teamcode ${line.teamcode}) in VRL ${vrl.typeid}`);
 						const team_age = parseInt(team_age_m[1]);
 						if (age > team_age) {
 							const message = (

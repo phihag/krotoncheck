@@ -762,7 +762,7 @@ function* check_vrl(season, vrl) {
 					} else {
 						const age = parseInt(m[1]);
 						const team_age_m = /^U([0-9]+)/.exec(team.eventname);
-						assert(team_age_m);
+						assert(team_age_m, `Cannot parse age ${team.eventname}`);
 						const team_age = parseInt(team_age_m[1]);
 						if (age > team_age) {
 							const message = (

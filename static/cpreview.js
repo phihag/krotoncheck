@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (r.receiver_class) {
 			uiu.el(div, 'span', {}, r.receiver_class + ' ');
 		}
-		uiu.el(div, 'span', {}, r.to);
+		uiu.el(div, 'span', {}, r.to + (r.receiver_name ? ` (${r.receiver_name})` : ''));
 		var colors = uiu.el(div, 'div', {
 			style: 'display: inline-block;',
 		});

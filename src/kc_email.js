@@ -37,6 +37,12 @@ function filter_receiver(problems_struct, receiver) {
 			}
 		}
 
+		if (receiver.club_filter) {
+			if (problem.clubcode !== receiver.club_filter) {
+				return false;
+			}
+		}
+
 		if (receiver.stb_filter) {
 			if (! problem.stb) {
 				return false;
@@ -101,6 +107,25 @@ function stb_receivers(season, callback) {
 	});
 }
 
+function club_receivers(season, callback) {
+	loader.load_season_table(season, 'users', (err, user_table) => {
+		if (err) return callback(err);
+
+		const receivers = [];
+		for (const u of user_table) {
+			if (u.rolename !== 'Verein') continue;
+
+			receivers.push({
+				club_filter: u.externalcode,
+				receiver_name: u.lastname,
+				email: u.email,
+				colors_filter: ['lightgray'],
+			});
+		}
+		callback(err, receivers);
+	});
+}
+
 function bw_receivers(season, callback) {
 	const bw_str = season.bws;
 	const lines = bw_str.split('\n');
@@ -138,6 +163,9 @@ function craft_emails(season, default_receivers, problems_struct, message_top, m
 		}
 		if (add_receivers.all_bws) {
 			tasks.push(cb => bw_receivers(season, cb));
+		}
+		if (add_receivers.all_clubs) {
+			tasks.push(cb => club_receivers(season, cb));
 		}
 	}
 
@@ -207,6 +235,9 @@ function craft_single_email(season, problems_struct, receiver, message_top, mess
 			color_counts: count_colors(colors),
 			receiver_class,
 		};
+		if (receiver.receiver_name) {
+			res.receiver_name = receiver.receiver_name;
+		}
 		render.render_standalone('mail_scaffold', res, function(err, mail_html) {
 			if (err) return cb(err);
 			res.mail_html = mail_html;

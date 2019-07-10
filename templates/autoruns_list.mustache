@@ -25,8 +25,9 @@
 
 <form method="post" action="{{root_path}}s/{{season_key}}/autorun/{{_id}}/edit">
 {{{csrf_field}}}
-<label><input type="checkbox" name="all_stbs" {{#add_receivers}}{{#all_stbs}}checked="checked"{{/all_stbs}}{{/add_receivers}}/> alle StBs</label>
-<label><input type="checkbox" name="all_bws" {{#add_receivers}}{{#all_bws}}checked="checked"{{/all_bws}}{{/add_receivers}}/> Bezirks(jugend)warte</label>
+<label><input type="checkbox" name="all_stbs" {{#add_receivers}}{{#all_stbs}}checked="checked"{{/all_stbs}}{{/add_receivers}}/>alle StBs</label>
+<label><input type="checkbox" name="all_bws" {{#add_receivers}}{{#all_bws}}checked="checked"{{/all_bws}}{{/add_receivers}}/>Bezirks(jugend)warte</label>
+<label><input type="checkbox" name="all_clubs" {{#add_receivers}}{{#all_clubs}}checked="checked"{{/all_clubs}}{{/add_receivers}}/>Vereine</label>
 <button type="submit">Ändern</button>
 </form>
 </div>

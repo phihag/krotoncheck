@@ -167,6 +167,7 @@ function edit_handler(req, res, next) {
 	const add_receivers = {
 		all_stbs: !! req.body.all_stbs,
 		all_bws: !! req.body.all_bws,
+		all_clubs: !! req.body.all_clubs,
 	};
 
 	async.waterfall([

@@ -54,7 +54,7 @@ function* check_fixed_date(player, team, vrl_entry, tm) {
 function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
 	if (!should_fixed.team) {
 		if (vrl_entry.fixed_in) {
-			if (vrl_entry.vkz3 === 'FIX') {
+			if ((vrl_entry.vkz3 || '').toUpperCase() === 'FIX') {
 				return; // Manually fixed (usually by federation)
 			}
 

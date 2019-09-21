@@ -90,6 +90,10 @@ function league_type(staffelcode) {
 	throw new Error('Unknown league code ' + JSON.stringify(staffelcode));
 }
 
+function is_bundesliga_event(eventname) {
+	return /^O19-GW-B[12]$/.test(eventname);
+}
+
 function player_str(player) {
 	return player.vorname + ' ' + player.name + ' (' + player.spielerid + ')';
 }
@@ -166,6 +170,7 @@ function reporting_deadline(tm) {
 
 module.exports = {
 	extract_names,
+	is_bundesliga_event,
 	is_preseason,
 	league_type,
 	match_name,

@@ -52,6 +52,12 @@ function* check_fixed_date(player, team, vrl_entry, tm) {
 }
 
 function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
+	const orig_team = data.try_get_team(vrl_entry.teamcode);
+	if (orig_team && data_utils.is_bundesliga_event(orig_team.eventname)) {
+		// Bundesliga-only player
+		return;
+	}
+
 	if (!should_fixed.team) {
 		if (vrl_entry.fixed_in) {
 			if ((vrl_entry.vkz3 || '').toUpperCase() === 'FIX') {
@@ -69,7 +75,6 @@ function* check_vrl_entry(data, should_fixed, vrl_entry, player) {
 				' Fest in ' + JSON.stringify(vrl_entry.fixed_in) +
 				(vrl_entry.fixed_from ? (' (ab ' + vrl_entry.fixed_from + ')') : '') +
 				', aber der Grund des Festspielens konnte nicht gefunden werden' +
-				(vrl_entry.teamcode ? '' : ' (Reiner Bundesliga-Spieler!)') +
 				((vrl_team && (vrl_entry.fixed_in === vrl_team.number)) ? ' (vkz3="FIX" beim Festschreiben vergessen?)' : '')
 			);
 			yield {

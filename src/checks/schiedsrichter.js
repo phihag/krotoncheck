@@ -64,6 +64,20 @@ module.exports = function*(season) {
 				}
 			}
 
+			if (min_diff > 5) {
+				yield {
+					teammatch_id: tm.matchid,
+					message: `Neuer Schiedsrichter ${JSON.stringify(uname)}, Philipp Hagemeister muss ihn/sie eintragen.`,
+					stb: {
+						firstname: 'Philipp',
+						middlename: '',
+						lastname: 'Hagemeister',
+						email: 'philipp.hagemeister@badminton-nrw.de',
+					},
+				};
+				continue;
+			}
+
 			const message = (
 				'Unbekannter Schiedsrichter ' + JSON.stringify(uname) + '. ' +
 				'Vielleicht ' + candidates.slice(0, 3).join(' oder ') + '?'

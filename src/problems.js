@@ -42,7 +42,9 @@ function enrich(season, found) {
 			if (p.teammatch2_id) {
 				p.turnier2_url = downloads.BASE_URL + 'sport/teammatch.aspx?id=' + season.tournament_id + '&match=' + p.teammatch2_id;
 			}
-			p.stb = data.get_stb(p.teammatch);
+			if (!p.stb) {
+				p.stb = data.get_stb(p.teammatch);
+			}
 			p.region = data.get_region(p.teammatch.eventname);
 		}
 		if (p.match_id) {

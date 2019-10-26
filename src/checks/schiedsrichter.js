@@ -24,9 +24,15 @@ module.exports = function*(season) {
 				continue;
 			}
 
+			let message = 'Keine Schiedsrichter in der Regionalliga';
+
+			if (data.get_comment(tm.matchid, text => text.includes('Schiedsrichter'))) {
+				message += ' (als Kommentar vom Verein nachgeliefert?)';
+			}
+
 			yield {
 				teammatch_id: tm.matchid,
-				message: 'Keine Schiedsrichter in der Regionalliga',
+				message,
 			};
 			continue;
 		}

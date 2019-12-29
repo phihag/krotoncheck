@@ -52,6 +52,7 @@ function annotate_umpire_index(season) {
 		_add_umpire(last_name + ', ' + initial, full_name);
 		_add_umpire(last_name + ', ' + initial + '.', full_name);
 		_add_umpire(last_name + ', ' + first_name, full_name);
+		_add_umpire(first_name + '  ' + last_name, full_name);
 		_add_umpire(last_name, full_name);
 	}
 

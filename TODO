@@ -1,11 +1,13 @@
+fix makefile install-service
+
+
+
 O19-Rangliste: Mannschaft nur numerisch
 Keine Spieler in der Rückrunde gemeldet in Mannschaften die zurückgezogen sind 14.11.
 
 Miles: Report Staffelwechsel
 
-
 fix processing with umpires
-Michael Storch:  error if umpires misspelled
 
 Björn Wüpping Liste
     Heimmannschaft Gastmannschaft Datum Schiedsrichter + alle Felder

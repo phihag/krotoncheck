@@ -41,7 +41,7 @@ eslint-client:
 	@node_modules/.bin/eslint -c static/.eslintrc static/*.js
 
 install-service:
-	@if id -u 2>/dev/null ; echo "Could not find user krotoncheck . Create the user and put this repository somewhere they can access"; exit 2; then fi
+	@if ! id -u krotoncheck 2>/dev/null ; then echo 'Could not find user krotoncheck . Create the user and put this repository somewhere they can access.'; exit 2; fi
 	sed -e "s#KROTONCHECK_ROOT_DIR#$$PWD#" div/krotoncheck.service.template > /etc/systemd/system/krotoncheck.service
 	systemctl enable krotoncheck
 	systemctl start krotoncheck

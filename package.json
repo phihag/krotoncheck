@@ -19,10 +19,10 @@
   "dependencies": {
     "atomic-write": "*",
     "babyparse": "*",
-    "bcrypt": "*",
+    "bcrypt": ">=1.0.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "*",
-    "cron": "*",
+    "cron": ">=1.2.1",
     "csurf": "*",
     "express": "^4.16.4",
     "fast-levenshtein": "*",

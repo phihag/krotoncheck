@@ -79,7 +79,9 @@ function show_handler(req, res, next) {
 				stats_ar,
 				region_filter,
 				show_emails,
-				extended: req.query.hasOwnProperty('extended') || req.query.hasOwnProperty('e'),
+				extended: (
+					Object.prototype.hasOwnProperty.call(req.query, 'extended') ||
+					Object.prototype.hasOwnProperty.call(req.query, 'e')),
 			});
 		});
 	});

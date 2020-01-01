@@ -25,7 +25,7 @@
     "globals": {
     },
     "parserOptions": {
-        "ecmaVersion": "3",
+        "ecmaVersion": 6,
         "sourceType": "module",
     },
     "extends": "eslint:recommended"

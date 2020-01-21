@@ -4,8 +4,10 @@ krotoncheck checks a turnier.de league alongside the rules of a federation (curr
 
 ## Installation
 
-Install node.js and npm, and type
+Install node.js, check out this repository, and install node.js dependencies:
 ```
+$ git clone https://github.com/phihag/krotoncheck.git
+$ cd krotoncheck
 $ npm i
 ```
 

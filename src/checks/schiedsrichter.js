@@ -17,7 +17,7 @@ module.exports = function*(season) {
 			continue;
 		}
 
-		const sr = data.get_matchfield(tm, 'Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen');
+		let sr = data.get_matchfield(tm, 'Namen der Schiedsrichter (nur Regionalliga), ggf. Absagen');
 		if (!sr) {
 			if (data.get_stb_note(tm.matchid, text => text.includes('Schiedsrichter'))) {
 				// Already noted
@@ -43,6 +43,11 @@ module.exports = function*(season) {
 
 		if (!season.umpire_index) {
 			continue;
+		}
+
+		const sr_m = /^\s*Schiedsrichter:\s*(.*)$/.exec(sr);
+		if (sr_m) {
+			sr = sr_m[1];
 		}
 
 		const umpire_names = umpire_mail.parse_names(sr);

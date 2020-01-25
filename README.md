@@ -11,10 +11,10 @@ $ cd krotoncheck
 $ npm i
 ```
 
-You can set up a systemd service by creating a user `krotoncheck`, moving this repository somewhere they can access, and typing `make install-service`.
-
 ## Configuration & Start
 
-Copy `config.json.example` to `config.json`, and fill in the usernames and passwords.
+Copy `config.json.example` to `config.json`, and fill in the usernames and passwords. To import from turnier.de/tournamentsoftware.com, you will need an administration account, whose credentials need to be filled in for `tournament_user`/`tournament_password`.
 
 To start a development server, type `make run`. An admin account will be created automatically and be included in the output.
+
+You can set up a systemd service by creating a user `krotoncheck`, moving this repository somewhere they can access, and typing `make install-service`.

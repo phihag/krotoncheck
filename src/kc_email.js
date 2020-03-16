@@ -273,9 +273,12 @@ function sendall(config, crafted, callback) {
 	const got = mails.map(() => false);
 
 	mails.map((mail, i) => {
+		console.log('Sending to ' + mail.to);
 		transporter.sendMail(mail, (err) => {
+			console.log('success: ' + mail.to);
 			got[i] = true;
 			if (err) {
+				console.log('error: ' + err);
 				errors.push({
 					mail,
 					err,

@@ -11,6 +11,13 @@ $ cd krotoncheck
 $ npm i
 ```
 
+## Docker installation
+
+You can also use the docker image:
+```
+docker build . -t krotoncheck && docker run -u $(id -u):$(id -g) -v $PWD/data:/krotoncheck/data -it --rm -p 3002:3002 krotoncheck
+```
+
 ## Configuration & Start
 
 Copy `config.json.example` to `config.json`, and fill in the usernames and passwords. To import from turnier.de/tournamentsoftware.com, you will need an administration account, whose credentials need to be filled in for `tournament_user`/`tournament_password`.

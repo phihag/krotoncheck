@@ -49,6 +49,6 @@ install-service:
 docker:
 	docker kill krotoncheck || true
 	docker build . -t krotoncheck
-	docker run -u $(id -u):$(id -g) -v $PWD/data:/krotoncheck/data -it --rm -p 3002:3002 --name krotoncheck krotoncheck
+	docker run -u "$$(id -u):$$(id -g)" -v "$$(pwd)/data:/krotoncheck/data" -it --rm -p 3002:3002 --name krotoncheck krotoncheck
 
 .PHONY: default compile help deps test clean run-server lint eslint eslint-server eslint-client install-service docker

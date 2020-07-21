@@ -14,9 +14,9 @@ $ npm i
 ## Docker installation
 
 You can also use the docker image:
-```
-docker build . -t krotoncheck && docker run -u $(id -u):$(id -g) -v $PWD/data:/krotoncheck/data -it --rm -p 3002:3002 krotoncheck
-```
+`
+$ make docker
+`
 
 ## Configuration & Start
 

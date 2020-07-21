@@ -291,6 +291,7 @@ function download_job(app, season, cb_started, cb_finished)  {
 				return;
 			}
 
+			season.newest_download = dl;
 			app.db.seasons.update({_id: season._id}, {
 				$set: {newest_download: dl},
 			}, function(err) {

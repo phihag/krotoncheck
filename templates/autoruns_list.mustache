@@ -6,7 +6,7 @@
 </h3>
 <div>Letzte erfolgreiche Überprüfung: {{#last_success}}{{#format_timestamp}}{{last_success}}{{/format_timestamp}}{{/last_success}}{{^last_success}}(noch nie){{/last_success}}</div>
 
-{{#errors}}<div style="color:#f00;">Fehler {{#email}}{{recipient}}{{/email}}: {{#err}}{{response}}{{/err}}</div>{{/errors}}
+{{#errors}}<div style="color:#f00;">Fehler {{#mail}}{{to}}{{/mail}}: {{#err}}{{response}}{{/err}}</div>{{/errors}}
 
 <ul>
 {{#display_receivers}}

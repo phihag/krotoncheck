@@ -48,7 +48,7 @@ install-service:
 
 docker:
 	docker kill krotoncheck || true
-	docker rm -f krotoncheck
+	docker rm -f krotoncheck || true
 	docker build . -t krotoncheck
 	docker run -u "$$(id -u):$$(id -g)" -v "$$(pwd)/data:/krotoncheck/data" -p 3002:3002 -d --restart unless-stopped --name krotoncheck krotoncheck
 

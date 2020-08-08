@@ -262,6 +262,7 @@ function sendall(config, crafted, callback) {
 	const mails = crafted_nonempty.map(c => {
 		return {
 			from: config('mail_from'),
+			replyTo: config('reply_to'),
 			to: c.to,
 			subject: c.subject,
 			text: c.mail_text,

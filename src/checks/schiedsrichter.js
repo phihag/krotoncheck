@@ -37,7 +37,7 @@ module.exports = function*(season) {
 			continue;
 		}
 
-		if (sr.includes('erschienen')) {
+		if (sr.includes('erschienen') || sr.includes(' ohne ')) {
 			continue;
 		}
 

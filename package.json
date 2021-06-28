@@ -30,7 +30,7 @@
     "mustache": "*",
     "mustache-express": "*",
     "nedb": "*",
-    "nodemailer": "*",
+    "nodemailer": "6.6.1",
     "request": "^2.88.0",
     "serve-favicon": "^2.5.0",
     "supervisor": "*",

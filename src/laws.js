@@ -41,7 +41,7 @@ function _parse_youth_team(team, event_m) {
 
 
 // Returns true if player is serving as backup (i.e. from a lower-ranked team), false otherwise
-// registred_in and played_in are the respective teams
+// registered_in and played_in are the respective teams
 function is_backup(registered_in, played_in) {
 	const played_m = EVENT_RE.exec(played_in.eventname);
 	if (!played_m) {

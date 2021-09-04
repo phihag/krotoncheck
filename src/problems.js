@@ -286,7 +286,7 @@ function color_render(problems_struct) {
 							);
 						}).join('\n\n') +
 						'\n\n' +
-						'Alle Deine Spiele findest Du übrigens unter'
+						'Alle Deine Spiele findest Du übrigens unter' +
 						` ${downloads.BASE_URL}/sport/membermatches.aspx?id=${g.problems[0].tournament_id}\n\n` +
 						'Viele Grüße\n'
 				);

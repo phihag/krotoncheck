@@ -98,6 +98,7 @@ function annotate(data) {
 function enrich(season) {
 	const data = season.data;
 
+	data.season_key = season.key;
 	annotate(data);
 	umpire_mail.annotate_umpire_index(season);
 

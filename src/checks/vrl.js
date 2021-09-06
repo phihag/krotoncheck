@@ -110,12 +110,17 @@ function* check_u19e(data, vrl, line) {
 			'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
 			' (in AK U19-1) in ' + data.vrl_name(vrl.typeid) + ' von ' + vrl.clubname
 		);
-		yield {
-			type: 'vrl',
-			clubcode: vrl.clubcode,
-			vrl_typeid: vrl.typeid,
-			message: message,
-		};
+
+		const ignore = data.season_key === 'nrw2021';
+		if (!ignore) {
+			throw new Error(`Season key is ${data.season_key}`);
+			yield {
+				type: 'vrl',
+				clubcode: vrl.clubcode,
+				vrl_typeid: vrl.typeid,
+				message: message,
+			};
+		}
 	} else if ((withdrawn_all === true) && (!line.enddate)) {
 		const message = (
 			'Alle Schüler/Jugend/Mini-Teams zurückgezogen, aber U19E-Spieler ' +

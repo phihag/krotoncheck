@@ -113,7 +113,6 @@ function* check_u19e(data, vrl, line) {
 
 		const ignore = data.season_key === 'nrw2021';
 		if (!ignore) {
-			throw new Error(`Season key is ${data.season_key}`);
 			yield {
 				type: 'vrl',
 				clubcode: vrl.clubcode,

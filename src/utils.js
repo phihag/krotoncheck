@@ -83,9 +83,7 @@ function pad(n, width, z) {
 }
 
 function multilineRegExp(regs, options) {
-	return new RegExp(regs.map(
-		function(reg){ return reg.source; }
-	).join(''), options);
+	return new RegExp(regs.map(reg => reg.source).join(''), options);
 }
 
 function sha512(bytes) {

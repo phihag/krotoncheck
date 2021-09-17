@@ -1,0 +1,9 @@
+﻿turnierid;teammatchid;matchorder;matchid;disziplin;matchtypeno;team1spieler1spielerid;team1spieler2spielerid;team2spieler1spielerid;team2spieler2spielerid;winner;setcount;set1team1;set1team2;set2team1;set2team2;set3team1;set3team2;set4team1;set4team2;set5team1;set5team2;team1spielpunkte;team2spielpunkte;team1sets;team2sets;flag_keinspiel_keinespieler;flag_keinspiel_keinspieler_team1;flag_keinspiel_keinspieler_team2;flag_umwertung_gegen_team1;flag_umwertung_gegen_team2;flag_aufgabe_team1;flag_aufgabe_team2
+316973;4030;1;28067;HD;1;01-131739;01-143871;01-098272;01-052518;2;2;16;21;19;21;0;0;0;0;0;0;35;42;0;2;false;false;false;false;false;false;false
+316973;4030;2;28068;HD;2;01-149667;01-156141;01-124598;01-117222;2;3;21;16;15;21;17;21;0;0;0;0;53;58;1;2;false;false;false;false;false;false;false
+316973;4030;3;28069;DD;0;01-035496;01-159851;01-082703;01-070978;2;2;7;21;9;21;0;0;0;0;0;0;16;42;0;2;false;false;false;false;false;false;false
+316973;4030;4;28070;HE;1;01-131739;;01-098272;;2;3;19;21;21;9;14;21;0;0;0;0;54;51;1;2;false;false;false;false;false;false;false
+316973;4030;5;28071;HE;2;01-156141;;01-117222;;2;3;21;17;10;21;12;21;0;0;0;0;43;59;1;2;false;false;false;false;false;false;false
+316973;4030;6;28072;HE;3;01-143871;;01-124598;;1;2;21;10;21;15;0;0;0;0;0;0;42;25;2;0;false;false;false;false;false;false;false
+316973;4030;7;28073;DE;0;01-159851;;01-082703;;2;2;3;21;4;21;0;0;0;0;0;0;7;42;0;2;false;false;false;false;false;false;false
+316973;4030;8;28074;GD;0;01-149667;01-035496;01-052518;01-070978;2;2;17;21;21;23;0;0;0;0;0;0;38;44;0;2;false;false;false;false;false;false;false

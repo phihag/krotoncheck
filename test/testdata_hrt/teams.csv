@@ -1,0 +1,10 @@
+﻿tournamentid;teamid;code;number;name;contact;address;address2;address3;postalcode;city;state;country;phone;phone2;mobile;fax;fax2;email;website;externallink;clubcode;clubname;eventname;DrawID;DrawName;Status;locationcode;locationname;LineNr
+316973;26;01-0596-1;1;BC 89 Bottrop 1;;;;;;;;;;;;;;;;;01-0596;BC 89 Bottrop;O19-N1-VL;01-004;(004) Verbandsliga Nord 1;;01-46242-1;46242 Bottrop-Fuhlenbrock, SpH August-Everding-RS, Gorch-Fock-Str. 21;2
+316973;136;01-0596-2;2;BC 89 Bottrop 2;;;;;;;;;;;;;;;;;01-0596;BC 89 Bottrop;O19-N1-BL;01-017;(017) Bezirksliga Nord 1;;01-46242-1;46242 Bottrop-Fuhlenbrock, SpH August-Everding-RS, Gorch-Fock-Str. 21;8
+316973;469;01-0596-3;3;BC 89 Bottrop 3;;;;;;;;;;;;;;;;;01-0596;BC 89 Bottrop;O19-N1-KL;01-066;(066) Kreisliga Nord 1;;01-46242-1;46242 Bottrop-Fuhlenbrock, SpH August-Everding-RS, Gorch-Fock-Str. 21;3
+316973;465;01-0596-4;4;BC 89 Bottrop 4;;;;;;;;;;;;;;;;;01-0596;BC 89 Bottrop;O19-N1-KL;01-065;(065) Kreisliga Nord 1;;01-46242-1;46242 Bottrop-Fuhlenbrock, SpH August-Everding-RS, Gorch-Fock-Str. 21;7
+316973;480;01-0596-5;5;BC 89 Bottrop 5;;;;;;;;;;;;;;;;;01-0596;BC 89 Bottrop;O19-N1-KL;01-067;(067) Kreisliga Nord 1;;01-46242-1;46242 Bottrop-Fuhlenbrock, SpH August-Everding-RS, Gorch-Fock-Str. 21;6
+316973;135;01-0075-1;1;BC RW Borbeck 1;André Hinz;;;;;;;;;;;;;a.hinz1990@gmx.de;;;01-0075;BC RW Borbeck;O19-N1-BL;01-017;(017) Bezirksliga Nord 1;;01-45355-1;45355 Essen, SpH Bergeborbeck, Friedrich-Lange-Str. 15;7
+316973;143;01-0075-2;2;BC RW Borbeck 2;André Hinz;;;;;;;;;;;;;a.hinz1990@gmx.de;;;01-0075;BC RW Borbeck;O19-N1-BL;01-018;(018) Bezirksliga Nord 1;;01-45355-1;45355 Essen, SpH Bergeborbeck, Friedrich-Lange-Str. 15;7
+316973;277;01-0075-3;3;BC RW Borbeck 3;André Hinz;;;;;;;;;;;;;a.hinz1990@gmx.de;;;01-0075;BC RW Borbeck;O19-N1-BK;01-035;(035) Bezirksklasse Nord 1;;01-45355-1;45355 Essen, SpH Bergeborbeck, Friedrich-Lange-Str. 15;6
+316973;471;01-0075-4;4;BC RW Borbeck 4;André Hinz;;;;;;;;;;;;;a.hinz1990@gmx.de;;;01-0075;BC RW Borbeck;O19-N1-KL;01-066;(066) Kreisliga Nord 1;;01-45355-1;45355 Essen, SpH Bergeborbeck, Friedrich-Lange-Str. 15;5

@@ -37,7 +37,7 @@
     "timezone": "*"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
+    "eslint": "^7.32.0",
     "mocha": "^6.0.2"
   }
 }

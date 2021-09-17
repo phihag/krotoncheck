@@ -275,7 +275,9 @@ function* check_all(data, tm, pms, team_idx) {
 	// Check if everyone present in VRL
 	for (let pm of pms) {
 		const flagged = is_flagged(pm, team_idx);
-		const problems = Array.from(check_pm(data, league_type, tm, pm, pm_ratings_by_discipline, team, team_idx));
+		const player_team_idx = tm.hrt ? (1 - team_idx) : team_idx;
+		const problems = Array.from(check_pm(
+			data, league_type, tm, pm, pm_ratings_by_discipline, team, player_team_idx));
 
 		if (problems.length > 0)  {
 			problematic.add(pm.matchid);

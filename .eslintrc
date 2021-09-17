@@ -15,14 +15,10 @@
             2,
             "always"
         ],
-        "comma-dangle": [
-            2,
-            "always-multiline"
-        ],
     },
     "env": {
         "node": true,
-        "es6": true,
+        "es2020": true,
     },
     "globals": {
         " (test runner) ": true,
@@ -31,7 +27,7 @@
         "run": true,
     },
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 8,
         "sourceType": "module",
     },
     "extends": "eslint:recommended"

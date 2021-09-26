@@ -52,7 +52,9 @@ module.exports = function*(season) {
 
 		const umpire_names = umpire_mail.parse_names(sr);
 		if (!/[A-ZÄÖÜ]\w+\s[A-ZÄÖÜ]\w+/.test(sr) && (umpire_names.length !== 2)) {
-			console.error('cannot parse umpire names ' + umpire_names);
+			if (!season.umpire_index.has(sr)) {
+				console.error('cannot parse umpire names ' + umpire_names);
+			}
 			continue;
 		}
 

@@ -63,7 +63,9 @@ function annotate(data) {
 		}
 	}
 	for (const tm of data.teammatches) {
-		tm.ts = utils.parse_date(tm.spieldatum);
+		if (tm.spieldatum) {
+			tm.ts = utils.parse_date(tm.spieldatum);
+		}
 	}
 	if (has_buli) {
 		for (const tm of data.buli_teammatches) {
@@ -213,6 +215,7 @@ function enrich(season) {
 	data.active_teammatches = [];
 	let active_teammatch_ids = new Set();
 	for (let tm of data.teammatches) {
+		if (! tm.ts) continue;
 		let t1 = team_by_id.get(tm.team1id);
 		if (!t1) {
 			throw new Error('Team1 (ID: ' + tm.team1id + ')  in teammatch ' + tm.matchid + ' is missing');
@@ -312,6 +315,9 @@ function enrich(season) {
 			throw new Error('Konnte Spiele von Wettkampf ' + JSON.stringify(teammatch_id) + ' nicht finden');
 		}
 		return res;
+	};
+	data.try_get_playermatches_by_teammatch_id = function(teammatch_id) {
+		return playermatches_by_teammatchid.get(teammatch_id);
 	};
 	data.try_get_team = function(team_id) {
 		return team_by_id.get(team_id);

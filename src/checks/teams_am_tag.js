@@ -34,6 +34,10 @@ module.exports = function*(season) {
 	const players_by_date = new Map();
 
 	for (const tm of data.teammatches) {
+		if (!tm.ts) {
+			continue;
+		}
+
 		const date = extract_date(tm);
 		let today = players_by_date.get(date);
 		if (!today) {

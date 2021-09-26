@@ -10,6 +10,9 @@ function* check_conflicts(data, team_id, sorted_teammatches) {
 	for (let i = 0;i < sorted_teammatches.length - 1;i++) {
 		const tm1 = sorted_teammatches[i];
 		const tm2 = sorted_teammatches[i + 1];
+		if (!tm1.ts || !tm2.ts) {
+			continue;
+		}
 		assert(tm1.ts <= tm2.ts);
 		if (tm1.ts + 5 * utils.HOUR < tm2.ts) {
 			continue;

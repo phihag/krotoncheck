@@ -12,6 +12,10 @@ function* check_tm(data, tm, pms, team_idx) {
 		return;
 	}
 
+	if (! tm.spieldatum) {
+		return;
+	}
+
 	for (const pm of pms) {
 		const p1id = pm[`team${team_idx}spieler1spielerid`];
 		const p2id = pm[`team${team_idx}spieler2spielerid`];

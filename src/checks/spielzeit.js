@@ -35,6 +35,26 @@ function* check_tm(season, tm) {
 	const GRACE_TIME_BEFORE = 15 * 60000; // Some teams enter their line-up before the start
 
 	const league_type = data_utils.tm_league_type(tm);
+
+	let missing_dates = false;
+	if (!tm.datum_verbandsansetzung) {
+		yield {
+			teammatch_id: tm.matchid,
+			message: 'Spiel ohne Verbandsansetzung',
+		};
+		missing_dates = true;
+	}
+	if (!tm.spieldatum) {
+		yield {
+			teammatch_id: tm.matchid,
+			message: 'Spiel ohne Spieltermin',
+		};
+		missing_dates = true;
+	}
+	if (missing_dates) {
+		return;
+	}
+
 	const original_ts = utils.parse_date(tm.datum_verbandsansetzung);
 	const original_weekday = utils.weekday(original_ts);
 	const original_timestr = utils.ts2timestr(original_ts);

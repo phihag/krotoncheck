@@ -29,6 +29,11 @@ function has_stb_comment_after(data, tm, after) {
 	});
 }
 
+function hide_warning(season) {
+	if (season.key !== 'nrw2021') return false;
+	return Date.now() < (new Date('2021-10-10T00:00:00+0200')).getTime();
+}
+
 function* check_tm(season, tm) {
 	const data = season.data;
 	const now = season.check_now;
@@ -38,17 +43,21 @@ function* check_tm(season, tm) {
 
 	let missing_dates = false;
 	if (!tm.datum_verbandsansetzung) {
-		yield {
-			teammatch_id: tm.matchid,
-			message: 'Spiel ohne Verbandsansetzung',
-		};
+		if (!hide_warning(season)) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Spiel ohne Verbandsansetzung',
+			};
+		}
 		missing_dates = true;
 	}
 	if (!tm.spieldatum) {
-		yield {
-			teammatch_id: tm.matchid,
-			message: 'Spiel ohne Spieltermin',
-		};
+		if (!hide_warning(season)) {
+			yield {
+				teammatch_id: tm.matchid,
+				message: 'Spiel ohne Spieltermin',
+			};
+		}
 		missing_dates = true;
 	}
 	if (missing_dates) {

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/phihag/krotoncheck#readme",
   "dependencies": {
+    "argparse": "^2.0.1",
     "atomic-write": "*",
     "babyparse": "*",
     "bcrypt": ">=1.0.2",

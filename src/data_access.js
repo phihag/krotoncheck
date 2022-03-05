@@ -23,6 +23,17 @@ const ALL_TASKS = [
     'users',
 ];
 
+const BOOLEAN_KEYS = [
+	'flag_ok_gegen_team1',
+	'flag_ok_gegen_team2',
+	'flag_umwertung_gegen_team1',
+	'flag_umwertung_gegen_team2',
+	'flag_umwertung_gegen_team1_beide',
+	'flag_umwertung_gegen_team2_beide',
+	'flag_umwertung_gegen_beide',
+	'hrt',
+];
+
 function annotate(data) {
 	for (let cr of data.clubranking) {
 		cr.typeid = data_utils.parse_int(cr.typeid);
@@ -49,17 +60,15 @@ function annotate(data) {
 	}
 
 	for (const tm of data.teammatches) {
-		for (const bool_key of [
-				'flag_ok_gegen_team1',
-				'flag_ok_gegen_team2',
-				'flag_umwertung_gegen_team1',
-				'flag_umwertung_gegen_team2',
-				'flag_umwertung_gegen_team1_beide',
-				'flag_umwertung_gegen_team2_beide',
-				'flag_umwertung_gegen_beide',
-				'hrt',
-				]) {
+		for (const bool_key of BOOLEAN_KEYS) {
 			tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
+		}
+	}
+	if (has_buli) {
+		for (const tm of data.buli_teammatches) {
+			for (const bool_key of BOOLEAN_KEYS) {
+				tm[bool_key] = data_utils.parse_bool(tm[bool_key]);
+			}
 		}
 	}
 	for (const tm of data.teammatches) {

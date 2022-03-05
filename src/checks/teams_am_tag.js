@@ -14,6 +14,9 @@ function extract_date(tm) {
 
 function all_players(data, tm, team_idx) {
 	let res = new Set();
+	if (tm.hrt) {
+		team_idx = (team_idx === 1) ? 2 : 1;
+	}
 	const pms = data.get_playermatches_by_teammatch_id(tm.matchid);
 	for (const pm of pms) {
 		if (pm['flag_umwertung_gegen_team' + team_idx]) { // Already noted

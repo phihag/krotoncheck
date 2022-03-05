@@ -188,7 +188,11 @@ function* check_round(data, player, matches, is_hr, o19) {
 		}
 		handled_tms.add(tm_id);
 
-		const is_team1 = (pm.team1spieler1spielerid === player.spielerid) || (pm.team1spieler2spielerid === player.spielerid);
+		let is_team1 = (pm.team1spieler1spielerid === player.spielerid) || (pm.team1spieler2spielerid === player.spielerid);
+		if (tm.hrt) {
+			is_team1 = !is_team1;
+		}
+
 		const team_id = tm[`team${is_team1 ? 1 : 2}id`];
 		const team = data.get_team(team_id, true);
 

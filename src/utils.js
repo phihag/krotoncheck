@@ -220,6 +220,7 @@ function weekday_destr(ts) {
 }
 
 function parse_date(dstr) {
+	dstr = dstr.trim();
 	const m = /^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})(?: ([0-9]{2}:[0-9]{2}:[0-9]{2}))?$/.exec(dstr);
 	if (!m) {
 		throw new Error('Cannot parse date ' + JSON.stringify(dstr));

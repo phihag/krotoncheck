@@ -4,6 +4,7 @@ const async = require('async');
 const Datastore = require('nedb');
 const fs = require('fs');
 const path = require('path');
+const {promisify} = require('util');
 
 const utils = require('./utils');
 const users = require('./users');
@@ -43,6 +44,9 @@ function init(callback) {
 	db.fetch_all = function(specs, callback) {
 		return fetch_all(db, specs, callback);
 	};
+	db.async_fetch_all = function(specs, callback) {
+		return promisify(fetch_all)(db, specs);
+	};
 	db.efetch_all = function(errfunc, specs, callback) {
 		return fetch_all(db, specs, function(err, ...args) {
 			if (err) {
@@ -62,6 +66,8 @@ function init(callback) {
 		callback(err, db);
 	});
 }
+
+const async_init = promisify(init);
 
 function fetch_all(db, specs, callback) {
 	async.map(specs, function(spec, cb) {
@@ -110,6 +116,7 @@ function setup_autonum(callback, db, collection, start) {
 }
 
 module.exports = {
+	async_init,
 	init,
 	MAX_VRLS_DIR,
 };

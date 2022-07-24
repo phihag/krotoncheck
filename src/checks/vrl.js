@@ -176,7 +176,7 @@ function* check_in_youth_team(season, is_hr, line) {
 				['U13-1', 'U13-2', 'U15-1', 'U15-2'].includes(line.akl) ?
 				'benötigt des Alters (' + line.akl + ') wegen aber eine O19-Starterlaubnis' :
 				'die Altersklasse ' + JSON.stringify(line.akl) + ' ist nicht U17 oder U19'
-			) + ' (§11.1.2 JSpO ab 2018/2019)'
+			) + ' (§5.2 JSpO)'
 		);
 		yield {
 			type: 'vrl',

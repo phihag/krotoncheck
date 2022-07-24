@@ -354,6 +354,7 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 	if (!m) {
 		return;
 	}
+	const left_date_str = m[1];
 
 	// Enddate required?
 	if (season.data.spielgemeinschaften && (line.clubcode !== line.playerclubcode) && (!season.data.in_sg(line.clubcode, line.playerclubcode))) {
@@ -379,9 +380,9 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 		}
 
 		let after_start = true;
-		const start_str = season['vrldate_' + (is_o19 ? 'o19' : 'u19')];
+		const start_str = season['vrldate_' + (is_o19 ? 'o19' : 'u19') + '_' + (is_hr ? 'hr' : 'rr')];
 		if (start_str) {
-			const left_date = utils.parse_date(m[1]);
+			const left_date = utils.parse_date(left_date_str);
 			const season_start = utils.parse_date(start_str);
 			if (left_date < season_start) {
 				after_start = false;
@@ -393,7 +394,7 @@ function* check_startend(season, is_hr, vrl_date, is_o19, line) {
 			((line.playerclubcode === '01-8999') ?
 				' wurde am ' + m[1] + ' von der Spielberechtigungsliste gestrichen,'
 				:
-				(' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + m[1] + ' verlassen ' +
+				(' hat Verein (' + line.clubcode + ') ' + line.clubname + ' am ' + left_date_str + ' verlassen ' +
 				' zu (' + line.playerclubcode + ') ' + line.playerclubname + ',')
 			) +
 			(after_start ?

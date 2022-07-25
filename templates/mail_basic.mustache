@@ -4,14 +4,7 @@
 
 {{>problems_maillist}}
 
-<p style="color: #333;">{{#receiver}}
-turnier.de-Report
-{{#club_filter}}für den Verein ({{club_filter}}) {{receiver_name}},{{/club_filter}}
-{{#region_filter}}für Bezirk {{region_filter}},{{/region_filter}}
-{{#stb_filter}}für StB {{stb_filter}},{{/stb_filter}}
-{{#regions_filter_present}}für Bezirkswart von |{{#regions_filter}}{{.}}|{{/regions_filter}} {{#u19o19}}(nur {{u19o19}}){{/u19o19}} in {{/regions_filter_present}}
-{{^region_filter}}{{^regions_filter_present}}{{^stb_filter}}{{^club_filter}}(alle Bezirke),{{/club_filter}}{{/stb_filter}}{{/regions_filter_present}}{{/region_filter}}
-{{/receiver}}
+<p style="color: #333;">turnier.de-Report {{#receiver}}{{>report_receiver}}{{/receiver}}
 {{#season}}{{name}}, Stand {{#newest_download}}{{#format_timestamp}}{{done_timestamp}}{{/format_timestamp}}{{/newest_download}}{{/season}}.<br />
 {{#message_bottom}}{{message_bottom}}<br/>
 {{/message_bottom}}

@@ -118,6 +118,7 @@ function club_receivers(season, callback) {
 			receivers.push({
 				club_filter: u.externalcode,
 				receiver_name: u.lastname,
+				receiver_class: 'club',
 				email: u.email,
 				colors_filter: ['lightgray'],
 			});
@@ -210,30 +211,49 @@ function craft_single_email(season, problems_struct, receiver, message_top, mess
 	const important_problems_struct = filter_receiver(problems_struct, receiver);
 	const colors = problems.color_render(important_problems_struct);
 
+	const receiver_class = receiver.receiver_class || (receiver.stb_filter ? 'StB' : (
+		receiver.regions_filter ? (
+			(receiver.u19o19 === 'U19') ? 'BJW' : 'BW'
+		) : ''
+	));
+	const is_club_receiver = (receiver_class === 'club')
+
+	if (!message_top && receiver.receiver_name && receiver_class === 'club') {
+		const multiple = important_problems_struct.found.length > 1;
+
+		message_top = (
+			'Sie erhalten diesen automatisch verschickten turnier.de-Report, weil ' +
+			(multiple ? 'die folgenden Fehler' : 'der folgende Fehler') +
+			' in der Vereinsrangliste (VRL) von ' + receiver.receiver_name + ' erkannt ' +
+			(multiple ? 'wurden' : 'wurde') + ':'
+		);
+	}
+
+	let subject = 'turnier.de-Report';
+	if (receiver_class === 'club' && receiver.receiver_name) {
+		subject = 'Fehler in der Vereinsrangliste von ' + receiver.receiver_name;
+	}
+
 	const data = {
 		season,
 		colors,
 		receiver,
 		message_top,
 		message_bottom,
+		is_club_receiver,
 	};
 
 	render.render_standalone('mail_basic', data, function(err, body_html) {
 		if (err) return cb(err);
 
-		const receiver_class = (receiver.stb_filter ? 'StB' : (
-			receiver.regions_filter ? (
-				(receiver.u19o19 === 'U19') ? 'BJW' : 'BW'
-			) : ''
-		));
-
 		const res = {
-			subject: 'turnier.de-Report',
+			subject,
 			to: receiver.email,
 			body_html,
 			empty: (important_problems_struct.found.length === 0),
 			color_counts: count_colors(colors),
 			receiver_class,
+			is_club_receiver,
 		};
 		if (receiver.receiver_name) {
 			res.receiver_name = receiver.receiver_name;

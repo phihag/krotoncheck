@@ -1,7 +1,7 @@
 {{#colors}}
 {{#regions}}
-{{name}}
-
+{{^is_club_receiver}}{{name}}
+{{/is_club_receiver}}
 {{#groups}}
 {{header}}{{#teammatch}}{{#hrt}}{{team2name}} - {{team1name}}{{/hrt}}{{^hrt}}{{team1name}} - {{team2name}}{{/hrt}} {{#ergebnisbestaetigt_datum}}(bestätigt){{/ergebnisbestaetigt_datum}}{{/teammatch}}
 {{#turnier_url}}{{turnier_url}}

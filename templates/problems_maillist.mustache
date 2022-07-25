@@ -1,7 +1,7 @@
 <div class="problems_maillist">
 {{#colors}}
 {{#regions}}
-<h2>{{name}}</h2>
+{{^is_club_receiver}}<h2>{{name}}</h2>{{/is_club_receiver}}
 {{#groups}}
 <p style="margin-bottom: 1em">
 <span style="display: block; font-weight: bold; background: {{#lookup_color}}{{color}}{{/lookup_color}};">{{header}}{{#teammatch}}

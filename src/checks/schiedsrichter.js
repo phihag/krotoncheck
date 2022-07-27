@@ -85,7 +85,7 @@ module.exports = function*(season) {
 						firstname: 'Philipp',
 						middlename: '',
 						lastname: 'Hagemeister',
-						email: 'philipp.hagemeister@badminton-nrw.de',
+						email: 'philipp.hagemeister@badminton.nrw',
 					},
 				};
 				continue;

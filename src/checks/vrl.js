@@ -169,23 +169,25 @@ function* check_in_youth_team(season, is_hr, line) {
 	const clubcode = line.clubcode;
 
 	if (!['U17-1', 'U17-2', 'U19-1', 'U19-2'].includes(line.akl)) {
-		const message = (
-			' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
-			' steht mit J-Kennzeichen ' + line.vkz1 + ' in der ' +
-			data.vrl_name(line.typeid) + ' von ' +
-			'(' + clubcode + ') ' + line.clubname +
-			', aber ' + (
-				['U13-1', 'U13-2', 'U15-1', 'U15-2'].includes(line.akl) ?
-				'benötigt des Alters (' + line.akl + ') wegen aber eine O19-Starterlaubnis' :
-				'die Altersklasse ' + JSON.stringify(line.akl) + ' ist nicht U17 oder U19'
-			) + ' (§5.2 JSpO)'
-		);
-		yield {
-			type: 'vrl',
-			clubcode: line.clubcode,
-			vrl_typeid: line.typeid,
-			message,
-		};
+		if (line.jkz1 !== 'SE') { // Special Exemption ;) §5.2 JSpO
+			const message = (
+				' (' + line.memberid + ') ' + line.firstname + ' ' + line.lastname +
+				' steht mit J-Kennzeichen ' + line.vkz1 + ' in der ' +
+				data.vrl_name(line.typeid) + ' von ' +
+				'(' + clubcode + ') ' + line.clubname +
+				', aber ' + (
+					['U13-1', 'U13-2', 'U15-1', 'U15-2'].includes(line.akl) ?
+					'benötigt des Alters (' + line.akl + ') wegen aber eine O19-Starterlaubnis' :
+					'die Altersklasse ' + JSON.stringify(line.akl) + ' ist nicht U17 oder U19'
+				) + ' (§5.2 JSpO)'
+			);
+			yield {
+				type: 'vrl',
+				clubcode: line.clubcode,
+				vrl_typeid: line.typeid,
+				message,
+			};
+		}
 	}
 
 	const vrl_types = is_hr ? [14, 17] : [16, 18];

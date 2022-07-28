@@ -141,12 +141,14 @@ function* check_not_in_youth_team(data, is_hr, line) {
 	for (const vrl_type of look_in) {
 		const ve = data.try_get_vrl_entry(clubcode, vrl_type, line.memberid);
 		if (ve) {
+			const marker = (line.vkz1 || line.jkz1);
 			const message = (
 				line.firstname + ' ' + line.lastname + ' (' + line.memberid + ') ' +
-				'steht mit Kennzeichen ' + (line.vkz1 || line.jkz1) + ' in der ' +
+				'steht mit Kennzeichen ' + marker + ' in der ' +
 				data.vrl_name(line.typeid) + ' von ' +
 				'(' + clubcode + ') ' + line.clubname + ', ist aber in der ' + data.vrl_name(vrl_type) +
-				' an Position ' + ve.position + ' aufgeführt.'
+				' an Position ' + ve.position + ' aufgeführt.' +
+				(marker === 'U19E' ? ' (§6.2 JSpO)' : '')
 			);
 			yield {
 				type: 'vrl',

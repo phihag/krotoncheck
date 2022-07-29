@@ -685,7 +685,10 @@ function* check_vrl(season, vrl) {
 					const message = (
 						'Jugendkennzeichen (vkz1) fehlt in ' + data.vrl_name(vrl.typeid) +
 						' von (' + vrl.clubcode + ') ' + vrl.clubname + ' bei ' +
-						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname
+						'(' + line.memberid + ') ' + line.firstname + ' ' + line.lastname + '.' +
+						' Sollte U19E (U19-Erklärung eingereicht),' +
+						' SE (O19-Starterlaubnis wurde erteilt),' +
+						' oder J (Spieler der ersten Jugend-Mannschaft) sein.'
 					);
 					yield {
 						type: 'vrl',

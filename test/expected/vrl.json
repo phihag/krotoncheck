@@ -52,7 +52,7 @@
 },
 {
 	"clubcode": "01-1005",
-	"message": "Jugendkennzeichen (vkz1) fehlt in VRL 9[Hinrunde Herren O19] von (01-1005) Chaos VRL bei (01-cv-m13) first13 last13",
+	"message": "Jugendkennzeichen (vkz1) fehlt in VRL 9[Hinrunde Herren O19] von (01-1005) Chaos VRL bei (01-cv-m13) first13 last13. Sollte U19E (U19-Erklärung eingereicht), SE (O19-Starterlaubnis wurde erteilt), oder J (Spieler der ersten Jugend-Mannschaft) sein.",
 	"type": "vrl",
 	"vrl_typeid": 9
 },
@@ -77,7 +77,7 @@
 },
 
 {
-	"message": "Jugendkennzeichen (vkz1) fehlt in VRL 9[Hinrunde Herren O19] von (01-1007) No YouthA bei (01-ny-m7) firsty7 lasty7",
+	"message": "Jugendkennzeichen (vkz1) fehlt in VRL 9[Hinrunde Herren O19] von (01-1007) No YouthA bei (01-ny-m7) firsty7 lasty7. Sollte U19E (U19-Erklärung eingereicht), SE (O19-Starterlaubnis wurde erteilt), oder J (Spieler der ersten Jugend-Mannschaft) sein.",
 	"type": "vrl",
 	"vrl_typeid": 9,
 	"clubcode": "01-1007"

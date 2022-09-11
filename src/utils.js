@@ -380,6 +380,16 @@ function deep_copy(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
 
+function is_empty_field(s) {
+	if (!s) return true;
+	s = s.trim();
+	if (!s) return true; // only whitespace
+	if (/^[-/]$/.test(s)) { // one character denoting empty
+		return true;
+	}
+	return false;
+}
+
 module.exports = {
 	all,
 	cmp,
@@ -396,6 +406,7 @@ module.exports = {
 	gen_token,
 	get,
 	HOUR,
+	is_empty_field,
 	make_key,
 	make_index,
 	make_multi_index,

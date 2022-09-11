@@ -7,12 +7,12 @@ const utils = require('../utils');
 
 function* check_comment(data, pm) {
 	const resigned = data.get_resigned_field(pm.tm);
-	if (resigned) {
+	if (!utils.is_empty_note(resigned)) {
 		return;
 	}
 
 	const notes = data.get_matchfield(pm.tm, 'weitere \'Besondere Vorkommnisse\' lt. Original-Spielbericht');
-	if (notes) {
+	if (!utils.is_empty_note(notes)) {
 		return;
 	}
 

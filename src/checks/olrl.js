@@ -89,7 +89,7 @@ module.exports = function*(season) {
 			continue;
 		}
 
-		if (team.Status === 'Mannschaftsrückzug') {
+		if (data_utils.is_retracted(team)) {
 			continue;
 		}
 

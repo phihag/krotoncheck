@@ -25,7 +25,7 @@ function* check_conflicts(data, team_id, sorted_teammatches) {
 			data.get_team(tm2.team2id),
 		];
 
-		if (teams.some(t => t.Status === 'Mannschaftsrückzug')) {
+		if (teams.some(data_utils.is_retracted)) {
 			// Team was retracted
 			continue;
 		}

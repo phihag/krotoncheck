@@ -188,7 +188,7 @@ function* check_tm(season, tm) {
 
 	const team1 = data.get_team(tm.team1id);
 	const team2 = data.get_team(tm.team2id);
-	if ((team1.Status === 'Mannschaftsrückzug') || (team2.Status === 'Mannschaftsrückzug')) {
+	if (data_utils.is_retracted(team1) || data_utils.is_retracted(team2)) {
 		return;
 	}
 

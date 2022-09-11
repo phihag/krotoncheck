@@ -95,7 +95,7 @@ function* check_u19e(data, vrl, line) {
 			continue;
 		}
 
-		if (t.Status === 'Mannschaftsrückzug') {
+		if (data_utils.is_retracted(t)) {
 			if (withdrawn_all === undefined) {
 				withdrawn_all = true;
 			}
@@ -225,7 +225,7 @@ function* check_in_youth_team(season, is_hr, line) {
 		return;
 	}
 
-	if (team.Status === 'Mannschaftsrückzug') {
+	if (data_utils.is_retracted(team)) {
 		// Retreated in RR?
 		if (is_hr && season.lastdate_hr) {
 			const l_hr = utils.parse_date(season.lastdate_hr);
@@ -756,7 +756,7 @@ function* check_vrl(season, vrl) {
 			// Youth player playing in correct age group?
 			if (line.teamcode && line.akl) {
 				const team = data.try_get_team(line.teamcode);
-				if (team && team.Status !== 'Mannschaftsrückzug') {
+				if (team && ! data_utils.is_retracted(team)) {
 					const m = /^U([0-9]+)/.exec(line.akl);
 					if (!m) {
 						const message = (

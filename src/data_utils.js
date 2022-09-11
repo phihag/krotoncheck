@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require('assert').strict;
+
 const utils = require('./utils');
 
 
@@ -168,10 +170,16 @@ function reporting_deadline(tm) {
 		: (played + 48 * utils.HOUR));
 }
 
+function is_retracted(team) {
+	assert.equal(typeof team.Status, 'string');
+	return team.Status === 'Mannschaftsrückzug';
+}
+
 module.exports = {
 	extract_names,
 	is_bundesliga_event,
 	is_preseason,
+	is_retracted,
 	league_type,
 	match_name,
 	matches_by_disciplines,

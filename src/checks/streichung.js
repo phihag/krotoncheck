@@ -3,11 +3,13 @@
 const laws = require('../laws.js');
 const utils = require('../utils.js');
 
+ const data_utils = require('../data_utils');
+
 module.exports = function*(season) {
 	const data = season.data;
 
 	for (const team of data.teams) {
-		if (team.Status === 'Mannschaftsrückzug') {
+		if (data_utils.is_retracted(team)) {
 			continue;
 		}
 

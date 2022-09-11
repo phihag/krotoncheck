@@ -9,7 +9,7 @@ function* get_double_teams(season) {
 
 	const groups = new Map(); // Contents: Map clubCode -> array of teams
 	for (const team of season.data.teams) {
-		if (team.Status === 'Mannschaftsrückzug') {
+		if (data_utils.is_retracted(team)) {
 			continue; // Team retracted, does not matter
 		}
 		const gid = team.DrawID;

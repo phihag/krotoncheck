@@ -380,7 +380,7 @@ function deep_copy(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-function is_empty_field(s) {
+function is_empty_note(s) {
 	if (!s) return true;
 	s = s.trim();
 	if (!s) return true; // only whitespace
@@ -406,7 +406,7 @@ module.exports = {
 	gen_token,
 	get,
 	HOUR,
-	is_empty_field,
+	is_empty_note,
 	make_key,
 	make_index,
 	make_multi_index,

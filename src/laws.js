@@ -49,6 +49,9 @@ function is_backup(registered_in, played_in) {
 	}
 	const registered_m = EVENT_RE.exec(registered_in.eventname);
 	if (!registered_m) {
+		if (data_utils.is_bundesliga_event(registered_in.eventname)) {
+			return false;
+		}
 		throw new Error('Cannot parse registered_in event ' + registered_in.eventname);
 	}
 

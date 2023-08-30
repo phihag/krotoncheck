@@ -93,7 +93,7 @@ module.exports = function*(season) {
 
 	for (const tm of data.teammatches) {
 		const resigned = data.get_resigned_field(tm);
-		if (!resigned) {
+		if (utils.is_empty_note(resigned)) {
 			continue;
 		}
 

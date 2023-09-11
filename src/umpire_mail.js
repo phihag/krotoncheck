@@ -65,11 +65,22 @@ function annotate_umpire_index(season) {
 }
 
 function parse_names(str) {
-	const res = str.split(/(?:\sund\s|;|&|\/|\s-\s)/g).map(s => s.trim());
+	str = str.trim();
+	let res = str.split(/(?:\sund\s|;|&|\/|\s-\s)/g).map(s => s.trim());
 	if (res.length >= 2) {
 		return res;
 	}
-	return str.split(/,/).map(s => s.trim());
+	res = str.split(/,/).map(s => s.trim());
+
+	if (res.length === 1) {
+		// "John Doe Max Mustermann" ?
+		const parts = str.split(/\s+/);
+		if (parts.length === 4) {
+			return [parts[0] + ' ' + parts[1], parts[2] + ' ' + parts[3]];
+		}
+	}
+
+	return res;
 }
 
 module.exports = {

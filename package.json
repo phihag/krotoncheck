@@ -20,7 +20,7 @@
     "argparse": "^2.0.1",
     "atomic-write": "*",
     "babyparse": "*",
-    "bcrypt": ">=1.0.2",
+    "bcrypt": ">=5.0.1",
     "body-parser": "^1.18.3",
     "cookie-parser": "*",
     "cron": ">=1.2.1",

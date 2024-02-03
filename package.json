@@ -32,7 +32,7 @@
     "mustache-express": "*",
     "nedb": "*",
     "nodemailer": "*",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "serve-favicon": "^2.5.0",
     "supervisor": "*",
     "timezone": "*"

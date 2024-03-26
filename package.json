@@ -25,7 +25,7 @@
     "cookie-parser": "*",
     "cron": ">=1.2.1",
     "csurf": "*",
-    "express": "^4.16.4",
+    "express": "^4.19.2",
     "fast-levenshtein": "*",
     "html-entities": "*",
     "mustache": "*",
